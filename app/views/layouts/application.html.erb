@@ -23,6 +23,15 @@
   </head>
 
   <body>
-    <%= yield %>
+    <header class="app-chrome">
+      <div class="app-chrome__inner">
+        <%= link_to "Preflight", root_path, class: "brand" %>
+        <span class="brand-tagline">Local pull requests before you push</span>
+      </div>
+    </header>
+
+    <main class="app-main">
+      <%= yield %>
+    </main>
   </body>
 </html>
