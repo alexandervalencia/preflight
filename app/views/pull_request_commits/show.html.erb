@@ -10,52 +10,58 @@
     </div>
   </header>
 
-  <section class="panel commit-navigation">
-    <div>
+  <section class="panel commit-review-header">
+    <div class="commit-review-header__meta">
+      <strong>Commit <%= @current_index + 1 %> of <%= @comparison.commits.length %></strong>
+      <span><code><%= @commit.short_sha %></code></span>
+    </div>
+    <div class="commit-navigation">
       <% if @previous_commit %>
-        <%= link_to "Previous: #{@previous_commit.message}", pull_request_commit_path(@pull_request, @previous_commit.sha) %>
+        <%= link_to "Previous", pull_request_commit_path(@pull_request, @previous_commit.sha), class: "button button-secondary button-small" %>
+      <% else %>
+        <span></span>
       <% end %>
-    </div>
-    <div>
-      <%= link_to "Back to pull request", repository_pull_request_path(@local_repository, @pull_request) %>
-    </div>
-    <div>
+
+      <%= link_to "Back to pull request", repository_pull_request_path(@local_repository, @pull_request), class: "button button-secondary button-small" %>
+
       <% if @next_commit %>
-        <%= link_to "Next: #{@next_commit.message}", pull_request_commit_path(@pull_request, @next_commit.sha) %>
+        <%= link_to "Next", pull_request_commit_path(@pull_request, @next_commit.sha), class: "button button-secondary button-small" %>
+      <% else %>
+        <span></span>
       <% end %>
     </div>
   </section>
 
-  <section class="grid">
-    <aside class="panel">
-      <div class="panel-header">
-        <h2>Commits</h2>
-      </div>
-      <ol class="commit-list" data-role="commit-rail">
-        <% @comparison.commits.each do |commit| %>
-          <li class="<%= "commit-current" if commit.sha == @commit.sha %>">
-            <strong><%= link_to commit.message, pull_request_commit_path(@pull_request, commit.sha) %></strong>
+  <section class="panel commit-strip-panel">
+    <div class="panel-header">
+      <h2>Commits</h2>
+    </div>
+    <ol class="commit-strip" data-role="commit-rail">
+      <% @comparison.commits.each do |commit| %>
+        <li class="<%= "commit-current" if commit.sha == @commit.sha %>">
+          <%= link_to pull_request_commit_path(@pull_request, commit.sha), class: "commit-chip" do %>
+            <strong><%= commit.message %></strong>
             <span><%= commit.short_sha %></span>
-          </li>
-        <% end %>
-      </ol>
-    </aside>
+          <% end %>
+        </li>
+      <% end %>
+    </ol>
+  </section>
 
-    <section class="panel">
-      <div class="panel-header">
-        <h2>Files changed in this commit</h2>
-      </div>
-      <div class="changed-files">
-        <% @commit.files.each do |file| %>
-          <%= render "pull_requests/diff_file",
-            pull_request: @pull_request,
-            file: file,
-            comments_by_key: @comments_by_key,
-            commit_sha: @commit.sha,
-            redirect_path: pull_request_commit_path(@pull_request, @commit.sha),
-            show_review_state: false %>
-        <% end %>
-      </div>
-    </section>
+  <section class="panel commit-diff-panel">
+    <div class="panel-header">
+      <h2>Files changed in this commit</h2>
+    </div>
+    <div class="changed-files">
+      <% @commit.files.each do |file| %>
+        <%= render "pull_requests/diff_file",
+          pull_request: @pull_request,
+          file: file,
+          comments_by_key: @comments_by_key,
+          commit_sha: @commit.sha,
+          redirect_path: pull_request_commit_path(@pull_request, @commit.sha),
+          show_review_state: false %>
+      <% end %>
+    </div>
   </section>
 </section>

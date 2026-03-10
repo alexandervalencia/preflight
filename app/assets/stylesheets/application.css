@@ -320,6 +320,79 @@ code {
   background: rgba(31, 111, 235, 0.1);
 }
 
+.commit-review-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1rem;
+}
+
+.commit-review-header__meta {
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
+  color: var(--muted);
+}
+
+.commit-review-header__meta strong {
+  color: var(--ink);
+}
+
+.commit-strip-panel {
+  padding-bottom: 1rem;
+}
+
+.commit-strip {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  display: grid;
+  grid-auto-flow: column;
+  grid-auto-columns: minmax(240px, 300px);
+  gap: 0.8rem;
+  overflow-x: auto;
+}
+
+.commit-strip li {
+  margin: 0;
+}
+
+.commit-chip {
+  display: grid;
+  gap: 0.35rem;
+  min-height: 4.8rem;
+  padding: 0.9rem 1rem;
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  background: white;
+}
+
+.commit-chip strong {
+  display: -webkit-box;
+  overflow: hidden;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  font-size: 0.94rem;
+  line-height: 1.3;
+}
+
+.commit-chip span {
+  color: var(--muted);
+  font-size: 0.82rem;
+}
+
+.commit-strip .commit-current {
+  padding: 0;
+  margin-left: 0;
+  background: transparent;
+}
+
+.commit-strip .commit-current .commit-chip {
+  border-color: rgba(31, 111, 235, 0.35);
+  background: var(--accent-soft);
+  box-shadow: inset 0 0 0 1px rgba(31, 111, 235, 0.08);
+}
+
 .changed-files {
   display: grid;
   gap: 1rem;
@@ -380,7 +453,7 @@ code {
 }
 
 .line-form {
-  width: 12rem;
+  width: 8.2rem;
   padding: 0.45rem 0.55rem;
   background: #fbfcff;
 }
@@ -403,6 +476,10 @@ code {
   font-size: 0.78rem;
   font-weight: 700;
   list-style: none;
+}
+
+.commit-diff-panel .changed-file {
+  width: 100%;
 }
 
 .inline-comment-shell summary::-webkit-details-marker {
@@ -459,13 +536,16 @@ code {
 }
 
 .commit-navigation {
-  display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 1rem;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 0.65rem;
+  flex-wrap: wrap;
 }
 
-.commit-navigation div:last-child {
-  text-align: right;
+.commit-navigation span {
+  display: inline-block;
+  min-width: 4.5rem;
 }
 
 .errors {
@@ -478,12 +558,13 @@ code {
     grid-template-columns: 1fr;
   }
 
-  .commit-navigation {
-    grid-template-columns: 1fr;
+  .commit-review-header {
+    flex-direction: column;
+    align-items: flex-start;
   }
 
-  .commit-navigation div:last-child {
-    text-align: left;
+  .commit-navigation {
+    justify-content: flex-start;
   }
 
   .browse-entry,
@@ -506,5 +587,9 @@ code {
 
   .brand-tagline {
     display: none;
+  }
+
+  .commit-strip {
+    grid-auto-columns: minmax(220px, 82vw);
   }
 }
