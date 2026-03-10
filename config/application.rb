@@ -35,5 +35,6 @@ module Preflight
     #
     # config.time_zone = "Central Time (US & Canada)"
     # config.eager_load_paths << Rails.root.join("extras")
+    config.x.preflight.repository_path = ENV.fetch("PREFLIGHT_REPOSITORY_PATH", Rails.root.to_s)
   end
 end
