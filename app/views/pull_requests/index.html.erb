@@ -1,12 +1,12 @@
 <section class="page">
   <header class="page-header">
     <p class="eyebrow">Preflight</p>
-    <h1>Open a local pull request</h1>
-    <p>Review a local branch before you push it upstream.</p>
+    <h1><%= @local_repository.name %></h1>
+    <p>Review local branches from <code><%= @local_repository.path %></code> before you push them upstream.</p>
   </header>
 
   <section class="panel">
-    <%= form_with model: @pull_request, class: "compare-form" do |form| %>
+    <%= form_with model: @pull_request, url: repository_pull_requests_path(@local_repository), class: "compare-form" do |form| %>
       <div class="field">
         <%= form.label :base_branch, "Base branch" %>
         <%= form.select :base_branch, options_for_select(@branches.map(&:name), @pull_request.base_branch) %>
@@ -41,7 +41,7 @@
       <ul class="pull-request-list">
         <% @pull_requests.each do |pull_request| %>
           <li>
-            <%= link_to pull_request.source_branch, pull_request_path(pull_request) %>
+            <%= link_to pull_request.source_branch, repository_pull_request_path(@local_repository, pull_request) %>
             <span><%= pull_request.base_branch %> ← <%= pull_request.source_branch %></span>
           </li>
         <% end %>

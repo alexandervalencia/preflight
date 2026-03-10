@@ -9,9 +9,13 @@ Rails.application.routes.draw do
   # get "manifest" => "rails/pwa#manifest", as: :pwa_manifest
   # get "service-worker" => "rails/pwa#service_worker", as: :pwa_service_worker
 
-  root "pull_requests#index"
+  root "local_repositories#index"
 
-  resources :pull_requests, only: [:index, :create, :show, :update] do
+  resources :repositories, controller: "local_repositories", only: [:index, :create] do
+    resources :pull_requests, only: [:index, :create, :show, :update]
+  end
+
+  resources :pull_requests, only: [] do
     resources :commits, controller: "pull_request_commits", only: [:show]
     resources :inline_comments, only: [:create]
     resources :viewed_files, only: [:create]

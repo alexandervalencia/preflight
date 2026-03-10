@@ -1,23 +1,21 @@
 class PullRequest < ApplicationRecord
+  belongs_to :local_repository
   has_many :inline_comments, dependent: :destroy
   has_many :viewed_files, dependent: :destroy
 
+  validates :local_repository, presence: true
   validates :source_branch, presence: true
   validates :base_branch, presence: true
   validate :base_branch_differs_from_source_branch
 
   before_validation :assign_default_base_branch
 
-  def repository
-    @repository ||= GitRepository.new(path: repository_path)
-  end
-
-  def repository_path
-    Rails.configuration.x.preflight.repository_path
+  def git_repository
+    local_repository.git_repository
   end
 
   def comparison
-    repository.compare(base: base_branch, head: source_branch)
+    git_repository.compare(base: base_branch, head: source_branch)
   end
 
   def commits
@@ -29,13 +27,15 @@ class PullRequest < ApplicationRecord
   end
 
   def head_sha
-    repository.branch_head(source_branch)
+    git_repository.branch_head(source_branch)
   end
 
   private
 
   def assign_default_base_branch
-    self.base_branch = repository.default_branch if base_branch.blank? && source_branch.present?
+    return if base_branch.present? || source_branch.blank? || local_repository.blank?
+
+    self.base_branch = local_repository.default_branch
   end
 
   def base_branch_differs_from_source_branch

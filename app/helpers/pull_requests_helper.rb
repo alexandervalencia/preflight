@@ -14,7 +14,7 @@ module PullRequestsHelper
 
   def file_view_state(pull_request, viewed_file)
     return FileViewState.new(label: "Unviewed", css_class: "view-state--unviewed", action_label: "Mark as viewed") unless viewed_file
-    return FileViewState.new(label: "Viewed", css_class: "view-state--viewed", action_label: nil) if viewed_file.current?(repository: pull_request.repository)
+    return FileViewState.new(label: "Viewed", css_class: "view-state--viewed", action_label: nil) if viewed_file.current?(repository: pull_request.git_repository)
 
     FileViewState.new(label: "New changes", css_class: "view-state--new", action_label: "Mark as viewed again")
   end

@@ -55,12 +55,8 @@ module GitFixtureHelper
     end
   end
 
-  def with_preflight_repository_path(path)
-    previous_path = Rails.configuration.x.preflight.repository_path
-    Rails.configuration.x.preflight.repository_path = path
-    yield
-  ensure
-    Rails.configuration.x.preflight.repository_path = previous_path
+  def create_local_repository!(fixture, name: nil)
+    LocalRepository.create!(name: name, path: fixture.path)
   end
 
   private

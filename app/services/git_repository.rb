@@ -8,6 +8,15 @@ class GitRepository
   Comparison = Data.define(:base, :head, :commits, :files)
   CommitDetails = Data.define(:sha, :short_sha, :message, :body, :author_name, :authored_at, :files)
 
+  def self.valid_repository?(path)
+    return false unless path.present? && Dir.exist?(path)
+
+    _stdout, _stderr, status = Open3.capture3("git", "rev-parse", "--is-inside-work-tree", chdir: path)
+    status.success?
+  rescue Errno::ENOENT
+    false
+  end
+
   def initialize(path:)
     @path = path
   end

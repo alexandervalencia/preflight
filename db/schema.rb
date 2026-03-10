@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_03_10_202500) do
+ActiveRecord::Schema[8.1].define(version: 2026_03_10_230500) do
   create_table "inline_comments", force: :cascade do |t|
     t.text "body", null: false
     t.string "commit_sha"
@@ -23,12 +23,22 @@ ActiveRecord::Schema[8.1].define(version: 2026_03_10_202500) do
     t.index ["pull_request_id"], name: "index_inline_comments_on_pull_request_id"
   end
 
+  create_table "local_repositories", force: :cascade do |t|
+    t.datetime "created_at", null: false
+    t.string "name", null: false
+    t.string "path", null: false
+    t.datetime "updated_at", null: false
+    t.index ["path"], name: "index_local_repositories_on_path", unique: true
+  end
+
   create_table "pull_requests", force: :cascade do |t|
     t.string "base_branch", null: false
     t.datetime "created_at", null: false
     t.text "description", default: "", null: false
+    t.integer "local_repository_id", null: false
     t.string "source_branch", null: false
     t.datetime "updated_at", null: false
+    t.index ["local_repository_id"], name: "index_pull_requests_on_local_repository_id"
   end
 
   create_table "viewed_files", force: :cascade do |t|
@@ -42,5 +52,6 @@ ActiveRecord::Schema[8.1].define(version: 2026_03_10_202500) do
   end
 
   add_foreign_key "inline_comments", "pull_requests"
+  add_foreign_key "pull_requests", "local_repositories"
   add_foreign_key "viewed_files", "pull_requests"
 end

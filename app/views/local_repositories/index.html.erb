@@ -1,0 +1,48 @@
+<section class="page">
+  <header class="page-header">
+    <p class="eyebrow">Preflight</p>
+    <h1>Choose a repository</h1>
+    <p>Register the local git repository you want to review before opening a pull request-style diff.</p>
+  </header>
+
+  <section class="panel">
+    <%= form_with model: @local_repository, url: repositories_path, class: "compare-form" do |form| %>
+      <div class="field">
+        <%= form.label :path, "Repository path" %>
+        <%= form.text_field :path, placeholder: "/Users/alex/Code/my-project" %>
+      </div>
+
+      <div class="field">
+        <%= form.label :name, "Name (optional)" %>
+        <%= form.text_field :name, placeholder: "my-project" %>
+      </div>
+
+      <% if @local_repository.errors.any? %>
+        <div class="errors">
+          <%= @local_repository.errors.full_messages.to_sentence %>
+        </div>
+      <% end %>
+
+      <%= form.submit "Add repository", class: "button" %>
+    <% end %>
+  </section>
+
+  <section class="panel">
+    <div class="panel-header">
+      <h2>Repositories</h2>
+    </div>
+
+    <% if @local_repositories.any? %>
+      <ul class="pull-request-list">
+        <% @local_repositories.each do |local_repository| %>
+          <li>
+            <%= link_to local_repository.name, repository_pull_requests_path(local_repository) %>
+            <span><%= local_repository.path %></span>
+          </li>
+        <% end %>
+      </ul>
+    <% else %>
+      <p>No repositories added yet.</p>
+    <% end %>
+  </section>
+</section>
