@@ -1,0 +1,44 @@
+<section class="page">
+  <header class="page-header">
+    <p class="eyebrow">Commit review</p>
+    <h1><%= @commit.message %></h1>
+    <div class="branch-row">
+      <span class="branch-pill"><%= @pull_request.base_branch %></span>
+      <span class="branch-arrow">&larr;</span>
+      <span class="branch-pill"><%= @pull_request.source_branch %></span>
+    </div>
+  </header>
+
+  <section class="panel commit-navigation">
+    <div>
+      <% if @previous_commit %>
+        <%= link_to "Previous: #{@previous_commit.message}", pull_request_commit_path(@pull_request, @previous_commit.sha) %>
+      <% end %>
+    </div>
+    <div>
+      <%= link_to "Back to pull request", pull_request_path(@pull_request) %>
+    </div>
+    <div>
+      <% if @next_commit %>
+        <%= link_to "Next: #{@next_commit.message}", pull_request_commit_path(@pull_request, @next_commit.sha) %>
+      <% end %>
+    </div>
+  </section>
+
+  <section class="panel">
+    <div class="panel-header">
+      <h2>Files changed in this commit</h2>
+    </div>
+    <div class="changed-files">
+      <% @commit.files.each do |file| %>
+        <%= render "pull_requests/diff_file",
+          pull_request: @pull_request,
+          file: file,
+          comments_by_key: @comments_by_key,
+          commit_sha: @commit.sha,
+          redirect_path: pull_request_commit_path(@pull_request, @commit.sha),
+          show_review_state: false %>
+      <% end %>
+    </div>
+  </section>
+</section>

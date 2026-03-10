@@ -1,0 +1,65 @@
+<section class="page">
+  <header class="page-header">
+    <p class="eyebrow">Local pull request</p>
+    <h1><%= @pull_request.source_branch %></h1>
+    <div class="branch-row">
+      <span class="branch-pill" data-role="branch-pill"><%= @pull_request.base_branch %></span>
+      <span class="branch-arrow">&larr;</span>
+      <span class="branch-pill" data-role="branch-pill"><%= @pull_request.source_branch %></span>
+    </div>
+  </header>
+
+  <section class="grid">
+    <section class="panel">
+      <div class="panel-header">
+        <h2>Overview</h2>
+      </div>
+
+      <%= form_with model: @pull_request, class: "details-form" do |form| %>
+        <div class="field">
+          <%= form.label :base_branch, "Base branch" %>
+          <%= form.select :base_branch, options_for_select(@branches.map(&:name), @pull_request.base_branch) %>
+        </div>
+
+        <div class="field">
+          <%= form.label :description, "Description" %>
+          <%= form.text_area :description, rows: 8 %>
+        </div>
+
+        <%= form.submit "Update pull request", class: "button" %>
+      <% end %>
+    </section>
+
+    <aside class="panel">
+      <div class="panel-header">
+        <h2>Commits</h2>
+      </div>
+      <ol class="commit-list" data-role="commit-list">
+        <% @comparison.commits.each do |commit| %>
+          <li>
+            <strong><%= link_to commit.message, pull_request_commit_path(@pull_request, commit.sha) %></strong>
+            <span><%= commit.short_sha %></span>
+          </li>
+        <% end %>
+      </ol>
+    </aside>
+  </section>
+
+  <section class="panel">
+    <div class="panel-header">
+      <h2>Files changed</h2>
+    </div>
+    <div class="changed-files">
+      <% @comparison.files.each do |file| %>
+        <%= render "diff_file",
+          pull_request: @pull_request,
+          file: file,
+          comments_by_key: @comments_by_key,
+          commit_sha: nil,
+          redirect_path: pull_request_path(@pull_request),
+          show_review_state: true,
+          viewed_file: @viewed_files_by_path[file.path] %>
+      <% end %>
+    </div>
+  </section>
+</section>

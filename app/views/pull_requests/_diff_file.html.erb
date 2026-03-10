@@ -1,0 +1,63 @@
+<article class="changed-file" data-role="changed-file" data-path="<%= file.path %>">
+  <% if local_assigns[:show_review_state] %>
+    <% state = file_view_state(pull_request, viewed_file) %>
+  <% end %>
+
+  <header>
+    <div>
+      <strong><%= file.path %></strong>
+      <span><%= file.status %></span>
+    </div>
+
+    <% if local_assigns[:show_review_state] %>
+      <div class="file-review-tools">
+        <span class="view-state <%= state.css_class %>" data-role="view-state"><%= state.label %></span>
+
+        <% if state.action_label %>
+          <%= button_to state.action_label,
+            pull_request_viewed_files_path(pull_request),
+            params: { path: file.path },
+            class: "button button-small button-secondary" %>
+        <% end %>
+      </div>
+    <% end %>
+  </header>
+
+  <table class="diff-table">
+    <tbody>
+      <% file.lines.each do |line| %>
+        <% side, line_number = comment_target_for(line) %>
+        <% comments = side ? comments_by_key.fetch([file.path, side, line_number], []) : [] %>
+
+        <tr class="<%= diff_line_class(line) %>">
+          <td class="line-number"><%= line.old_number %></td>
+          <td class="line-number"><%= line.new_number %></td>
+          <td class="line-code"><code><%= line.content %></code></td>
+          <td class="line-form">
+            <% if side && line_number %>
+              <%= form_with url: pull_request_inline_comments_path(pull_request), class: "inline-comment-form" do %>
+                <%= hidden_field_tag "inline_comment[path]", file.path %>
+                <%= hidden_field_tag "inline_comment[side]", side %>
+                <%= hidden_field_tag "inline_comment[line_number]", line_number %>
+                <%= hidden_field_tag "inline_comment[commit_sha]", commit_sha %>
+                <%= hidden_field_tag :redirect_to, redirect_path %>
+                <%= text_area_tag "inline_comment[body]", nil, rows: 2, placeholder: "Add a comment" %>
+                <%= submit_tag "Comment", class: "button button-small" %>
+              <% end %>
+            <% end %>
+          </td>
+        </tr>
+
+        <% comments.each do |comment| %>
+          <tr class="comment-row">
+            <td></td>
+            <td></td>
+            <td colspan="2">
+              <div class="inline-comment" data-role="inline-comment"><%= comment.body %></div>
+            </td>
+          </tr>
+        <% end %>
+      <% end %>
+    </tbody>
+  </table>
+</article>

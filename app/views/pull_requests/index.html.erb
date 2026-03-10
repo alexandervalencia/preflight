@@ -1,0 +1,53 @@
+<section class="page">
+  <header class="page-header">
+    <p class="eyebrow">Preflight</p>
+    <h1>Open a local pull request</h1>
+    <p>Review a local branch before you push it upstream.</p>
+  </header>
+
+  <section class="panel">
+    <%= form_with model: @pull_request, class: "compare-form" do |form| %>
+      <div class="field">
+        <%= form.label :base_branch, "Base branch" %>
+        <%= form.select :base_branch, options_for_select(@branches.map(&:name), @pull_request.base_branch) %>
+      </div>
+
+      <div class="field">
+        <%= form.label :source_branch, "Compare branch" %>
+        <%= form.select :source_branch, options_for_select(@branches.map(&:name), @pull_request.source_branch) %>
+      </div>
+
+      <div class="field">
+        <%= form.label :description, "Description" %>
+        <%= form.text_area :description, rows: 5 %>
+      </div>
+
+      <% if @pull_request.errors.any? %>
+        <div class="errors">
+          <%= @pull_request.errors.full_messages.to_sentence %>
+        </div>
+      <% end %>
+
+      <%= form.submit "Create local pull request", class: "button" %>
+    <% end %>
+  </section>
+
+  <section class="panel">
+    <div class="panel-header">
+      <h2>Local pull requests</h2>
+    </div>
+
+    <% if @pull_requests.any? %>
+      <ul class="pull-request-list">
+        <% @pull_requests.each do |pull_request| %>
+          <li>
+            <%= link_to pull_request.source_branch, pull_request_path(pull_request) %>
+            <span><%= pull_request.base_branch %> ← <%= pull_request.source_branch %></span>
+          </li>
+        <% end %>
+      </ul>
+    <% else %>
+      <p>No local pull requests yet.</p>
+    <% end %>
+  </section>
+</section>
