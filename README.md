@@ -5,8 +5,9 @@ pull request before you push it upstream.
 
 ## What it does
 
-- compares a local branch against a base branch, defaulting to the repository
-  default branch (`main` when present)
+- lets you register local git repositories by filesystem path
+- compares a local branch against a base branch, defaulting to the selected
+  repository's default branch (`main` when present)
 - stores local pull request records with descriptions
 - walks commit-by-commit through the branch history
 - renders per-file diffs and supports inline comments on specific lines
@@ -32,9 +33,8 @@ devbox run -- bin/rails server
 
 Open [http://localhost:3000](http://localhost:3000).
 
-By default Preflight reviews the git repository at the Rails app root. To point
-it at another local repository, set `PREFLIGHT_REPOSITORY_PATH` before starting
-the server.
+Add a repository from the home page by entering its local filesystem path, then
+open that repository's compare page to create and review local pull requests.
 
 ## Test
 
