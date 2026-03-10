@@ -12,11 +12,15 @@ Rails.application.routes.draw do
   root "local_repositories#index"
 
   resources :repositories, controller: "local_repositories", only: [:index, :create] do
+    collection do
+      get :browse
+    end
+
     resources :pull_requests, only: [:index, :create, :show, :update]
   end
 
   resources :pull_requests, only: [] do
-    resources :commits, controller: "pull_request_commits", only: [:show]
+    resources :commits, controller: "pull_request_commits", only: [:index, :show]
     resources :inline_comments, only: [:create]
     resources :viewed_files, only: [:create]
   end

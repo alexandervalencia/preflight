@@ -26,20 +26,36 @@
     </div>
   </section>
 
-  <section class="panel">
-    <div class="panel-header">
-      <h2>Files changed in this commit</h2>
-    </div>
-    <div class="changed-files">
-      <% @commit.files.each do |file| %>
-        <%= render "pull_requests/diff_file",
-          pull_request: @pull_request,
-          file: file,
-          comments_by_key: @comments_by_key,
-          commit_sha: @commit.sha,
-          redirect_path: pull_request_commit_path(@pull_request, @commit.sha),
-          show_review_state: false %>
-      <% end %>
-    </div>
+  <section class="grid">
+    <aside class="panel">
+      <div class="panel-header">
+        <h2>Commits</h2>
+      </div>
+      <ol class="commit-list" data-role="commit-rail">
+        <% @comparison.commits.each do |commit| %>
+          <li class="<%= "commit-current" if commit.sha == @commit.sha %>">
+            <strong><%= link_to commit.message, pull_request_commit_path(@pull_request, commit.sha) %></strong>
+            <span><%= commit.short_sha %></span>
+          </li>
+        <% end %>
+      </ol>
+    </aside>
+
+    <section class="panel">
+      <div class="panel-header">
+        <h2>Files changed in this commit</h2>
+      </div>
+      <div class="changed-files">
+        <% @commit.files.each do |file| %>
+          <%= render "pull_requests/diff_file",
+            pull_request: @pull_request,
+            file: file,
+            comments_by_key: @comments_by_key,
+            commit_sha: @commit.sha,
+            redirect_path: pull_request_commit_path(@pull_request, @commit.sha),
+            show_review_state: false %>
+        <% end %>
+      </div>
+    </section>
   </section>
 </section>

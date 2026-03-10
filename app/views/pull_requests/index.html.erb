@@ -3,6 +3,7 @@
     <p class="eyebrow">Preflight</p>
     <h1><%= @local_repository.name %></h1>
     <p>Review local branches from <code><%= @local_repository.path %></code> before you push them upstream.</p>
+    <p><%= link_to "Browse folders", browse_repositories_path(directory: File.dirname(@local_repository.path)), class: "button button-secondary" %></p>
   </header>
 
   <section class="panel">

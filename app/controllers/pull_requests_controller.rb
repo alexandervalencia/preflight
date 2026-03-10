@@ -26,6 +26,7 @@ class PullRequestsController < ApplicationController
   end
 
   def show
+    @tab = params[:tab].presence_in(%w[conversation files]) || "conversation"
     @comparison = @pull_request.comparison
     @branches = @local_repository.branches
     @comments_by_key = comments_by_key(@pull_request.inline_comments.where(commit_sha: nil))
@@ -36,6 +37,7 @@ class PullRequestsController < ApplicationController
     if @pull_request.update(pull_request_update_params)
       redirect_to repository_pull_request_path(@local_repository, @pull_request)
     else
+      @tab = "conversation"
       @comparison = @pull_request.comparison
       @branches = @local_repository.branches
       @comments_by_key = comments_by_key(@pull_request.inline_comments.where(commit_sha: nil))

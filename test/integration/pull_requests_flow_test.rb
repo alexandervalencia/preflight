@@ -24,10 +24,15 @@ class PullRequestsFlowTest < ActionDispatch::IntegrationTest
       follow_redirect!
       assert_response :success
       assert_select "h1", text: "feature"
+      assert_select "a", text: "Conversation"
+      assert_select "a", text: "Commits"
+      assert_select "a", text: "Files changed"
       assert_select "[data-role='branch-pill']", text: "main"
       assert_select "[data-role='branch-pill']", text: "feature"
       assert_select "textarea[name='pull_request[description]']", text: "Review the widget work."
-      assert_select "[data-role='commit-list'] li", text: /Add widget/
+      assert_select "[data-role='pr-summary']", text: /2 commits/
+
+      get repository_pull_request_path(repository, pull_request, tab: "files")
       assert_select "[data-role='changed-file']", text: /README.md/
       assert_select "[data-role='changed-file']", text: /app\/models\/widget.rb/
     end

@@ -1,6 +1,17 @@
 require "test_helper"
 
 class LocalRepositoriesFlowTest < ActionDispatch::IntegrationTest
+  test "browses local directories to add a repository" do
+    with_sample_repository do |fixture|
+      get browse_repositories_path(directory: File.dirname(fixture.path))
+
+      assert_response :success
+      assert_select "h1", text: "Browse local folders"
+      assert_select "form[action='#{repositories_path}'] input[value='#{fixture.path}']"
+      assert_select "button", text: /Add #{File.basename(fixture.path)}/
+    end
+  end
+
   test "registers a local repository path and lands on its compare page" do
     with_sample_repository do |fixture|
       get root_path
@@ -21,6 +32,7 @@ class LocalRepositoriesFlowTest < ActionDispatch::IntegrationTest
       assert_response :success
       assert_select "h1", text: repository.name
       assert_select "form[action='#{repository_pull_requests_path(repository)}']"
+      assert_select "a", text: "Browse folders"
     end
   end
 end

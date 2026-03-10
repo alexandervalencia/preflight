@@ -1,6 +1,11 @@
 class PullRequestCommitsController < ApplicationController
   before_action :set_pull_request
 
+  def index
+    latest_commit = @pull_request.commits.last
+    redirect_to pull_request_commit_path(@pull_request, latest_commit.sha)
+  end
+
   def show
     @comparison = @pull_request.comparison
     @local_repository = @pull_request.local_repository
