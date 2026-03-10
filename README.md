@@ -1,24 +1,43 @@
-# README
+# Preflight
 
-This README would normally document whatever steps are necessary to get the
-application up and running.
+Preflight is a local-first Rails application for reviewing a branch like a GitHub
+pull request before you push it upstream.
 
-Things you may want to cover:
+## What it does
 
-* Ruby version
+- compares a local branch against a base branch, defaulting to the repository
+  default branch (`main` when present)
+- stores local pull request records with descriptions
+- walks commit-by-commit through the branch history
+- renders per-file diffs and supports inline comments on specific lines
+- lets you mark files as viewed and flags `New changes` when later commits touch
+  those files again
 
-* System dependencies
+## Requirements
 
-* Configuration
+- [Devbox](https://www.jetify.com/devbox) 0.16 or newer
 
-* Database creation
+## Setup
 
-* Database initialization
+```bash
+devbox run -- bundle install
+devbox run -- bin/rails db:prepare
+```
 
-* How to run the test suite
+## Run the app
 
-* Services (job queues, cache servers, search engines, etc.)
+```bash
+devbox run -- bin/rails server
+```
 
-* Deployment instructions
+Open [http://localhost:3000](http://localhost:3000).
 
-* ...
+By default Preflight reviews the git repository at the Rails app root. To point
+it at another local repository, set `PREFLIGHT_REPOSITORY_PATH` before starting
+the server.
+
+## Test
+
+```bash
+devbox run -- bin/rails test
+```
