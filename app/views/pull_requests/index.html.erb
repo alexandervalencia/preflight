@@ -1,8 +1,10 @@
 <section class="page">
+  <%= render "repository_header", local_repository: @local_repository %>
+
   <header class="page-header">
-    <p class="eyebrow">Preflight</p>
-    <h1><%= @local_repository.name %></h1>
-    <p>Review local branches from <code><%= @local_repository.path %></code> before you push them upstream.</p>
+    <p class="eyebrow">Open A Pull Request</p>
+    <h1>Compare changes</h1>
+    <p>Select the base and compare branches you want to review locally before you push them upstream.</p>
     <p><%= link_to "Browse folders", browse_repositories_path(directory: File.dirname(@local_repository.path)), class: "button button-secondary" %></p>
   </header>
 

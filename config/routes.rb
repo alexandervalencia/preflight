@@ -19,6 +19,10 @@ Rails.application.routes.draw do
     resources :pull_requests, only: [:index, :create, :show, :update]
   end
 
+  get "repositories/:repository_id/pull_requests/:id/files",
+    to: "pull_request_files#index",
+    as: :repository_pull_request_files
+
   resources :pull_requests, only: [] do
     resources :commits, controller: "pull_request_commits", only: [:index, :show]
     resources :inline_comments, only: [:create]

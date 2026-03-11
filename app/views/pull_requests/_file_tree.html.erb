@@ -1,0 +1,13 @@
+<aside class="gh-file-tree" data-role="file-tree">
+  <%= form_with url: filter_path, method: :get, class: "gh-file-filter" do %>
+    <%= text_field_tag :q, query, placeholder: "Filter files..." %>
+  <% end %>
+
+  <ul class="gh-file-tree__list">
+    <% files.each do |file| %>
+      <li>
+        <a href="##{file_anchor_id(file.path)}"><%= file.path %></a>
+      </li>
+    <% end %>
+  </ul>
+</aside>

@@ -2,8 +2,9 @@ class PullRequestCommitsController < ApplicationController
   before_action :set_pull_request
 
   def index
-    latest_commit = @pull_request.commits.last
-    redirect_to pull_request_commit_path(@pull_request, latest_commit.sha)
+    @local_repository = @pull_request.local_repository
+    @comparison = @pull_request.comparison
+    @grouped_commits = @comparison.commits.group_by { |commit| commit.authored_at.to_date }
   end
 
   def show
@@ -14,11 +15,19 @@ class PullRequestCommitsController < ApplicationController
     @previous_commit = @current_index&.positive? ? @comparison.commits[@current_index - 1] : nil
     @next_commit = @current_index && @current_index < @comparison.commits.length - 1 ? @comparison.commits[@current_index + 1] : nil
     @comments_by_key = comments_by_key(@pull_request.inline_comments.where(commit_sha: @commit.sha))
+    @query = params[:q].to_s.strip
+    @files = filtered_files(@commit.files, @query)
   end
 
   private
 
   def set_pull_request
     @pull_request = PullRequest.find(params[:pull_request_id])
+  end
+
+  def filtered_files(files, query)
+    return files if query.blank?
+
+    files.select { |file| file.path.downcase.include?(query.downcase) }
   end
 end

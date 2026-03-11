@@ -1,59 +1,44 @@
-<section class="page">
-  <header class="page-header">
-    <p class="eyebrow">Commit review</p>
-    <h1><%= @commit.message %></h1>
-    <p><%= link_to @local_repository.name, repository_pull_requests_path(@local_repository) %></p>
-    <div class="branch-row">
-      <span class="branch-pill"><%= @pull_request.base_branch %></span>
-      <span class="branch-arrow">&larr;</span>
-      <span class="branch-pill"><%= @pull_request.source_branch %></span>
-    </div>
-  </header>
+<section class="gh-page">
+  <%= render "pull_requests/repository_header", local_repository: @local_repository %>
 
-  <section class="panel commit-review-header">
-    <div class="commit-review-header__meta">
-      <strong>Commit <%= @current_index + 1 %> of <%= @comparison.commits.length %></strong>
-      <span><code><%= @commit.short_sha %></code></span>
-    </div>
-    <div class="commit-navigation">
-      <% if @previous_commit %>
-        <%= link_to "Previous", pull_request_commit_path(@pull_request, @previous_commit.sha), class: "button button-secondary button-small" %>
-      <% else %>
-        <span></span>
-      <% end %>
+  <%= render "pull_requests/pull_request_header",
+    local_repository: @local_repository,
+    pull_request: @pull_request,
+    comparison: @comparison,
+    active_tab: :commits %>
 
-      <%= link_to "Back to pull request", repository_pull_request_path(@local_repository, @pull_request), class: "button button-secondary button-small" %>
+  <div class="gh-review-layout">
+    <%= render "pull_requests/file_tree",
+      files: @commit.files,
+      query: @query,
+      filter_path: pull_request_commit_path(@pull_request, @commit.sha) %>
 
-      <% if @next_commit %>
-        <%= link_to "Next", pull_request_commit_path(@pull_request, @next_commit.sha), class: "button button-secondary button-small" %>
-      <% else %>
-        <span></span>
-      <% end %>
-    </div>
-  </section>
-
-  <section class="panel commit-strip-panel">
-    <div class="panel-header">
-      <h2>Commits</h2>
-    </div>
-    <ol class="commit-strip" data-role="commit-rail">
-      <% @comparison.commits.each do |commit| %>
-        <li class="<%= "commit-current" if commit.sha == @commit.sha %>">
-          <%= link_to pull_request_commit_path(@pull_request, commit.sha), class: "commit-chip" do %>
-            <strong><%= commit.message %></strong>
-            <span><%= commit.short_sha %></span>
+    <section class="gh-diff-column">
+      <article class="gh-card gh-commit-summary" data-role="commit-summary">
+        <div class="gh-card-body">
+          <h2><%= @commit.message %></h2>
+          <% if @commit.body.present? %>
+            <pre><%= @commit.body %></pre>
           <% end %>
-        </li>
-      <% end %>
-    </ol>
-  </section>
 
-  <section class="panel commit-diff-panel">
-    <div class="panel-header">
-      <h2>Files changed in this commit</h2>
-    </div>
-    <div class="changed-files">
-      <% @commit.files.each do |file| %>
+          <div class="gh-commit-summary__footer">
+            <span><%= @commit.author_name %> committed <%= time_ago_in_words(@commit.authored_at) %> ago</span>
+            <code>commit <%= @commit.short_sha %></code>
+          </div>
+
+          <div class="gh-commit-summary__actions">
+            <% if @previous_commit %>
+              <%= link_to "Prev", pull_request_commit_path(@pull_request, @previous_commit.sha), class: "button button-secondary button-small" %>
+            <% end %>
+            <% if @next_commit %>
+              <%= link_to "Next", pull_request_commit_path(@pull_request, @next_commit.sha), class: "button button-secondary button-small" %>
+            <% end %>
+            <%= link_to "Browse files", repository_pull_request_files_path(@local_repository, @pull_request), class: "button button-secondary button-small" %>
+          </div>
+        </div>
+      </article>
+
+      <% @files.each do |file| %>
         <%= render "pull_requests/diff_file",
           pull_request: @pull_request,
           file: file,
@@ -62,6 +47,6 @@
           redirect_path: pull_request_commit_path(@pull_request, @commit.sha),
           show_review_state: false %>
       <% end %>
-    </div>
-  </section>
+    </section>
+  </div>
 </section>

@@ -24,15 +24,19 @@ class PullRequestsFlowTest < ActionDispatch::IntegrationTest
       follow_redirect!
       assert_response :success
       assert_select "h1", text: "feature"
-      assert_select "a", text: "Conversation"
-      assert_select "a", text: "Commits"
-      assert_select "a", text: "Files changed"
+      assert_select "a[href='#{repository_pull_request_path(repository, pull_request)}']", text: /Conversation/
+      assert_select "a[href='#{pull_request_commits_path(pull_request)}']", text: /Commits/
+      assert_select "a[href='#{repository_pull_request_files_path(repository, pull_request)}']", text: /Files changed/
+      assert_select "[data-role='conversation-card']", text: /Review the widget work\./
+      assert_select "[data-role='pr-sidebar']", text: /Reviewers/
       assert_select "[data-role='branch-pill']", text: "main"
       assert_select "[data-role='branch-pill']", text: "feature"
-      assert_select "textarea[name='pull_request[description]']", text: "Review the widget work."
       assert_select "[data-role='pr-summary']", text: /2 commits/
 
-      get repository_pull_request_path(repository, pull_request, tab: "files")
+      get repository_pull_request_files_path(repository, pull_request)
+      assert_select "input[name='q']"
+      assert_select "[data-role='file-tree']", text: /README\.md/
+      assert_select "[data-role='file-tree']", text: /app\/models\/widget\.rb/
       assert_select "[data-role='changed-file']", text: /README.md/
       assert_select "[data-role='changed-file']", text: /app\/models\/widget.rb/
     end
@@ -64,7 +68,8 @@ class PullRequestsFlowTest < ActionDispatch::IntegrationTest
       }
 
       assert_redirected_to repository_pull_request_path(repository, pull_request)
-      assert_equal "Ready to merge once the widget lands.", pull_request.reload.description
+      follow_redirect!
+      assert_select "[data-role='conversation-card']", text: /Ready to merge once the widget lands\./
     end
   end
 end

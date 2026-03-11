@@ -1,0 +1,31 @@
+<section class="gh-page">
+  <%= render "pull_requests/repository_header", local_repository: @local_repository %>
+
+  <%= render "pull_requests/pull_request_header",
+    local_repository: @local_repository,
+    pull_request: @pull_request,
+    comparison: @comparison,
+    active_tab: :commits %>
+
+  <section class="gh-commits-index">
+    <% @grouped_commits.each do |date, commits| %>
+      <div class="gh-commit-group">
+        <h2><%= commit_group_title(date) %></h2>
+
+        <% commits.each do |commit| %>
+          <article class="gh-commit-list-item" data-role="commit-list-item">
+            <div>
+              <strong><%= link_to commit.message, pull_request_commit_path(@pull_request, commit.sha) %></strong>
+              <p><%= commit.author_name %> committed <%= time_ago_in_words(commit.authored_at) %> ago</p>
+            </div>
+
+            <div class="gh-commit-list-item__meta">
+              <span class="gh-verified">Verified</span>
+              <code><%= commit.short_sha %></code>
+            </div>
+          </article>
+        <% end %>
+      </div>
+    <% end %>
+  </section>
+</section>

@@ -30,7 +30,8 @@ class LocalRepositoriesFlowTest < ActionDispatch::IntegrationTest
       assert_redirected_to repository_pull_requests_path(repository)
       follow_redirect!
       assert_response :success
-      assert_select "h1", text: repository.name
+      assert_select ".gh-repository-header__path", text: /#{Regexp.escape(repository.name)}/
+      assert_select "h1", text: "Compare changes"
       assert_select "form[action='#{repository_pull_requests_path(repository)}']"
       assert_select "a", text: "Browse folders"
     end

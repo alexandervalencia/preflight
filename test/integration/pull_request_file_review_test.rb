@@ -8,10 +8,10 @@ class PullRequestFileReviewTest < ActionDispatch::IntegrationTest
 
       post pull_request_viewed_files_path(pull_request), params: {
         path: "app/models/widget.rb",
-        redirect_to: repository_pull_request_path(repository, pull_request, tab: "files")
+        redirect_to: repository_pull_request_files_path(repository, pull_request)
       }
 
-      assert_redirected_to repository_pull_request_path(repository, pull_request, tab: "files")
+      assert_redirected_to repository_pull_request_files_path(repository, pull_request)
       follow_redirect!
       assert_select "[data-path='app/models/widget.rb'] [data-role='view-state']", text: "Viewed"
 
@@ -22,7 +22,7 @@ class PullRequestFileReviewTest < ActionDispatch::IntegrationTest
         message: "Ship widget"
       )
 
-      get repository_pull_request_path(repository, pull_request, tab: "files")
+      get repository_pull_request_files_path(repository, pull_request)
 
       assert_select "[data-path='app/models/widget.rb'] [data-role='view-state']", text: "New changes"
     end

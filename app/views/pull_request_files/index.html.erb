@@ -1,0 +1,38 @@
+<section class="gh-page">
+  <%= render "pull_requests/repository_header", local_repository: @local_repository %>
+
+  <%= render "pull_requests/pull_request_header",
+    local_repository: @local_repository,
+    pull_request: @pull_request,
+    comparison: @comparison,
+    active_tab: :files %>
+
+  <section class="gh-review-toolbar">
+    <div class="gh-review-toolbar__left">
+      <span><%= @viewed_files_by_path.values.count { |viewed_file| viewed_file.current?(repository: @pull_request.git_repository) } %> / <%= @comparison.files.count %> viewed</span>
+    </div>
+    <div class="gh-review-toolbar__right">
+      <button class="button" type="button">Submit review</button>
+    </div>
+  </section>
+
+  <div class="gh-review-layout">
+    <%= render "pull_requests/file_tree",
+      files: @comparison.files,
+      query: @query,
+      filter_path: repository_pull_request_files_path(@local_repository, @pull_request) %>
+
+    <section class="gh-diff-column">
+      <% @files.each do |file| %>
+        <%= render "pull_requests/diff_file",
+          pull_request: @pull_request,
+          file: file,
+          comments_by_key: @comments_by_key,
+          commit_sha: nil,
+          redirect_path: repository_pull_request_files_path(@local_repository, @pull_request),
+          show_review_state: true,
+          viewed_file: @viewed_files_by_path[file.path] %>
+      <% end %>
+    </section>
+  </div>
+</section>

@@ -2,11 +2,17 @@
   <% if local_assigns[:show_review_state] %>
     <% state = file_view_state(pull_request, viewed_file) %>
   <% end %>
+  <% stats = diff_stats(file) %>
 
-  <header>
-    <div>
+  <header id="<%= file_anchor_id(file.path) %>">
+    <div class="gh-file-header">
       <strong><%= file.path %></strong>
       <span><%= file.status %></span>
+    </div>
+
+    <div class="gh-file-stats">
+      <span class="gh-additions">+<%= stats[:additions] %></span>
+      <span class="gh-deletions">-<%= stats[:deletions] %></span>
     </div>
 
     <% if local_assigns[:show_review_state] %>
@@ -16,31 +22,32 @@
         <% if state.action_label %>
           <%= button_to state.action_label,
             pull_request_viewed_files_path(pull_request),
-            params: { path: file.path },
+            params: { path: file.path, redirect_to: redirect_path },
             class: "button button-small button-secondary" %>
         <% end %>
       </div>
     <% end %>
   </header>
 
-  <table class="diff-table">
+  <table class="diff-table gh-split-diff">
     <tbody>
-      <% file.lines.each do |line| %>
-        <% side, line_number = comment_target_for(line) %>
-        <% comments = side ? comments_by_key.fetch([file.path, side, line_number], []) : [] %>
+      <% split_diff_rows(file, comments_by_key).each do |row| %>
+        <% left = row.left %>
+        <% right = row.right %>
 
-        <tr class="<%= diff_line_class(line) %>">
-          <td class="line-number"><%= line.old_number %></td>
-          <td class="line-number"><%= line.new_number %></td>
-          <td class="line-code"><code><%= line.content %></code></td>
+        <tr class="gh-split-row">
+          <td class="line-number <%= "line-number--#{left.kind}" unless left.kind == :empty %>"><%= left.number %></td>
+          <td class="line-code line-code--<%= left.kind %>"><code><%= left.content %></code></td>
+          <td class="line-number <%= "line-number--#{right.kind}" unless right.kind == :empty %>"><%= right.number %></td>
+          <td class="line-code line-code--<%= right.kind %>"><code><%= right.content %></code></td>
           <td class="line-form">
-            <% if side && line_number %>
+            <% if row.comment_side && row.comment_line_number %>
               <details class="inline-comment-shell">
                 <summary>Add comment</summary>
                 <%= form_with url: pull_request_inline_comments_path(pull_request), class: "inline-comment-form" do %>
                   <%= hidden_field_tag "inline_comment[path]", file.path %>
-                  <%= hidden_field_tag "inline_comment[side]", side %>
-                  <%= hidden_field_tag "inline_comment[line_number]", line_number %>
+                  <%= hidden_field_tag "inline_comment[side]", row.comment_side %>
+                  <%= hidden_field_tag "inline_comment[line_number]", row.comment_line_number %>
                   <%= hidden_field_tag "inline_comment[commit_sha]", commit_sha %>
                   <%= hidden_field_tag :redirect_to, redirect_path %>
                   <%= text_area_tag "inline_comment[body]", nil, rows: 2, placeholder: "Add a comment" %>
@@ -51,11 +58,13 @@
           </td>
         </tr>
 
-        <% comments.each do |comment| %>
+        <% row.comments.each do |comment| %>
           <tr class="comment-row">
             <td></td>
             <td></td>
-            <td colspan="2">
+            <td></td>
+            <td></td>
+            <td>
               <div class="inline-comment" data-role="inline-comment"><%= comment.body %></div>
             </td>
           </tr>

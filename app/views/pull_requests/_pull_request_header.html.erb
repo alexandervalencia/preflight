@@ -1,0 +1,53 @@
+<% summary = pr_status_summary(comparison) %>
+<% conversation_count = pull_request.inline_comments.count %>
+<% commits_count = comparison.commits.count %>
+<% changed_files_count = comparison.files.count %>
+
+<header class="gh-pr-header">
+  <p class="gh-breadcrumb">
+    <%= link_to local_repository.name, repository_pull_requests_path(local_repository) %>
+    <span>/</span>
+    <span>pull request</span>
+  </p>
+
+  <div class="gh-pr-title-row">
+    <h1 class="gh-pr-title"><%= pull_request.source_branch %></h1>
+    <span class="gh-pr-number">#<%= pull_request.id %></span>
+  </div>
+
+  <div class="gh-pr-meta">
+    <span class="gh-state-badge">Open</span>
+    <span class="gh-pr-meta__text">
+      <strong>Preflight</strong> wants to merge
+      <strong><%= pluralize(commits_count, "commit") %></strong>
+      into
+      <span class="gh-inline-branch" data-role="branch-pill"><%= pull_request.base_branch %></span>
+      from
+      <span class="gh-inline-branch" data-role="branch-pill"><%= pull_request.source_branch %></span>
+    </span>
+  </div>
+
+  <nav class="gh-tabs">
+    <%= link_to repository_pull_request_path(local_repository, pull_request),
+      class: ["gh-tab", ("gh-tab--active" if active_tab == :conversation)] do %>
+      <span>Conversation</span>
+      <span class="gh-tab-count"><%= conversation_count %></span>
+    <% end %>
+    <%= link_to pull_request_commits_path(pull_request),
+      class: ["gh-tab", ("gh-tab--active" if active_tab == :commits)] do %>
+      <span>Commits</span>
+      <span class="gh-tab-count"><%= commits_count %></span>
+    <% end %>
+    <%= link_to repository_pull_request_files_path(local_repository, pull_request),
+      class: ["gh-tab", ("gh-tab--active" if active_tab == :files)] do %>
+      <span>Files changed</span>
+      <span class="gh-tab-count"><%= changed_files_count %></span>
+    <% end %>
+
+    <div class="gh-tab-summary" data-role="pr-summary">
+      <span class="gh-tab-summary__count"><%= pluralize(commits_count, "commit") %></span>
+      <span class="gh-additions">+<%= summary[:additions] %></span>
+      <span class="gh-deletions">-<%= summary[:deletions] %></span>
+    </div>
+  </nav>
+</header>

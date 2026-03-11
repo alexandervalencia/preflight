@@ -1,83 +1,48 @@
-<section class="page">
-  <header class="page-header">
-    <p class="eyebrow">Local pull request</p>
-    <h1><%= @pull_request.source_branch %></h1>
-    <p><%= link_to @local_repository.name, repository_pull_requests_path(@local_repository) %></p>
-    <div class="branch-row">
-      <span class="branch-pill" data-role="branch-pill"><%= @pull_request.base_branch %></span>
-      <span class="branch-arrow">&larr;</span>
-      <span class="branch-pill" data-role="branch-pill"><%= @pull_request.source_branch %></span>
-    </div>
-  </header>
+<section class="gh-page">
+  <%= render "repository_header", local_repository: @local_repository %>
 
-  <nav class="pr-tabs">
-    <%= link_to "Conversation",
-      repository_pull_request_path(@local_repository, @pull_request),
-      class: ["pr-tab", ("pr-tab--active" if @tab == "conversation")] %>
-    <%= link_to "Commits", pull_request_commits_path(@pull_request), class: "pr-tab" %>
-    <%= link_to "Files changed",
-      repository_pull_request_path(@local_repository, @pull_request, tab: "files"),
-      class: ["pr-tab", ("pr-tab--active" if @tab == "files")] %>
-  </nav>
+  <%= render "pull_request_header",
+    local_repository: @local_repository,
+    pull_request: @pull_request,
+    comparison: @comparison,
+    active_tab: :conversation %>
 
-  <% if @tab == "conversation" %>
-    <section class="grid">
-      <section class="panel">
-        <div class="panel-header">
-          <h2>Conversation</h2>
+  <div class="gh-content-with-sidebar">
+    <section class="gh-main-column">
+      <article class="gh-card gh-conversation-card" data-role="conversation-card">
+        <header class="gh-card-header">
+          <strong>Preflight</strong>
+          <span>opened this local pull request</span>
+        </header>
+
+        <div class="gh-card-body markdown-body">
+          <%= simple_format(@pull_request.description.presence || "No description provided yet.") %>
         </div>
+      </article>
 
-        <div class="summary-banner" data-role="pr-summary">
-          <strong><%= pluralize(@comparison.commits.count, "commit") %></strong>
-          <span>across <%= pluralize(@comparison.files.count, "changed file") %></span>
-        </div>
+      <details class="gh-card gh-edit-card">
+        <summary>Edit pull request</summary>
+        <div class="gh-card-body">
+          <%= form_with model: @pull_request, url: repository_pull_request_path(@local_repository, @pull_request), method: :patch, class: "gh-form" do |form| %>
+            <div class="field">
+              <%= form.label :base_branch, "Base branch" %>
+              <%= form.select :base_branch, options_for_select(@branches.map(&:name), @pull_request.base_branch) %>
+            </div>
 
-        <%= form_with model: @pull_request, url: repository_pull_request_path(@local_repository, @pull_request), method: :patch, class: "details-form" do |form| %>
-          <div class="field">
-            <%= form.label :base_branch, "Base branch" %>
-            <%= form.select :base_branch, options_for_select(@branches.map(&:name), @pull_request.base_branch) %>
-          </div>
+            <div class="field">
+              <%= form.label :description, "Description" %>
+              <%= form.text_area :description, rows: 10 %>
+            </div>
 
-          <div class="field">
-            <%= form.label :description, "Description" %>
-            <%= form.text_area :description, rows: 8 %>
-          </div>
-
-          <%= form.submit "Update pull request", class: "button" %>
-        <% end %>
-      </section>
-
-      <aside class="panel">
-        <div class="panel-header">
-          <h2>Ready to review</h2>
-        </div>
-        <ol class="commit-list">
-          <% @comparison.commits.each do |commit| %>
-            <li>
-              <strong><%= commit.message %></strong>
-              <span><%= commit.short_sha %></span>
-            </li>
+            <%= form.submit "Save", class: "button" %>
           <% end %>
-        </ol>
-      </aside>
+        </div>
+      </details>
     </section>
-  <% else %>
-    <section class="panel">
-      <div class="panel-header">
-        <h2>Files changed</h2>
-      </div>
-      <div class="changed-files">
-        <% @comparison.files.each do |file| %>
-          <%= render "diff_file",
-            pull_request: @pull_request,
-            file: file,
-            comments_by_key: @comments_by_key,
-            commit_sha: nil,
-            redirect_path: repository_pull_request_path(@local_repository, @pull_request, tab: "files"),
-            show_review_state: true,
-            viewed_file: @viewed_files_by_path[file.path] %>
-        <% end %>
-      </div>
-    </section>
-  <% end %>
+
+    <%= render "sidebar",
+      local_repository: @local_repository,
+      pull_request: @pull_request,
+      comparison: @comparison %>
+  </div>
 </section>

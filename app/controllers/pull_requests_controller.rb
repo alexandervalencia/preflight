@@ -26,22 +26,14 @@ class PullRequestsController < ApplicationController
   end
 
   def show
-    @tab = params[:tab].presence_in(%w[conversation files]) || "conversation"
-    @comparison = @pull_request.comparison
-    @branches = @local_repository.branches
-    @comments_by_key = comments_by_key(@pull_request.inline_comments.where(commit_sha: nil))
-    @viewed_files_by_path = @pull_request.viewed_files.index_by(&:path)
+    load_pull_request_data
   end
 
   def update
     if @pull_request.update(pull_request_update_params)
       redirect_to repository_pull_request_path(@local_repository, @pull_request)
     else
-      @tab = "conversation"
-      @comparison = @pull_request.comparison
-      @branches = @local_repository.branches
-      @comments_by_key = comments_by_key(@pull_request.inline_comments.where(commit_sha: nil))
-      @viewed_files_by_path = @pull_request.viewed_files.index_by(&:path)
+      load_pull_request_data
       render :show, status: :unprocessable_entity
     end
   end
@@ -68,5 +60,10 @@ class PullRequestsController < ApplicationController
     return @local_repository.current_branch if @local_repository.current_branch != default_base_branch
 
     @local_repository.branches.map(&:name).find { |branch_name| branch_name != default_base_branch }
+  end
+
+  def load_pull_request_data
+    @comparison = @pull_request.comparison
+    @branches = @local_repository.branches
   end
 end

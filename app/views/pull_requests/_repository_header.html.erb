@@ -1,0 +1,21 @@
+<header class="gh-repository-header">
+  <div class="gh-repository-header__path">
+    <span class="gh-repository-owner">local</span>
+    <span>/</span>
+    <strong><%= local_repository.name %></strong>
+    <span class="gh-repository-visibility">Local</span>
+  </div>
+
+  <p class="gh-repository-header__location"><code><%= local_repository.path %></code></p>
+
+  <nav class="gh-repository-nav">
+    <span class="gh-repository-nav__item">Code</span>
+    <%= link_to repository_pull_requests_path(local_repository),
+      class: ["gh-repository-nav__item", "gh-repository-nav__item--active"] do %>
+      <span>Pull requests</span>
+      <span class="gh-repository-nav__count"><%= local_repository.pull_requests.count %></span>
+    <% end %>
+    <span class="gh-repository-nav__item">Branches</span>
+    <span class="gh-repository-nav__item">Reviews</span>
+  </nav>
+</header>
