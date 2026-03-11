@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_03_10_230500) do
+ActiveRecord::Schema[8.1].define(version: 2026_03_11_102000) do
   create_table "inline_comments", force: :cascade do |t|
     t.text "body", null: false
     t.string "commit_sha"
@@ -38,6 +38,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_03_10_230500) do
     t.integer "local_repository_id", null: false
     t.string "source_branch", null: false
     t.datetime "updated_at", null: false
+    t.index ["local_repository_id", "source_branch"], name: "index_pull_requests_on_repository_and_source_branch", unique: true
     t.index ["local_repository_id"], name: "index_pull_requests_on_local_repository_id"
   end
 

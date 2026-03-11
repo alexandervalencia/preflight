@@ -6,6 +6,10 @@ class PullRequest < ApplicationRecord
   validates :local_repository, presence: true
   validates :source_branch, presence: true
   validates :base_branch, presence: true
+  validates :source_branch, uniqueness: {
+    scope: :local_repository_id,
+    message: "already has an open local pull request"
+  }
   validate :base_branch_differs_from_source_branch
 
   before_validation :assign_default_base_branch

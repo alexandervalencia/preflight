@@ -8,8 +8,10 @@ class PullRequestsFlowTest < ActionDispatch::IntegrationTest
 
       assert_response :success
       assert_select "form[action='#{repository_pull_requests_path(repository)}']"
-      assert_select "select[name='pull_request[source_branch]'] option", text: "feature"
-      assert_select "select[name='pull_request[base_branch]'] option[selected='selected']", text: "main"
+      assert_select "select[name='source_branch'] option", text: "feature"
+      assert_select "select[name='base_branch'] option[selected='selected']", text: "main"
+      assert_select "input[name='pull_request[source_branch]'][value='feature']", count: 1
+      assert_select "input[name='pull_request[base_branch]'][value='main']", count: 1
 
       post repository_pull_requests_path(repository), params: {
         pull_request: {
@@ -53,8 +55,8 @@ class PullRequestsFlowTest < ActionDispatch::IntegrationTest
       get repository_pull_requests_path(repository)
 
       assert_response :success
-      assert_select "select[name='pull_request[base_branch]'] option[selected='selected']", text: "main"
-      assert_select "select[name='pull_request[source_branch]'] option[selected='selected']", text: "feature"
+      assert_select "select[name='base_branch'] option[selected='selected']", text: "main"
+      assert_select "select[name='source_branch'] option[selected='selected']", text: "feature"
     end
   end
 
@@ -73,6 +75,47 @@ class PullRequestsFlowTest < ActionDispatch::IntegrationTest
       assert_redirected_to repository_pull_request_path(repository, pull_request)
       follow_redirect!
       assert_select "[data-role='conversation-card']", text: /Ready to merge once the widget lands\./
+    end
+  end
+
+  test "shows an existing pull request preview instead of allowing a duplicate branch pull request" do
+    with_sample_repository do |fixture|
+      repository = create_local_repository!(fixture)
+      pull_request = PullRequest.create!(
+        local_repository: repository,
+        source_branch: "feature",
+        base_branch: "main",
+        description: "Existing review in progress."
+      )
+
+      get repository_pull_requests_path(repository), params: {
+        source_branch: "feature",
+        base_branch: "main"
+      }
+
+      assert_response :success
+      assert_select "[data-role='existing-pr-preview']", text: /feature/
+      assert_select "[data-role='existing-pr-preview']", text: /Existing review in progress\./
+      assert_select "a[href='#{repository_pull_request_path(repository, pull_request)}']", text: "View pull request"
+      assert_select "input[type='submit'][value='Create local pull request']", count: 0
+    end
+  end
+
+  test "redirects duplicate branch creations to the existing pull request" do
+    with_sample_repository do |fixture|
+      repository = create_local_repository!(fixture)
+      pull_request = PullRequest.create!(local_repository: repository, source_branch: "feature", base_branch: "main")
+
+      post repository_pull_requests_path(repository), params: {
+        pull_request: {
+          source_branch: "feature",
+          base_branch: "main",
+          description: "Another description"
+        }
+      }
+
+      assert_redirected_to repository_pull_request_path(repository, pull_request)
+      assert_equal 1, repository.pull_requests.where(source_branch: "feature").count
     end
   end
 end

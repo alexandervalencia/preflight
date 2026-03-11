@@ -20,4 +20,16 @@ class PullRequestTest < ActiveSupport::TestCase
       assert_includes pull_request.errors[:base_branch], "must be different from the source branch"
     end
   end
+
+  test "allows only one pull request per source branch in a repository" do
+    with_sample_repository do |fixture|
+      local_repository = create_local_repository!(fixture)
+      PullRequest.create!(local_repository:, source_branch: "feature", base_branch: "main")
+
+      pull_request = PullRequest.new(local_repository:, source_branch: "feature", base_branch: "release")
+
+      assert_not pull_request.valid?
+      assert_includes pull_request.errors[:source_branch], "already has an open local pull request"
+    end
+  end
 end

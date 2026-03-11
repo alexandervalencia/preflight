@@ -3,17 +3,21 @@ class PullRequestsController < ApplicationController
   before_action :set_pull_request, only: [:show, :update]
 
   def index
-    default_base_branch = @local_repository.default_branch
-
     @pull_request = PullRequest.new(
-      base_branch: default_base_branch,
-      source_branch: default_source_branch(default_base_branch)
+      base_branch: selected_base_branch,
+      source_branch: selected_source_branch
     )
     @pull_requests = @local_repository.pull_requests.order(created_at: :desc)
     @branches = @local_repository.branches
+    @existing_pull_request = existing_pull_request_for(@pull_request.source_branch)
   end
 
   def create
+    if (existing_pull_request = existing_pull_request_for(pull_request_params[:source_branch]))
+      redirect_to repository_pull_request_path(@local_repository, existing_pull_request)
+      return
+    end
+
     @pull_request = @local_repository.pull_requests.new(pull_request_params)
 
     if @pull_request.save
@@ -21,6 +25,7 @@ class PullRequestsController < ApplicationController
     else
       @pull_requests = @local_repository.pull_requests.order(created_at: :desc)
       @branches = @local_repository.branches
+      @existing_pull_request = existing_pull_request_for(@pull_request.source_branch)
       render :index, status: :unprocessable_entity
     end
   end
@@ -60,6 +65,20 @@ class PullRequestsController < ApplicationController
     return @local_repository.current_branch if @local_repository.current_branch != default_base_branch
 
     @local_repository.branches.map(&:name).find { |branch_name| branch_name != default_base_branch }
+  end
+
+  def selected_base_branch
+    params[:base_branch].presence || @local_repository.default_branch
+  end
+
+  def selected_source_branch
+    params[:source_branch].presence || default_source_branch(selected_base_branch)
+  end
+
+  def existing_pull_request_for(source_branch)
+    return if source_branch.blank?
+
+    @local_repository.pull_requests.find_by(source_branch:)
   end
 
   def load_pull_request_data
