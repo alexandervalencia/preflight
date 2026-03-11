@@ -7,42 +7,35 @@
     comparison: @comparison,
     active_tab: :conversation %>
 
-  <div class="gh-content-with-sidebar">
-    <section class="gh-main-column">
-      <article class="gh-card gh-conversation-card" data-role="conversation-card">
-        <header class="gh-card-header">
-          <strong>Preflight</strong>
-          <span>opened this local pull request</span>
-        </header>
+  <section class="gh-main-column gh-main-column--solo">
+    <article class="gh-card gh-conversation-card" data-role="conversation-card">
+      <header class="gh-card-header">
+        <strong>Preflight</strong>
+        <span>opened this local pull request</span>
+      </header>
 
-        <div class="gh-card-body markdown-body">
-          <%= simple_format(@pull_request.description.presence || "No description provided yet.") %>
-        </div>
-      </article>
+      <div class="gh-card-body markdown-body">
+        <%= simple_format(@pull_request.description.presence || "No description provided yet.") %>
+      </div>
+    </article>
 
-      <details class="gh-card gh-edit-card">
-        <summary>Edit pull request</summary>
-        <div class="gh-card-body">
-          <%= form_with model: @pull_request, url: repository_pull_request_path(@local_repository, @pull_request), method: :patch, class: "gh-form" do |form| %>
-            <div class="field">
-              <%= form.label :base_branch, "Base branch" %>
-              <%= form.select :base_branch, options_for_select(@branches.map(&:name), @pull_request.base_branch) %>
-            </div>
+    <details class="gh-card gh-edit-card">
+      <summary>Edit pull request</summary>
+      <div class="gh-card-body">
+        <%= form_with model: @pull_request, url: repository_pull_request_path(@local_repository, @pull_request), method: :patch, class: "gh-form" do |form| %>
+          <div class="field">
+            <%= form.label :base_branch, "Base branch" %>
+            <%= form.select :base_branch, options_for_select(@branches.map(&:name), @pull_request.base_branch) %>
+          </div>
 
-            <div class="field">
-              <%= form.label :description, "Description" %>
-              <%= form.text_area :description, rows: 10 %>
-            </div>
+          <div class="field">
+            <%= form.label :description, "Description" %>
+            <%= form.text_area :description, rows: 10 %>
+          </div>
 
-            <%= form.submit "Save", class: "button" %>
-          <% end %>
-        </div>
-      </details>
-    </section>
-
-    <%= render "sidebar",
-      local_repository: @local_repository,
-      pull_request: @pull_request,
-      comparison: @comparison %>
-  </div>
+          <%= form.submit "Save", class: "button" %>
+        <% end %>
+      </div>
+    </details>
+  </section>
 </section>

@@ -541,6 +541,10 @@ pre {
   min-width: 0;
 }
 
+.gh-main-column--solo {
+  margin-top: 1rem;
+}
+
 .gh-sidebar {
   display: grid;
   gap: 1rem;

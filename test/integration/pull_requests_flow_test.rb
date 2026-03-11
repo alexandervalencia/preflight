@@ -30,7 +30,7 @@ class PullRequestsFlowTest < ActionDispatch::IntegrationTest
       assert_select "a[href='#{pull_request_commits_path(pull_request)}']", text: /Commits/
       assert_select "a[href='#{repository_pull_request_files_path(repository, pull_request)}']", text: /Files changed/
       assert_select "[data-role='conversation-card']", text: /Review the widget work\./
-      assert_select "[data-role='pr-sidebar']", text: /Reviewers/
+      assert_select "[data-role='pr-sidebar']", count: 0
       assert_select "[data-role='branch-pill']", text: "main"
       assert_select "[data-role='branch-pill']", text: "feature"
       assert_select "[data-role='pr-summary']", text: /2 commits/
