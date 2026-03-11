@@ -7,35 +7,82 @@
     comparison: @comparison,
     active_tab: :conversation %>
 
-  <section class="gh-main-column gh-main-column--solo">
-    <article class="gh-card gh-conversation-card" data-role="conversation-card">
-      <header class="gh-card-header">
-        <strong>Preflight</strong>
-        <span>opened this local pull request</span>
+  <% author_name = pull_request_author_name(@comparison) %>
+
+  <section class="gh-main-column gh-main-column--solo gh-conversation-page">
+    <div class="gh-conversation-shell">
+      <header class="gh-section-header gh-section-header--conversation">
+        <h2>Conversation</h2>
       </header>
 
-      <div class="gh-card-body markdown-body">
-        <%= simple_format(@pull_request.description.presence || "No description provided yet.") %>
-      </div>
-    </article>
+      <ol class="gh-timeline" data-role="conversation-timeline">
+        <li class="gh-timeline-item gh-timeline-item--comment">
+          <div class="gh-timeline-badge" aria-hidden="true"><%= author_initials(author_name) %></div>
+          <article class="gh-card gh-comment-card" data-role="conversation-card">
+            <header class="gh-card-header gh-comment-card__header">
+              <div class="gh-comment-card__meta">
+                <strong><%= author_name %></strong>
+                <span>commented on <%= pull_request_timestamp(@pull_request.created_at) %></span>
+              </div>
+            </header>
 
-    <details class="gh-card gh-edit-card">
-      <summary>Edit pull request</summary>
-      <div class="gh-card-body">
-        <%= form_with model: @pull_request, url: repository_pull_request_path(@local_repository, @pull_request), method: :patch, class: "gh-form" do |form| %>
-          <div class="field">
-            <%= form.label :base_branch, "Base branch" %>
-            <%= form.select :base_branch, options_for_select(@branches.map(&:name), @pull_request.base_branch) %>
-          </div>
+            <div class="gh-card-body markdown-body gh-markdown-body">
+              <%= render_pull_request_markdown(@pull_request.description.presence || "No description provided yet.") %>
+            </div>
+          </article>
+        </li>
 
-          <div class="field">
-            <%= form.label :description, "Description" %>
-            <%= form.text_area :description, rows: 10 %>
-          </div>
+        <% if @comparison.commits.any? %>
+          <li class="gh-timeline-item gh-timeline-item--event">
+            <div class="gh-timeline-badge gh-timeline-badge--event" aria-hidden="true">&#8593;</div>
+            <section class="gh-timeline-event">
+              <header class="gh-timeline-event__header">
+                <strong><%= author_name %></strong>
+                <span>added <%= pluralize(@comparison.commits.count, "commit") %> on <%= pull_request_timestamp(@comparison.commits.last.authored_at) %></span>
+              </header>
 
-          <%= form.submit "Save", class: "button" %>
+              <div class="gh-commit-list" data-role="conversation-commit-list">
+                <% @comparison.commits.each do |commit| %>
+                  <div class="gh-commit-list__item">
+                    <div class="gh-commit-list__meta">
+                      <span class="gh-timeline-badge gh-timeline-badge--mini" aria-hidden="true"><%= author_initials(commit.author_name) %></span>
+                      <%= link_to commit.message, pull_request_commit_path(@pull_request, commit.sha), class: "gh-commit-list__message" %>
+                    </div>
+                    <%= link_to commit.short_sha, pull_request_commit_path(@pull_request, commit.sha), class: "gh-commit-list__sha" %>
+                  </div>
+                <% end %>
+              </div>
+            </section>
+          </li>
         <% end %>
-      </div>
-    </details>
+
+        <li class="gh-timeline-item gh-timeline-item--editor">
+          <div class="gh-timeline-badge gh-timeline-badge--event" aria-hidden="true">&#9998;</div>
+          <article class="gh-card gh-comment-editor">
+            <header class="gh-card-header gh-comment-editor__header">
+              <strong>Edit pull request details</strong>
+            </header>
+
+            <div class="gh-card-body">
+              <%= form_with model: @pull_request, url: repository_pull_request_path(@local_repository, @pull_request), method: :patch, class: "gh-form gh-comment-editor__form" do |form| %>
+                <div class="field">
+                  <%= form.label :base_branch, "Base branch" %>
+                  <%= form.select :base_branch, options_for_select(@branches.map(&:name), @pull_request.base_branch) %>
+                </div>
+
+                <div class="field">
+                  <%= form.label :description, "Description" %>
+                  <%= form.text_area :description, rows: 12 %>
+                </div>
+
+                <div class="gh-comment-editor__actions">
+                  <%= form.submit "Save changes", class: "button" %>
+                </div>
+              <% end %>
+            </div>
+          </article>
+        </li>
+      </ol>
+    </div>
   </section>
 </section>

@@ -10,6 +10,8 @@
 !/tmp/storage/.keep
 /storage/*
 !/storage/.keep
+/output/playwright/*
+/tmp/pids/server.pid
 /vendor/bundle
 /node_modules
 /config/master.key

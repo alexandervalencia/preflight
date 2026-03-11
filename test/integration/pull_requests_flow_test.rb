@@ -26,11 +26,14 @@ class PullRequestsFlowTest < ActionDispatch::IntegrationTest
       follow_redirect!
       assert_response :success
       assert_select "h1", text: "feature"
+      assert_select "h2", text: "Conversation"
       assert_select "summary[aria-label='Edit title']"
       assert_select "a[href='#{repository_pull_request_path(repository, pull_request)}']", text: /Conversation/
       assert_select "a[href='#{pull_request_commits_path(pull_request)}']", text: /Commits/
       assert_select "a[href='#{repository_pull_request_files_path(repository, pull_request)}']", text: /Files changed/
       assert_select "[data-role='conversation-card']", text: /Review the widget work\./
+      assert_select "[data-role='conversation-commit-list'] a[href='#{pull_request_commit_path(pull_request, fixture.feature_commits[:add_widget])}']", text: /Add widget/
+      assert_select "[data-role='conversation-commit-list'] a[href='#{pull_request_commit_path(pull_request, fixture.feature_commits[:refine_widget])}']", text: /Refine widget/
       assert_select "[data-role='pr-sidebar']", count: 0
       assert_select "[data-role='branch-pill']", text: "main"
       assert_select "[data-role='branch-pill']", text: "feature"
@@ -41,6 +44,7 @@ class PullRequestsFlowTest < ActionDispatch::IntegrationTest
       assert_select "input[name='q']"
       assert_select "[data-role='diff-settings']"
       assert_select "[data-role='split-diff']"
+      assert_select "summary[aria-label='Edit title']", count: 0
       assert_select ".gh-code .k, .gh-code .nf, .gh-code .nb", minimum: 1
       assert_select "[data-role='file-tree']", text: /README\.md/
       assert_select "[data-role='file-tree']", text: /app\/models\/widget\.rb/
@@ -94,6 +98,36 @@ class PullRequestsFlowTest < ActionDispatch::IntegrationTest
       assert_redirected_to repository_pull_request_path(repository, pull_request)
       follow_redirect!
       assert_select "[data-role='conversation-card']", text: /Ready to merge once the widget lands\./
+    end
+  end
+
+  test "renders markdown on the conversation page" do
+    with_sample_repository do |fixture|
+      repository = create_local_repository!(fixture)
+      pull_request = PullRequest.create!(
+        local_repository: repository,
+        source_branch: "feature",
+        base_branch: "main",
+        description: <<~MARKDOWN
+          ### Motivation
+
+          Same as [rails#1](https://example.com/rails/1)
+
+          ```
+          puts "retry"
+          ```
+
+          * [x] Added tests
+        MARKDOWN
+      )
+
+      get repository_pull_request_path(repository, pull_request)
+
+      assert_response :success
+      assert_select "[data-role='conversation-card'] h3", text: "Motivation"
+      assert_select "[data-role='conversation-card'] a[href='https://example.com/rails/1']", text: "rails#1"
+      assert_select "[data-role='conversation-card'] pre code", text: /puts "retry"/
+      assert_select "[data-role='conversation-card'] input[type='checkbox'][checked='checked'][disabled='disabled']"
     end
   end
 
