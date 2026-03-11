@@ -9,19 +9,49 @@
 
   <section class="gh-review-toolbar">
     <div class="gh-review-toolbar__left">
-      <span><%= @viewed_files_by_path.values.count { |viewed_file| viewed_file.current?(repository: @pull_request.git_repository) } %> / <%= @comparison.files.count %> viewed</span>
+      <%= link_to(@show_file_tree ? "Hide file tree" : "Show file tree",
+        repository_pull_request_files_path(
+          @local_repository,
+          @pull_request,
+          diff_layout_query(request.query_parameters, tree: (@show_file_tree ? "0" : "1"))
+        ),
+        class: "gh-toolbar-button") %>
+      <span class="gh-toolbar-pill">Changes from <strong>all commits</strong></span>
+      <details class="gh-diff-settings" data-role="diff-settings">
+        <summary class="gh-toolbar-button gh-toolbar-button--icon" aria-label="Diff settings">
+          <span>&#9881;</span>
+        </summary>
+        <div class="gh-diff-settings__menu">
+          <p class="gh-diff-settings__label">Layout</p>
+          <%= link_to "Unified",
+            repository_pull_request_files_path(@local_repository, @pull_request, diff_layout_query(request.query_parameters, layout: "unified")),
+            class: ["gh-diff-settings__option", ("gh-diff-settings__option--active" if @layout == :unified)] %>
+          <%= link_to "Split",
+            repository_pull_request_files_path(@local_repository, @pull_request, diff_layout_query(request.query_parameters, layout: "split")),
+            class: ["gh-diff-settings__option", ("gh-diff-settings__option--active" if @layout == :split)] %>
+          <%= link_to(@compact_line_height ? "Compact line height" : "Comfortable line height",
+            repository_pull_request_files_path(@local_repository, @pull_request, diff_layout_query(request.query_parameters, compact: (@compact_line_height ? "0" : "1"))),
+            class: ["gh-diff-settings__option", ("gh-diff-settings__option--active" if @compact_line_height)]) %>
+        </div>
+      </details>
     </div>
     <div class="gh-review-toolbar__right">
+      <span><%= @viewed_files_by_path.values.count { |viewed_file| viewed_file.current?(repository: @pull_request.git_repository) } %> / <%= @comparison.files.count %> viewed</span>
       <button class="button" type="button">Submit review</button>
     </div>
   </section>
 
-  <div class="gh-review-layout">
-    <%= render "pull_requests/file_tree",
-      files: @comparison.files,
-      query: @query,
-      comment_counts: @comment_counts,
-      filter_path: repository_pull_request_files_path(@local_repository, @pull_request) %>
+  <div class="gh-review-layout <%= "gh-review-layout--tree-hidden" unless @show_file_tree %>">
+    <% if @show_file_tree %>
+      <%= render "pull_requests/file_tree",
+        files: @comparison.files,
+        query: @query,
+        comment_counts: @comment_counts,
+        filter_path: repository_pull_request_files_path(@local_repository, @pull_request),
+        layout: @layout,
+        compact_line_height: @compact_line_height,
+        show_file_tree: @show_file_tree %>
+    <% end %>
 
     <section class="gh-diff-column">
       <% @files.each do |file| %>
@@ -31,6 +61,8 @@
           comments_by_key: @comments_by_key,
           commit_sha: nil,
           redirect_path: repository_pull_request_files_path(@local_repository, @pull_request),
+          layout: @layout,
+          compact_line_height: @compact_line_height,
           show_review_state: true,
           viewed_file: @viewed_files_by_path[file.path] %>
       <% end %>

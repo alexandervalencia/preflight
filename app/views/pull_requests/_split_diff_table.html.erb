@@ -1,0 +1,98 @@
+<table class="diff-table gh-split-diff <%= "gh-diff-table--compact" if compact_line_height %>" data-role="split-diff">
+  <tbody>
+    <% split_diff_rows(file, comments_by_key).each do |row| %>
+      <% if row.kind == :hunk %>
+        <tr class="gh-hunk-row">
+          <td class="line-number line-number--hunk">...</td>
+          <td class="line-number line-number--hunk">...</td>
+          <td class="line-code line-code--hunk" colspan="3">
+            <code><%= row.hunk %></code>
+          </td>
+        </tr>
+        <% next %>
+      <% end %>
+
+      <% left = row.left %>
+      <% right = row.right %>
+      <% row_key = "#{file_anchor_id(file.path)}-#{row.comment_side || "none"}-#{row.comment_line_number || "none"}" %>
+
+      <tr class="gh-split-row">
+        <td class="line-number <%= "line-number--#{left.kind}" unless left.kind == :empty %>"><%= left.number %></td>
+        <td class="line-code line-code--<%= left.kind %> <%= "line-code--commentable" if row.comment_side == "left" %>">
+          <% if row.comment_side == "left" && row.comment_line_number %>
+            <details class="gh-inline-comment">
+              <summary class="gh-inline-comment__summary" data-role="comment-trigger" aria-label="Add comment on this line">
+                <span>+</span>
+              </summary>
+              <div class="gh-inline-comment__popover">
+                <%= render "pull_requests/inline_comment_form",
+                  pull_request: pull_request,
+                  file: file,
+                  side: row.comment_side,
+                  line_number: row.comment_line_number,
+                  commit_sha: commit_sha,
+                  redirect_path: redirect_path %>
+              </div>
+            </details>
+          <% end %>
+          <div class="line-code__content">
+            <code><%= highlighted_diff_line(file.path, left.content) %></code>
+          </div>
+        </td>
+        <td class="line-number <%= "line-number--#{right.kind}" unless right.kind == :empty %>"><%= right.number %></td>
+        <td class="line-code line-code--<%= right.kind %> <%= "line-code--commentable" if row.comment_side == "right" %>">
+          <% if row.comment_side == "right" && row.comment_line_number %>
+            <details class="gh-inline-comment">
+              <summary class="gh-inline-comment__summary" data-role="comment-trigger" aria-label="Add comment on this line">
+                <span>+</span>
+              </summary>
+              <div class="gh-inline-comment__popover">
+                <%= render "pull_requests/inline_comment_form",
+                  pull_request: pull_request,
+                  file: file,
+                  side: row.comment_side,
+                  line_number: row.comment_line_number,
+                  commit_sha: commit_sha,
+                  redirect_path: redirect_path %>
+              </div>
+            </details>
+          <% end %>
+          <div class="line-code__content">
+            <code><%= highlighted_diff_line(file.path, right.content) %></code>
+          </div>
+        </td>
+        <td class="line-menu">
+          <% if row.comment_side && row.comment_line_number %>
+            <details class="gh-inline-menu">
+              <summary class="gh-inline-menu__summary" data-role="comment-menu" aria-label="Line actions">
+                <span>&#8942;</span>
+              </summary>
+              <div class="gh-inline-menu__popover" id="<%= row_key %>-menu">
+                <p class="gh-inline-menu__title">Add comment on line <%= row.comment_line_number %></p>
+                <%= render "pull_requests/inline_comment_form",
+                  pull_request: pull_request,
+                  file: file,
+                  side: row.comment_side,
+                  line_number: row.comment_line_number,
+                  commit_sha: commit_sha,
+                  redirect_path: redirect_path %>
+              </div>
+            </details>
+          <% end %>
+        </td>
+      </tr>
+
+      <% row.comments.each do |comment| %>
+        <tr class="comment-row">
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td>
+            <div class="inline-comment" data-role="inline-comment"><%= comment.body %></div>
+          </td>
+        </tr>
+      <% end %>
+    <% end %>
+  </tbody>
+</table>

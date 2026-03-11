@@ -1,7 +1,10 @@
+require "rouge"
+
 module PullRequestsHelper
   FileViewState = Data.define(:label, :css_class, :action_label)
   SplitDiffCell = Data.define(:number, :content, :kind)
-  SplitDiffRow = Data.define(:left, :right, :comment_side, :comment_line_number, :comments)
+  SplitDiffRow = Data.define(:kind, :left, :right, :comment_side, :comment_line_number, :comments, :hunk)
+  UnifiedDiffRow = Data.define(:kind, :left_number, :right_number, :content, :cell_kind, :comment_side, :comment_line_number, :comments, :hunk)
 
   def comment_target_for(line)
     return ["left", line.old_number] if line.type == :deletion
@@ -48,6 +51,20 @@ module PullRequestsHelper
 
     while index < lines.length
       line = lines[index]
+
+      if line.type == :hunk
+        rows << SplitDiffRow.new(
+          kind: :hunk,
+          left: nil,
+          right: nil,
+          comment_side: nil,
+          comment_line_number: nil,
+          comments: [],
+          hunk: line.content
+        )
+        index += 1
+        next
+      end
 
       if line.type == :deletion && lines[index + 1]&.type == :addition
         deletion = lines[index]
@@ -100,6 +117,57 @@ module PullRequestsHelper
     rows
   end
 
+  def unified_diff_rows(file, comments_by_key)
+    file.lines.map do |line|
+      if line.type == :hunk
+        UnifiedDiffRow.new(
+          kind: :hunk,
+          left_number: nil,
+          right_number: nil,
+          content: nil,
+          cell_kind: :hunk,
+          comment_side: nil,
+          comment_line_number: nil,
+          comments: [],
+          hunk: line.content
+        )
+      else
+        comment_side, comment_line_number = comment_target_for(line)
+
+        UnifiedDiffRow.new(
+          kind: :line,
+          left_number: line.old_number,
+          right_number: line.new_number,
+          content: line.content,
+          cell_kind: line.type,
+          comment_side: comment_side,
+          comment_line_number: comment_line_number,
+          comments: comments_by_key.fetch([file.path, comment_side, comment_line_number], []),
+          hunk: nil
+        )
+      end
+    end
+  end
+
+  def highlighted_diff_line(path, content)
+    return "".html_safe if content.blank?
+
+    marker = content[0]
+    source = content[1..] || ""
+    lexer = diff_lexer_for(path, source)
+    tokens = diff_formatter.format(lexer.lex(source))
+    marker_html = ERB::Util.html_escape(marker == " " ? "\u00A0" : marker)
+
+    %(<span class="gh-code-marker">#{marker_html}</span><span class="gh-code">#{tokens}</span>).html_safe
+  end
+
+  def diff_layout_query(params_hash, **updates)
+    current = params_hash.to_h.compact_blank
+    merged = current.merge(updates.transform_keys(&:to_s))
+
+    merged.reject { |_key, value| value.blank? }
+  end
+
   def commit_group_title(date)
     "Commits on #{date.strftime('%b %-d, %Y')}"
   end
@@ -114,11 +182,24 @@ module PullRequestsHelper
     comments = comments_by_key.fetch([path, comment_side, comment_line_number], [])
 
     SplitDiffRow.new(
+      kind: :line,
       left:,
       right:,
       comment_side:,
       comment_line_number:,
-      comments:
+      comments:,
+      hunk: nil
     )
+  end
+
+  def diff_lexer_for(path, source)
+    @diff_lexers ||= {}
+    @diff_lexers[path] ||= Rouge::Lexer.guess(filename: path, source: source).new
+  rescue Rouge::Guesser::Ambiguous, Rouge::Guesser::GuessError
+    Rouge::Lexers::PlainText.new
+  end
+
+  def diff_formatter
+    @diff_formatter ||= Rouge::Formatters::HTML.new
   end
 end

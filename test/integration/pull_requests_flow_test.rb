@@ -26,6 +26,7 @@ class PullRequestsFlowTest < ActionDispatch::IntegrationTest
       follow_redirect!
       assert_response :success
       assert_select "h1", text: "feature"
+      assert_select "summary[aria-label='Edit title']"
       assert_select "a[href='#{repository_pull_request_path(repository, pull_request)}']", text: /Conversation/
       assert_select "a[href='#{pull_request_commits_path(pull_request)}']", text: /Commits/
       assert_select "a[href='#{repository_pull_request_files_path(repository, pull_request)}']", text: /Files changed/
@@ -38,12 +39,30 @@ class PullRequestsFlowTest < ActionDispatch::IntegrationTest
       get repository_pull_request_files_path(repository, pull_request)
       assert_select ".gh-page--wide"
       assert_select "input[name='q']"
+      assert_select "[data-role='diff-settings']"
+      assert_select "[data-role='split-diff']"
+      assert_select ".gh-code .k, .gh-code .nf, .gh-code .nb", minimum: 1
       assert_select "[data-role='file-tree']", text: /README\.md/
       assert_select "[data-role='file-tree']", text: /app\/models\/widget\.rb/
+      assert_select "[data-role='file-tree'] a[href='#file-readme-md']"
+      assert_select "[data-role='file-tree'] a[href='#file-app-models-widget-rb']"
       assert_select "[data-role='changed-file']", text: /README.md/
       assert_select "[data-role='changed-file']", text: /app\/models\/widget.rb/
       assert_select "[data-role='comment-trigger']"
       assert_select "[data-role='comment-menu']"
+    end
+  end
+
+  test "renders a unified files diff when requested" do
+    with_sample_repository do |fixture|
+      repository = create_local_repository!(fixture)
+      pull_request = PullRequest.create!(local_repository: repository, source_branch: "feature", base_branch: "main")
+
+      get repository_pull_request_files_path(repository, pull_request), params: { layout: "unified" }
+
+      assert_response :success
+      assert_select "[data-role='unified-diff']"
+      assert_select "[data-role='split-diff']", count: 0
     end
   end
 
@@ -75,6 +94,26 @@ class PullRequestsFlowTest < ActionDispatch::IntegrationTest
       assert_redirected_to repository_pull_request_path(repository, pull_request)
       follow_redirect!
       assert_select "[data-role='conversation-card']", text: /Ready to merge once the widget lands\./
+    end
+  end
+
+  test "updates the pull request title" do
+    with_sample_repository do |fixture|
+      repository = create_local_repository!(fixture)
+      pull_request = PullRequest.create!(local_repository: repository, source_branch: "feature", base_branch: "main")
+
+      patch repository_pull_request_path(repository, pull_request), params: {
+        pull_request: {
+          title: "Ship retryable exec_query support",
+          base_branch: "main",
+          description: ""
+        }
+      }
+
+      assert_redirected_to repository_pull_request_path(repository, pull_request)
+      follow_redirect!
+      assert_select "h1", text: "Ship retryable exec_query support"
+      assert_select ".gh-pr-number", text: "##{pull_request.id}"
     end
   end
 

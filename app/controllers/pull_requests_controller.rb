@@ -54,11 +54,11 @@ class PullRequestsController < ApplicationController
   end
 
   def pull_request_params
-    params.require(:pull_request).permit(:source_branch, :base_branch, :description)
+    params.require(:pull_request).permit(:title, :source_branch, :base_branch, :description)
   end
 
   def pull_request_update_params
-    params.require(:pull_request).permit(:base_branch, :description)
+    params.require(:pull_request).permit(:title, :base_branch, :description)
   end
 
   def default_source_branch(default_base_branch)

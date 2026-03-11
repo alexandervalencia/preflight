@@ -1,6 +1,16 @@
 require "test_helper"
 
 class PullRequestTest < ActiveSupport::TestCase
+  test "defaults the title to the source branch" do
+    with_sample_repository do |fixture|
+      local_repository = create_local_repository!(fixture)
+      pull_request = PullRequest.new(local_repository:, source_branch: "feature")
+
+      assert pull_request.valid?
+      assert_equal "feature", pull_request.title
+    end
+  end
+
   test "defaults the base branch to the repository default branch" do
     with_sample_repository do |fixture|
       local_repository = create_local_repository!(fixture)

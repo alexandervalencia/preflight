@@ -1,5 +1,8 @@
 <aside class="gh-file-tree" data-role="file-tree">
   <%= form_with url: filter_path, method: :get, class: "gh-file-filter" do %>
+    <%= hidden_field_tag :layout, local_assigns.fetch(:layout, :split) %>
+    <%= hidden_field_tag :compact, local_assigns.fetch(:compact_line_height, true) ? "1" : "0" %>
+    <%= hidden_field_tag :tree, local_assigns.fetch(:show_file_tree, true) ? "1" : "0" %>
     <%= text_field_tag :q, query, placeholder: "Filter files..." %>
   <% end %>
 
@@ -7,7 +10,7 @@
     <% files.each do |file| %>
       <% comment_count = local_assigns.fetch(:comment_counts, {}).fetch(file.path, 0) %>
       <li>
-        <a href="##{file_anchor_id(file.path)}">
+        <a href="#<%= file_anchor_id(file.path) %>">
           <span class="gh-file-tree__path"><%= file.path %></span>
           <span class="gh-file-tree__meta">
             <span class="gh-file-tree__status"><%= file.status %></span>

@@ -193,6 +193,7 @@ class GitRepository
         match = line.match(/-([0-9]+)(?:,\d+)? \+([0-9]+)(?:,\d+)?/)
         old_number = match[1].to_i
         new_number = match[2].to_i
+        parsed_lines << DiffLine.new(type: :hunk, content: line.chomp, old_number: nil, new_number: nil)
         next
       end
 

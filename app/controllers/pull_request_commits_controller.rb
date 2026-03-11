@@ -18,6 +18,9 @@ class PullRequestCommitsController < ApplicationController
     @comments_by_key = comments_by_key(comments)
     @comment_counts = comments.group(:path).count
     @query = params[:q].to_s.strip
+    @layout = params[:layout] == "unified" ? :unified : :split
+    @compact_line_height = params[:compact] != "0"
+    @show_file_tree = params[:tree] != "0"
     @files = filtered_files(@commit.files, @query)
   end
 

@@ -202,6 +202,7 @@ GEM
       tsort
     reline (0.6.3)
       io-console (~> 0.5)
+    rouge (4.7.0)
     securerandom (0.4.1)
     sqlite3 (2.9.1-aarch64-linux-gnu)
     sqlite3 (2.9.1-aarch64-linux-musl)
@@ -241,6 +242,7 @@ DEPENDENCIES
   propshaft
   puma (>= 5.0)
   rails (~> 8.1.2)
+  rouge
   sqlite3 (>= 2.1)
   tzinfo-data
 

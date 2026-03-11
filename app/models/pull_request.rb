@@ -4,6 +4,7 @@ class PullRequest < ApplicationRecord
   has_many :viewed_files, dependent: :destroy
 
   validates :local_repository, presence: true
+  validates :title, presence: true
   validates :source_branch, presence: true
   validates :base_branch, presence: true
   validates :source_branch, uniqueness: {
@@ -13,6 +14,7 @@ class PullRequest < ApplicationRecord
   validate :base_branch_differs_from_source_branch
 
   before_validation :assign_default_base_branch
+  before_validation :assign_default_title
 
   def git_repository
     local_repository.git_repository
@@ -40,6 +42,12 @@ class PullRequest < ApplicationRecord
     return if base_branch.present? || source_branch.blank? || local_repository.blank?
 
     self.base_branch = local_repository.default_branch
+  end
+
+  def assign_default_title
+    return if title.present? || source_branch.blank?
+
+    self.title = source_branch
   end
 
   def base_branch_differs_from_source_branch

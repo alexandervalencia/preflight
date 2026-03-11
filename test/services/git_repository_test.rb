@@ -21,6 +21,7 @@ class GitRepositoryTest < ActiveSupport::TestCase
       widget_file = comparison.files.find { |file| file.path == "app/models/widget.rb" }
 
       assert_equal "A", widget_file.status
+      assert_includes widget_file.lines.map(&:type), :hunk
       assert_includes widget_file.lines.map(&:content), "+class Widget"
       assert_includes widget_file.lines.map(&:content), "+    :ready"
     end

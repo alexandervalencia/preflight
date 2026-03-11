@@ -5,6 +5,9 @@ class PullRequestFilesController < ApplicationController
   def index
     load_review_data
     @query = params[:q].to_s.strip
+    @layout = params[:layout] == "unified" ? :unified : :split
+    @compact_line_height = params[:compact] != "0"
+    @show_file_tree = params[:tree] != "0"
     @files = filtered_files(@comparison.files, @query)
   end
 
