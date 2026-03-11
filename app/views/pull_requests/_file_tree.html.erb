@@ -5,8 +5,17 @@
 
   <ul class="gh-file-tree__list">
     <% files.each do |file| %>
+      <% comment_count = local_assigns.fetch(:comment_counts, {}).fetch(file.path, 0) %>
       <li>
-        <a href="##{file_anchor_id(file.path)}"><%= file.path %></a>
+        <a href="##{file_anchor_id(file.path)}">
+          <span class="gh-file-tree__path"><%= file.path %></span>
+          <span class="gh-file-tree__meta">
+            <span class="gh-file-tree__status"><%= file.status %></span>
+            <% if comment_count.positive? %>
+              <span class="gh-file-tree__count" data-role="file-tree-count"><%= comment_count %></span>
+            <% end %>
+          </span>
+        </a>
       </li>
     <% end %>
   </ul>

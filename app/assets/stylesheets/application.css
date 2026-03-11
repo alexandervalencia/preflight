@@ -652,7 +652,10 @@ pre {
 }
 
 .gh-file-tree__list a {
-  display: block;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
   padding: 0.45rem 0.9rem;
   color: var(--gh-text);
   font-size: 0.875rem;
@@ -661,6 +664,41 @@ pre {
 .gh-file-tree__list a:hover {
   text-decoration: none;
   background: rgba(110, 118, 129, 0.1);
+}
+
+.gh-file-tree__path {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.gh-file-tree__meta {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  flex-shrink: 0;
+}
+
+.gh-file-tree__status,
+.gh-file-tree__count {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 1.2rem;
+  padding: 0.05rem 0.3rem;
+  border-radius: 999px;
+  font-size: 0.72rem;
+  font-weight: 600;
+}
+
+.gh-file-tree__status {
+  background: rgba(56, 139, 253, 0.14);
+  color: #58a6ff;
+}
+
+.gh-file-tree__count {
+  background: rgba(110, 118, 129, 0.22);
+  color: var(--gh-text);
 }
 
 .gh-diff-column {

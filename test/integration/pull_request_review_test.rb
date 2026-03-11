@@ -19,6 +19,7 @@ class PullRequestReviewTest < ActionDispatch::IntegrationTest
       assert_redirected_to repository_pull_request_files_path(repository, pull_request)
       follow_redirect!
       assert_select "[data-role='inline-comment']", text: /Ship this from the PR view\./
+      assert_select "[data-role='file-tree-count']", text: "1"
     end
   end
 

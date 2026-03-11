@@ -14,7 +14,9 @@ class PullRequestCommitsController < ApplicationController
     @current_index = @comparison.commits.index { |commit| commit.sha == @commit.sha }
     @previous_commit = @current_index&.positive? ? @comparison.commits[@current_index - 1] : nil
     @next_commit = @current_index && @current_index < @comparison.commits.length - 1 ? @comparison.commits[@current_index + 1] : nil
-    @comments_by_key = comments_by_key(@pull_request.inline_comments.where(commit_sha: @commit.sha))
+    comments = @pull_request.inline_comments.where(commit_sha: @commit.sha)
+    @comments_by_key = comments_by_key(comments)
+    @comment_counts = comments.group(:path).count
     @query = params[:q].to_s.strip
     @files = filtered_files(@commit.files, @query)
   end

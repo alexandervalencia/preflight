@@ -20,6 +20,7 @@
     <%= render "pull_requests/file_tree",
       files: @comparison.files,
       query: @query,
+      comment_counts: @comment_counts,
       filter_path: repository_pull_request_files_path(@local_repository, @pull_request) %>
 
     <section class="gh-diff-column">

@@ -11,6 +11,7 @@
     <%= render "pull_requests/file_tree",
       files: @commit.files,
       query: @query,
+      comment_counts: @comment_counts,
       filter_path: pull_request_commit_path(@pull_request, @commit.sha) %>
 
     <section class="gh-diff-column">

@@ -20,7 +20,9 @@ class PullRequestFilesController < ApplicationController
 
   def load_review_data
     @comparison = @pull_request.comparison
-    @comments_by_key = comments_by_key(@pull_request.inline_comments.where(commit_sha: nil))
+    comments = @pull_request.inline_comments.where(commit_sha: nil)
+    @comments_by_key = comments_by_key(comments)
+    @comment_counts = comments.group(:path).count
     @viewed_files_by_path = @pull_request.viewed_files.index_by(&:path)
   end
 
