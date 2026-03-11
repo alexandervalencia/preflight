@@ -56,11 +56,21 @@
           </li>
         <% end %>
 
+        <li class="gh-timeline-item gh-timeline-item--merge">
+          <div class="gh-timeline-badge gh-timeline-badge--merge" aria-hidden="true">&#10003;</div>
+          <section class="gh-merge-box">
+            <header class="gh-merge-box__header">
+              <strong>No conflicts with base branch</strong>
+            </header>
+            <p class="gh-merge-box__body">These branches can be merged cleanly. Review the files changed and update the description before you push this branch upstream.</p>
+          </section>
+        </li>
+
         <li class="gh-timeline-item gh-timeline-item--editor">
           <div class="gh-timeline-badge gh-timeline-badge--event" aria-hidden="true">&#9998;</div>
           <article class="gh-card gh-comment-editor">
             <header class="gh-card-header gh-comment-editor__header">
-              <strong>Edit pull request details</strong>
+              <strong>Edit pull request description</strong>
             </header>
 
             <div class="gh-card-body">

@@ -28,12 +28,16 @@ class PullRequestsFlowTest < ActionDispatch::IntegrationTest
       assert_select "h1", text: "feature"
       assert_select "h2", text: "Conversation"
       assert_select "summary[aria-label='Edit title']"
+      assert_select ".gh-header-pill", text: "Ready to merge"
+      assert_select ".gh-header-button", text: "Code"
       assert_select "a[href='#{repository_pull_request_path(repository, pull_request)}']", text: /Conversation/
       assert_select "a[href='#{pull_request_commits_path(pull_request)}']", text: /Commits/
+      assert_select ".gh-tab--disabled", text: /Checks/
       assert_select "a[href='#{repository_pull_request_files_path(repository, pull_request)}']", text: /Files changed/
       assert_select "[data-role='conversation-card']", text: /Review the widget work\./
       assert_select "[data-role='conversation-commit-list'] a[href='#{pull_request_commit_path(pull_request, fixture.feature_commits[:add_widget])}']", text: /Add widget/
       assert_select "[data-role='conversation-commit-list'] a[href='#{pull_request_commit_path(pull_request, fixture.feature_commits[:refine_widget])}']", text: /Refine widget/
+      assert_select ".gh-merge-box", text: /No conflicts with base branch/
       assert_select "[data-role='pr-sidebar']", count: 0
       assert_select "[data-role='branch-pill']", text: "main"
       assert_select "[data-role='branch-pill']", text: "feature"

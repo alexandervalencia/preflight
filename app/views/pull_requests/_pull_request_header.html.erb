@@ -12,32 +12,39 @@
   </p>
 
   <div class="gh-pr-title-row">
-    <div class="gh-pr-title-stack">
-      <h1 class="gh-pr-title"><%= pull_request.title %></h1>
-      <span class="gh-pr-number">#<%= pull_request.id %></span>
+    <div class="gh-pr-title-main">
+      <div class="gh-pr-title-stack">
+        <h1 class="gh-pr-title"><%= pull_request.title %></h1>
+        <span class="gh-pr-number">#<%= pull_request.id %></span>
+      </div>
+
+      <% if active_tab == :conversation %>
+        <details class="gh-title-editor">
+          <summary aria-label="Edit title" class="gh-title-editor__summary">
+            <span class="gh-title-editor__icon">&#9998;</span>
+          </summary>
+
+          <div class="gh-title-editor__popover">
+            <%= form_with model: pull_request,
+              url: repository_pull_request_path(local_repository, pull_request),
+              class: "gh-title-editor__form" do |form| %>
+              <%= form.label :title, "Edit title", class: "sr-only" %>
+              <%= form.text_field :title, value: pull_request.title, class: "gh-title-editor__input" %>
+              <%= form.hidden_field :base_branch, value: pull_request.base_branch %>
+              <%= form.hidden_field :description, value: pull_request.description %>
+              <div class="gh-title-editor__actions">
+                <%= form.submit "Save", class: "button button-small" %>
+              </div>
+            <% end %>
+          </div>
+        </details>
+      <% end %>
     </div>
 
-    <% if active_tab == :conversation %>
-      <details class="gh-title-editor">
-        <summary aria-label="Edit title" class="gh-title-editor__summary">
-          <span class="gh-title-editor__icon">&#9998;</span>
-        </summary>
-
-        <div class="gh-title-editor__popover">
-          <%= form_with model: pull_request,
-            url: repository_pull_request_path(local_repository, pull_request),
-            class: "gh-title-editor__form" do |form| %>
-            <%= form.label :title, "Edit title", class: "sr-only" %>
-            <%= form.text_field :title, value: pull_request.title, class: "gh-title-editor__input" %>
-            <%= form.hidden_field :base_branch, value: pull_request.base_branch %>
-            <%= form.hidden_field :description, value: pull_request.description %>
-            <div class="gh-title-editor__actions">
-              <%= form.submit "Save", class: "button button-small" %>
-            </div>
-          <% end %>
-        </div>
-      </details>
-    <% end %>
+    <div class="gh-pr-actions" aria-label="Pull request actions">
+      <span class="gh-header-pill">Ready to merge</span>
+      <span class="gh-header-button">Code</span>
+    </div>
   </div>
 
   <div class="gh-pr-meta">
@@ -63,6 +70,10 @@
       <span>Commits</span>
       <span class="gh-tab-count"><%= commits_count %></span>
     <% end %>
+    <span class="gh-tab gh-tab--disabled" aria-disabled="true">
+      <span>Checks</span>
+      <span class="gh-tab-count">0</span>
+    </span>
     <%= link_to repository_pull_request_files_path(local_repository, pull_request),
       class: ["gh-tab", ("gh-tab--active" if active_tab == :files)] do %>
       <span>Files changed</span>
