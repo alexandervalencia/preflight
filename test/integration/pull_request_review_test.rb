@@ -41,10 +41,13 @@ class PullRequestReviewTest < ActionDispatch::IntegrationTest
       get pull_request_commit_path(pull_request, fixture.feature_commits[:refine_widget])
 
       assert_response :success
+      assert_select ".gh-page--wide"
       assert_select "h1", text: "feature"
       assert_select "[data-role='commit-summary']", text: /Refine widget/
       assert_select "[data-role='file-tree']", text: /app\/models\/widget\.rb/
       assert_select "form[action='#{pull_request_inline_comments_path(pull_request)}']"
+      assert_select "[data-role='comment-trigger']"
+      assert_select "[data-role='comment-menu']"
     end
   end
 

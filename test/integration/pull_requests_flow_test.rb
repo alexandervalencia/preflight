@@ -34,11 +34,14 @@ class PullRequestsFlowTest < ActionDispatch::IntegrationTest
       assert_select "[data-role='pr-summary']", text: /2 commits/
 
       get repository_pull_request_files_path(repository, pull_request)
+      assert_select ".gh-page--wide"
       assert_select "input[name='q']"
       assert_select "[data-role='file-tree']", text: /README\.md/
       assert_select "[data-role='file-tree']", text: /app\/models\/widget\.rb/
       assert_select "[data-role='changed-file']", text: /README.md/
       assert_select "[data-role='changed-file']", text: /app\/models\/widget.rb/
+      assert_select "[data-role='comment-trigger']"
+      assert_select "[data-role='comment-menu']"
     end
   end
 

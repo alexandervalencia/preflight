@@ -34,25 +34,65 @@
       <% split_diff_rows(file, comments_by_key).each do |row| %>
         <% left = row.left %>
         <% right = row.right %>
+        <% row_key = "#{file_anchor_id(file.path)}-#{row.comment_side || "none"}-#{row.comment_line_number || "none"}" %>
 
         <tr class="gh-split-row">
           <td class="line-number <%= "line-number--#{left.kind}" unless left.kind == :empty %>"><%= left.number %></td>
-          <td class="line-code line-code--<%= left.kind %>"><code><%= left.content %></code></td>
+          <td class="line-code line-code--<%= left.kind %> <%= "line-code--commentable" if row.comment_side == "left" %>">
+            <% if row.comment_side == "left" && row.comment_line_number %>
+              <details class="gh-inline-comment">
+                <summary class="gh-inline-comment__summary" data-role="comment-trigger" aria-label="Add comment on this line">
+                  <span>+</span>
+                </summary>
+                <div class="gh-inline-comment__popover">
+                  <%= render "pull_requests/inline_comment_form",
+                    pull_request: pull_request,
+                    file: file,
+                    side: row.comment_side,
+                    line_number: row.comment_line_number,
+                    commit_sha: commit_sha,
+                    redirect_path: redirect_path %>
+                </div>
+              </details>
+            <% end %>
+            <div class="line-code__content"><code><%= left.content %></code></div>
+          </td>
           <td class="line-number <%= "line-number--#{right.kind}" unless right.kind == :empty %>"><%= right.number %></td>
-          <td class="line-code line-code--<%= right.kind %>"><code><%= right.content %></code></td>
-          <td class="line-form">
+          <td class="line-code line-code--<%= right.kind %> <%= "line-code--commentable" if row.comment_side == "right" %>">
+            <% if row.comment_side == "right" && row.comment_line_number %>
+              <details class="gh-inline-comment">
+                <summary class="gh-inline-comment__summary" data-role="comment-trigger" aria-label="Add comment on this line">
+                  <span>+</span>
+                </summary>
+                <div class="gh-inline-comment__popover">
+                  <%= render "pull_requests/inline_comment_form",
+                    pull_request: pull_request,
+                    file: file,
+                    side: row.comment_side,
+                    line_number: row.comment_line_number,
+                    commit_sha: commit_sha,
+                    redirect_path: redirect_path %>
+                </div>
+              </details>
+            <% end %>
+            <div class="line-code__content"><code><%= right.content %></code></div>
+          </td>
+          <td class="line-menu">
             <% if row.comment_side && row.comment_line_number %>
-              <details class="inline-comment-shell">
-                <summary>Add comment</summary>
-                <%= form_with url: pull_request_inline_comments_path(pull_request), class: "inline-comment-form" do %>
-                  <%= hidden_field_tag "inline_comment[path]", file.path %>
-                  <%= hidden_field_tag "inline_comment[side]", row.comment_side %>
-                  <%= hidden_field_tag "inline_comment[line_number]", row.comment_line_number %>
-                  <%= hidden_field_tag "inline_comment[commit_sha]", commit_sha %>
-                  <%= hidden_field_tag :redirect_to, redirect_path %>
-                  <%= text_area_tag "inline_comment[body]", nil, rows: 2, placeholder: "Add a comment" %>
-                  <%= submit_tag "Comment", class: "button button-small" %>
-                <% end %>
+              <details class="gh-inline-menu">
+                <summary class="gh-inline-menu__summary" data-role="comment-menu" aria-label="Line actions">
+                  <span>&#8942;</span>
+                </summary>
+                <div class="gh-inline-menu__popover" id="<%= row_key %>-menu">
+                  <p class="gh-inline-menu__title">Add comment on line <%= row.comment_line_number %></p>
+                  <%= render "pull_requests/inline_comment_form",
+                    pull_request: pull_request,
+                    file: file,
+                    side: row.comment_side,
+                    line_number: row.comment_line_number,
+                    commit_sha: commit_sha,
+                    redirect_path: redirect_path %>
+                </div>
               </details>
             <% end %>
           </td>

@@ -1,0 +1,11 @@
+<%= form_with url: pull_request_inline_comments_path(pull_request), class: "inline-comment-form" do %>
+  <%= hidden_field_tag "inline_comment[path]", file.path %>
+  <%= hidden_field_tag "inline_comment[side]", side %>
+  <%= hidden_field_tag "inline_comment[line_number]", line_number %>
+  <%= hidden_field_tag "inline_comment[commit_sha]", commit_sha %>
+  <%= hidden_field_tag :redirect_to, redirect_path %>
+  <%= text_area_tag "inline_comment[body]", nil, rows: 3, placeholder: "Leave a comment" %>
+  <div class="inline-comment-form__actions">
+    <%= submit_tag "Add single comment", class: "button button-small" %>
+  </div>
+<% end %>

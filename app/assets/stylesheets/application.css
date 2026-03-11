@@ -137,6 +137,11 @@ pre {
   margin: 0 auto;
 }
 
+.gh-page--wide {
+  width: calc(100vw - 2rem);
+  max-width: none;
+}
+
 .page {
   padding-top: 1.5rem;
 }
@@ -614,7 +619,7 @@ pre {
 
 .gh-review-layout {
   display: grid;
-  grid-template-columns: 280px minmax(0, 1fr);
+  grid-template-columns: 300px minmax(0, 1fr);
   gap: 1rem;
   align-items: start;
 }
@@ -781,7 +786,7 @@ pre {
 }
 
 .changed-file {
-  margin-bottom: 1rem;
+  margin-bottom: 0.75rem;
 }
 
 .changed-file header {
@@ -846,7 +851,7 @@ pre {
   width: 100%;
   border-collapse: collapse;
   table-layout: fixed;
-  font-size: 0.78rem;
+  font-size: 0.75rem;
 }
 
 .gh-split-diff .line-number {
@@ -854,7 +859,7 @@ pre {
 }
 
 .gh-split-diff .line-code {
-  width: calc((100% - 146px) / 2);
+  width: calc((100% - 132px) / 2);
 }
 
 .gh-split-row td,
@@ -864,22 +869,29 @@ pre {
 }
 
 .line-number {
-  padding: 0.28rem 0.5rem;
+  padding: 0 0.5rem;
   text-align: right;
+  line-height: 20px;
   color: var(--gh-text-muted);
   background: #0d1117;
 }
 
 .line-code {
-  padding: 0.28rem 0.75rem;
+  position: relative;
+  padding: 0;
   color: var(--gh-text);
   background: #0d1117;
-  white-space: pre-wrap;
-  word-break: break-word;
+  white-space: pre;
 }
 
 .line-code code {
+  display: block;
+  margin: 0;
+  padding: 0 10px;
+  overflow-x: auto;
   font-family: inherit;
+  line-height: 20px;
+  white-space: pre;
 }
 
 .line-code--context {
@@ -901,27 +913,138 @@ pre {
   background: #0d1117;
 }
 
+.line-code__content {
+  min-height: 20px;
+}
+
+.line-code--commentable:hover .gh-inline-comment__summary,
+.gh-inline-comment[open] .gh-inline-comment__summary,
+.gh-inline-menu[open] .gh-inline-menu__summary,
+.gh-split-row:hover .gh-inline-menu__summary {
+  opacity: 1;
+}
+
+.gh-inline-comment {
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 3;
+}
+
+.gh-inline-comment__summary,
+.gh-inline-menu__summary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 20px;
+  height: 20px;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  border-radius: 6px;
+  color: #f0f6fc;
+  background: #1f6feb;
+  cursor: pointer;
+  list-style: none;
+  opacity: 0;
+  transition: opacity 120ms ease;
+}
+
+.gh-inline-comment__summary {
+  transform: translateX(-50%);
+}
+
+.gh-inline-comment__summary::-webkit-details-marker,
+.gh-inline-menu__summary::-webkit-details-marker {
+  display: none;
+}
+
+.gh-inline-comment__popover {
+  position: absolute;
+  top: 1.45rem;
+  left: 0.8rem;
+  width: min(22rem, 42vw);
+  padding: 0.75rem;
+  border: 1px solid var(--gh-border);
+  border-radius: 6px;
+  box-shadow: 0 8px 24px rgba(1, 4, 9, 0.45);
+  background: #161b22;
+}
+
+.line-menu {
+  width: 36px;
+  padding: 0;
+  text-align: center;
+  background: #0d1117;
+}
+
+.gh-inline-menu {
+  position: relative;
+  display: block;
+}
+
+.gh-inline-menu__summary {
+  margin: 0 auto;
+  background: transparent;
+  color: var(--gh-text-muted);
+}
+
+.gh-inline-menu__popover {
+  position: absolute;
+  top: 1.25rem;
+  right: 0.5rem;
+  z-index: 4;
+  width: min(20rem, 42vw);
+  padding: 0.75rem;
+  border: 1px solid var(--gh-border);
+  border-radius: 6px;
+  box-shadow: 0 8px 24px rgba(1, 4, 9, 0.45);
+  background: #161b22;
+}
+
+.gh-inline-menu__title {
+  margin: 0 0 0.6rem;
+  color: var(--gh-text);
+  font-size: 0.8rem;
+  font-weight: 600;
+}
+
+.inline-comment-form__actions {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.comment-row .inline-comment {
+  margin: 0.35rem 0;
+}
+
+.inline-comment-form textarea {
+  resize: vertical;
+}
+
+.comment-row td {
+  padding-top: 0.25rem;
+}
+
+.comment-row td:last-child {
+  background: #0d1117;
+}
+
+.line-menu,
+.gh-inline-menu__summary,
+.gh-inline-comment__summary {
+  line-height: 20px;
+}
+
 .line-form {
   width: 50px;
   padding: 0.28rem 0.4rem;
   background: #0d1117;
 }
 
-.inline-comment-shell summary {
-  cursor: pointer;
-  color: #58a6ff;
-  font-size: 0.75rem;
-  list-style: none;
-}
-
-.inline-comment-shell summary::-webkit-details-marker {
-  display: none;
-}
-
 .inline-comment-form {
   display: grid;
   gap: 0.4rem;
-  margin-top: 0.35rem;
 }
 
 .inline-comment-form textarea {
@@ -960,6 +1083,10 @@ pre {
     width: min(100vw - 1rem, 1280px);
   }
 
+  .gh-page--wide {
+    width: calc(100vw - 1rem);
+  }
+
   .app-chrome__search,
   .app-chrome__nav {
     display: none;
@@ -984,5 +1111,10 @@ pre {
     grid-template-columns: 1fr;
     flex-direction: column;
     align-items: flex-start;
+  }
+
+  .gh-inline-comment__popover,
+  .gh-inline-menu__popover {
+    width: min(18rem, 80vw);
   }
 }
