@@ -1444,31 +1444,44 @@ pre {
   flex-wrap: nowrap;
 }
 
+.gh-view-toggle-form {
+  margin: 0;
+}
+
 .diff-table {
   width: 100%;
   border-collapse: separate;
   border-spacing: 0;
-  table-layout: fixed;
+  table-layout: auto;
   font-size: 12px;
   line-height: 20px;
 }
 
 .gh-split-diff .line-number {
-  width: 48px;
+  width: 1%;
+  white-space: nowrap;
 }
 
 .gh-split-diff .line-code {
-  width: calc((100% - 96px) / 2);
+  width: 49%;
 }
 
 .gh-unified-diff .line-number {
-  width: 48px;
+  width: 1%;
+  white-space: nowrap;
+}
+
+.gh-split-row,
+.comment-row,
+.gh-hunk-row {
+  box-shadow: inset 0 1px 0 #21262d;
 }
 
 .gh-split-row td,
-.comment-row td {
+.comment-row td,
+.gh-hunk-row td {
   vertical-align: top;
-  border-top: 1px solid #21262d;
+  border-top: 0;
 }
 
 .line-number {
@@ -1478,6 +1491,7 @@ pre {
   color: #6e7681;
   background: #0d1117;
   font-size: 12px;
+  background-clip: padding-box;
 }
 
 .line-code {
@@ -1488,6 +1502,7 @@ pre {
   color: #f0f6fc;
   background: #0d1117;
   white-space: normal;
+  background-clip: padding-box;
 }
 
 .line-code code {

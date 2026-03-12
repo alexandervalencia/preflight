@@ -2,7 +2,7 @@ require "rouge"
 require "cgi"
 
 module PullRequestsHelper
-  FileViewState = Data.define(:label, :css_class, :action_label)
+  FileViewState = Data.define(:label, :css_class, :mark_viewed)
   SplitDiffCell = Data.define(:number, :content, :kind)
   SplitDiffRow = Data.define(:kind, :left, :right, :comment_side, :comment_line_number, :comments, :hunk)
   UnifiedDiffRow = Data.define(:kind, :left_number, :right_number, :content, :cell_kind, :comment_side, :comment_line_number, :comments, :hunk)
@@ -20,10 +20,10 @@ module PullRequestsHelper
   end
 
   def file_view_state(pull_request, viewed_file)
-    return FileViewState.new(label: "Unviewed", css_class: "view-state--unviewed", action_label: "Mark as viewed") unless viewed_file
-    return FileViewState.new(label: "Viewed", css_class: "view-state--viewed", action_label: nil) if viewed_file.current?(repository: pull_request.git_repository)
+    return FileViewState.new(label: "Viewed", css_class: "view-state--unviewed", mark_viewed: true) unless viewed_file
+    return FileViewState.new(label: "Viewed", css_class: "view-state--viewed", mark_viewed: false) if viewed_file.current?(repository: pull_request.git_repository)
 
-    FileViewState.new(label: "New changes", css_class: "view-state--new", action_label: "Mark as viewed again")
+    FileViewState.new(label: "Viewed", css_class: "view-state--new", mark_viewed: true)
   end
 
   def pr_status_summary(comparison)

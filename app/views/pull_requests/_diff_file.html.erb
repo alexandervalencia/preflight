@@ -28,19 +28,18 @@
 
     <% if local_assigns[:show_review_state] %>
       <div class="file-review-tools">
-        <% if state.action_label %>
-          <%= button_to pull_request_viewed_files_path(pull_request),
-            params: { path: file.path, redirect_to: redirect_path },
-            class: ["gh-view-toggle", ("gh-view-toggle--checked" if state.css_class == "view-state--viewed")],
-            data: { role: "view-state" } do %>
+        <%= form_with url: pull_request_viewed_files_path(pull_request), method: :post, class: "gh-view-toggle-form" do %>
+          <%= hidden_field_tag :path, file.path %>
+          <%= hidden_field_tag :redirect_to, redirect_path %>
+          <%= hidden_field_tag :viewed, state.mark_viewed ? "1" : "0" %>
+          <button
+            type="submit"
+            class="<%= class_names('gh-view-toggle', ('gh-view-toggle--checked' if state.css_class == 'view-state--viewed')) %>"
+            data-role="view-state"
+            aria-pressed="<%= state.css_class == 'view-state--viewed' %>">
             <span class="gh-view-toggle__box" aria-hidden="true"><%= state.css_class == "view-state--viewed" ? "✓" : "" %></span>
             <span><%= state.label %></span>
-          <% end %>
-        <% else %>
-          <span class="gh-view-toggle gh-view-toggle--checked" data-role="view-state">
-            <span class="gh-view-toggle__box" aria-hidden="true">✓</span>
-            <span>Viewed</span>
-          </span>
+          </button>
         <% end %>
         <button class="gh-file-icon-button" type="button" aria-label="Comment on this file"><%= octicon(:comment, size: 16) %></button>
         <button class="gh-file-icon-button" type="button" aria-label="More file options"><%= octicon(:kebab, size: 16) %></button>
