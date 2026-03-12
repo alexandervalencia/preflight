@@ -9,17 +9,25 @@
 
   <section class="gh-review-toolbar">
     <div class="gh-review-toolbar__left">
-      <%= link_to(@show_file_tree ? "Hide file tree" : "Show file tree",
+      <%= link_to(
         repository_pull_request_files_path(
           @local_repository,
           @pull_request,
           diff_layout_query(request.query_parameters, tree: (@show_file_tree ? "0" : "1"))
         ),
-        class: "gh-toolbar-button") %>
-      <span class="gh-toolbar-pill">Changes from <strong>all commits</strong></span>
+        class: "gh-toolbar-button gh-toolbar-button--icon",
+        aria: { label: (@show_file_tree ? "Collapse file tree" : "Expand file tree") }
+      ) do %>
+        <%= octicon(:sidebar_collapse, size: 16) %>
+      <% end %>
+      <span class="gh-toolbar-button gh-toolbar-button--dropdown">
+        <span class="gh-toolbar-button__leading"><%= octicon(:git_commit, size: 16) %></span>
+        <span>All commits</span>
+        <span class="gh-toolbar-caret"><%= octicon(:chevron_down, size: 16) %></span>
+      </span>
       <details class="gh-diff-settings" data-role="diff-settings">
         <summary class="gh-toolbar-button gh-toolbar-button--icon" aria-label="Diff settings">
-          <span>&#9881;</span>
+          <%= octicon(:gear, size: 16) %>
         </summary>
         <div class="gh-diff-settings__menu">
           <p class="gh-diff-settings__label">Layout</p>
@@ -36,15 +44,19 @@
       </details>
     </div>
     <div class="gh-review-toolbar__right">
-      <span><%= @viewed_files_by_path.values.count { |viewed_file| viewed_file.current?(repository: @pull_request.git_repository) } %> / <%= @comparison.files.count %> viewed</span>
-      <button class="button" type="button">Submit review</button>
+      <span class="gh-viewed-summary"><%= @viewed_files_by_path.values.count { |viewed_file| viewed_file.current?(repository: @pull_request.git_repository) } %> / <%= @comparison.files.count %> viewed</span>
+      <button class="button gh-submit-review" type="button">Submit review <span class="gh-toolbar-caret"><%= octicon(:chevron_down, size: 16) %></span></button>
+      <button class="gh-toolbar-button gh-toolbar-button--icon" type="button" aria-label="Diff view settings"><%= octicon(:gear, size: 16) %></button>
+      <button class="gh-toolbar-button gh-toolbar-button--icon" type="button" aria-label="Overview panel"><%= octicon(:info, size: 16) %></button>
+      <button class="gh-toolbar-button gh-toolbar-button--icon" type="button" aria-label="Comments panel"><%= octicon(:comment, size: 16) %></button>
     </div>
   </section>
 
   <div class="gh-review-layout <%= "gh-review-layout--tree-hidden" unless @show_file_tree %>">
+    <% ordered_files = ordered_diff_files(@files) %>
     <% if @show_file_tree %>
       <%= render "pull_requests/file_tree",
-        files: @comparison.files,
+        files: ordered_files,
         query: @query,
         comment_counts: @comment_counts,
         filter_path: repository_pull_request_files_path(@local_repository, @pull_request),
@@ -54,7 +66,7 @@
     <% end %>
 
     <section class="gh-diff-column">
-      <% @files.each do |file| %>
+      <% ordered_files.each do |file| %>
         <%= render "pull_requests/diff_file",
           pull_request: @pull_request,
           file: file,

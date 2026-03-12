@@ -3,23 +3,42 @@
     <%= hidden_field_tag :layout, local_assigns.fetch(:layout, :split) %>
     <%= hidden_field_tag :compact, local_assigns.fetch(:compact_line_height, true) ? "1" : "0" %>
     <%= hidden_field_tag :tree, local_assigns.fetch(:show_file_tree, true) ? "1" : "0" %>
-    <%= text_field_tag :q, query, placeholder: "Filter files..." %>
+    <div class="gh-file-filter__input">
+      <span class="gh-file-filter__icon" aria-hidden="true"><%= octicon(:search, size: 16) %></span>
+      <%= text_field_tag :q, query, placeholder: "Filter files..." %>
+    </div>
+    <button class="gh-file-filter__button" type="button" aria-label="Filter options"><%= octicon(:filter, size: 16) %></button>
   <% end %>
 
   <ul class="gh-file-tree__list">
-    <% files.each do |file| %>
-      <% comment_count = local_assigns.fetch(:comment_counts, {}).fetch(file.path, 0) %>
-      <li>
-        <a href="#<%= file_anchor_id(file.path) %>">
-          <span class="gh-file-tree__path"><%= file.path %></span>
-          <span class="gh-file-tree__meta">
-            <span class="gh-file-tree__status"><%= file.status %></span>
-            <% if comment_count.positive? %>
-              <span class="gh-file-tree__count" data-role="file-tree-count"><%= comment_count %></span>
-            <% end %>
-          </span>
-        </a>
-      </li>
+    <% file_tree_nodes(files).each do |node| %>
+      <% if node.file %>
+        <% comment_count = local_assigns.fetch(:comment_counts, {}).fetch(node.file.path, 0) %>
+        <li>
+          <a href="#<%= file_anchor_id(node.file.path) %>" class="gh-file-tree__entry gh-file-tree__entry--file" style="--tree-level: <%= node.level %>">
+            <span class="gh-file-tree__label">
+              <span class="gh-file-tree__glyph" aria-hidden="true"><%= octicon(:file, size: 16) %></span>
+              <span class="gh-file-tree__path"><%= node.name %></span>
+            </span>
+            <span class="gh-file-tree__meta">
+              <% if comment_count.positive? %>
+                <span class="gh-file-tree__count" data-role="file-tree-count"><%= comment_count %></span>
+              <% end %>
+              <span class="gh-file-tree__status"><%= node.file.status %></span>
+            </span>
+          </a>
+        </li>
+      <% else %>
+        <li>
+          <div class="gh-file-tree__entry gh-file-tree__entry--directory" style="--tree-level: <%= node.level %>">
+            <span class="gh-file-tree__label">
+              <span class="gh-file-tree__glyph gh-file-tree__glyph--chevron" aria-hidden="true"><%= octicon(:chevron_down, size: 16) %></span>
+              <span class="gh-file-tree__glyph" aria-hidden="true"><%= octicon(:file_directory, size: 16) %></span>
+              <span class="gh-file-tree__path"><%= node.name %></span>
+            </span>
+          </div>
+        </li>
+      <% end %>
     <% end %>
   </ul>
 </aside>

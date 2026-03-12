@@ -37,10 +37,12 @@
     </div>
   </section>
 
+  <% ordered_files = ordered_diff_files(@files) %>
+
   <div class="gh-review-layout <%= "gh-review-layout--tree-hidden" unless @show_file_tree %>">
     <% if @show_file_tree %>
       <%= render "pull_requests/file_tree",
-        files: @commit.files,
+        files: ordered_files,
         query: @query,
         comment_counts: @comment_counts,
         filter_path: pull_request_commit_path(@pull_request, @commit.sha),
@@ -74,7 +76,7 @@
         </div>
       </article>
 
-      <% @files.each do |file| %>
+      <% ordered_files.each do |file| %>
         <%= render "pull_requests/diff_file",
           pull_request: @pull_request,
           file: file,

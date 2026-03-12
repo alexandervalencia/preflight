@@ -26,6 +26,8 @@ module GitFixtureHelper
       run_git(directory, "init", "-b", "main")
       run_git(directory, "config", "user.name", "Preflight Tests")
       run_git(directory, "config", "user.email", "preflight@example.com")
+      run_git(directory, "config", "commit.gpgsign", "false")
+      run_git(directory, "config", "core.hooksPath", "/dev/null")
 
       FileUtils.mkdir_p(File.join(directory, "app/models"))
       File.write(File.join(directory, "README.md"), "# Sample Repo\n")

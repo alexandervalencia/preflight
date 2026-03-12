@@ -49,9 +49,13 @@ class PullRequestsFlowTest < ActionDispatch::IntegrationTest
       assert_select "[data-role='diff-settings']"
       assert_select "[data-role='split-diff']"
       assert_select "summary[aria-label='Edit title']", count: 0
+      assert_select ".gh-toolbar-button--dropdown", text: /All commits/
+      assert_select ".gh-submit-review", text: /Submit review/
       assert_select ".gh-code .k, .gh-code .nf, .gh-code .nb", minimum: 1
+      assert_select "[data-role='file-tree']", text: /app/
+      assert_select "[data-role='file-tree']", text: /models/
       assert_select "[data-role='file-tree']", text: /README\.md/
-      assert_select "[data-role='file-tree']", text: /app\/models\/widget\.rb/
+      assert_select "[data-role='file-tree']", text: /widget\.rb/
       assert_select "[data-role='file-tree'] a[href='#file-readme-md']"
       assert_select "[data-role='file-tree'] a[href='#file-app-models-widget-rb']"
       assert_select "[data-role='changed-file']", text: /README.md/

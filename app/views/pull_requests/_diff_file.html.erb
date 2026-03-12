@@ -7,28 +7,43 @@
   <% compact_line_height = local_assigns.fetch(:compact_line_height, true) %>
 
   <header id="<%= file_anchor_id(file.path) %>">
-    <div class="gh-file-header">
+    <div class="gh-file-header__left">
+      <button class="gh-file-header__toggle" type="button" aria-label="Collapse file"><%= octicon(:chevron_down, size: 16) %></button>
       <div class="gh-file-header__path">
         <strong><%= file.path %></strong>
         <span><%= file.status %></span>
       </div>
+      <div class="gh-file-header__path-actions">
+        <button class="gh-file-icon-button" type="button" aria-label="Copy file name to clipboard"><%= octicon(:copy, size: 16) %></button>
+        <button class="gh-file-icon-button" type="button" aria-label="Expand all lines"><%= octicon(:expand, size: 16) %></button>
+      </div>
     </div>
 
-    <div class="gh-file-stats">
-      <span class="gh-additions">+<%= stats[:additions] %></span>
-      <span class="gh-deletions">-<%= stats[:deletions] %></span>
+    <div class="gh-file-header">
+      <div class="gh-file-stats">
+        <span class="gh-additions">+<%= stats[:additions] %></span>
+        <span class="gh-deletions">-<%= stats[:deletions] %></span>
+      </div>
     </div>
 
     <% if local_assigns[:show_review_state] %>
       <div class="file-review-tools">
-        <span class="view-state <%= state.css_class %>" data-role="view-state"><%= state.label %></span>
-
         <% if state.action_label %>
-          <%= button_to state.action_label,
-            pull_request_viewed_files_path(pull_request),
+          <%= button_to pull_request_viewed_files_path(pull_request),
             params: { path: file.path, redirect_to: redirect_path },
-            class: "button button-small button-secondary" %>
+            class: ["gh-view-toggle", ("gh-view-toggle--checked" if state.css_class == "view-state--viewed")],
+            data: { role: "view-state" } do %>
+            <span class="gh-view-toggle__box" aria-hidden="true"><%= state.css_class == "view-state--viewed" ? "✓" : "" %></span>
+            <span><%= state.label %></span>
+          <% end %>
+        <% else %>
+          <span class="gh-view-toggle gh-view-toggle--checked" data-role="view-state">
+            <span class="gh-view-toggle__box" aria-hidden="true">✓</span>
+            <span>Viewed</span>
+          </span>
         <% end %>
+        <button class="gh-file-icon-button" type="button" aria-label="Comment on this file"><%= octicon(:comment, size: 16) %></button>
+        <button class="gh-file-icon-button" type="button" aria-label="More file options"><%= octicon(:kebab, size: 16) %></button>
       </div>
     <% end %>
   </header>

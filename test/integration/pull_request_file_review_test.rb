@@ -13,7 +13,7 @@ class PullRequestFileReviewTest < ActionDispatch::IntegrationTest
 
       assert_redirected_to repository_pull_request_files_path(repository, pull_request)
       follow_redirect!
-      assert_select "[data-path='app/models/widget.rb'] [data-role='view-state']", text: "Viewed"
+      assert_select "[data-path='app/models/widget.rb'] [data-role='view-state']", text: /Viewed/
 
       fixture.commit_file(
         branch: "feature",

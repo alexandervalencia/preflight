@@ -60,12 +60,10 @@
           <div class="line-code__content">
             <code><%= highlighted_diff_line(file.path, right.content) %></code>
           </div>
-        </td>
-        <td class="line-menu">
           <% if row.comment_side && row.comment_line_number %>
             <details class="gh-inline-menu">
               <summary class="gh-inline-menu__summary" data-role="comment-menu" aria-label="Line actions">
-                <span>&#8942;</span>
+                <%= octicon(:kebab, size: 16) %>
               </summary>
               <div class="gh-inline-menu__popover" id="<%= row_key %>-menu">
                 <p class="gh-inline-menu__title">Add comment on line <%= row.comment_line_number %></p>
@@ -88,9 +86,7 @@
           <td></td>
           <td></td>
           <td></td>
-          <td>
-            <div class="inline-comment" data-role="inline-comment"><%= comment.body %></div>
-          </td>
+          <td><div class="inline-comment" data-role="inline-comment"><%= comment.body %></div></td>
         </tr>
       <% end %>
     <% end %>
