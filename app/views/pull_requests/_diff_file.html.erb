@@ -9,17 +9,8 @@
   <header id="<%= file_anchor_id(file.path) %>">
     <div class="gh-file-header__left">
       <button class="gh-file-header__toggle" type="button" aria-label="Collapse file"><%= octicon(:chevron_down, size: 16) %></button>
-      <div class="gh-file-header__path">
-        <strong><%= file.path %></strong>
-        <span><%= file.status %></span>
-      </div>
-    </div>
-
-    <div class="gh-file-header">
-      <div class="gh-file-stats">
-        <span class="gh-additions">+<%= stats[:additions] %></span>
-        <span class="gh-deletions">-<%= stats[:deletions] %></span>
-      </div>
+      <span class="gh-diffstat" aria-hidden="true"><span class="gh-diffstat-count"><%= stats[:additions] + stats[:deletions] %></span><%= diffstat_blocks(stats[:additions], stats[:deletions]) %></span>
+      <strong class="gh-file-header__path"><%= file.path %></strong>
     </div>
 
     <% if local_assigns[:show_review_state] %>

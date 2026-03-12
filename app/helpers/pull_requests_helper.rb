@@ -46,6 +46,33 @@ module PullRequestsHelper
     }
   end
 
+  def diffstat_blocks(additions, deletions)
+    total = additions + deletions
+    return "" if total == 0
+
+    blocks = 5
+    add_blocks = (additions.to_f / total * blocks).floor
+    del_blocks = (deletions.to_f / total * blocks).floor
+
+    # Ensure at least 1 block for non-zero counts
+    add_blocks = 1 if additions > 0 && add_blocks == 0
+    del_blocks = 1 if deletions > 0 && del_blocks == 0
+
+    # Cap to exactly 5 blocks
+    if add_blocks + del_blocks > blocks
+      add_blocks = blocks - del_blocks if del_blocks <= blocks
+      del_blocks = blocks - add_blocks if add_blocks + del_blocks > blocks
+    end
+
+    neutral = blocks - add_blocks - del_blocks
+
+    parts = []
+    add_blocks.times { parts << content_tag(:span, "", class: "gh-diffstat-block gh-diffstat-block--added") }
+    del_blocks.times { parts << content_tag(:span, "", class: "gh-diffstat-block gh-diffstat-block--deleted") }
+    neutral.times { parts << content_tag(:span, "", class: "gh-diffstat-block gh-diffstat-block--neutral") }
+    safe_join(parts)
+  end
+
   def split_diff_rows(file, comments_by_key)
     rows = []
     lines = file.lines
