@@ -13,10 +13,6 @@
         <strong><%= file.path %></strong>
         <span><%= file.status %></span>
       </div>
-      <div class="gh-file-header__path-actions">
-        <button class="gh-file-icon-button" type="button" aria-label="Copy file name to clipboard"><%= octicon(:copy, size: 16) %></button>
-        <button class="gh-file-icon-button" type="button" aria-label="Expand all lines"><%= octicon(:expand, size: 16) %></button>
-      </div>
     </div>
 
     <div class="gh-file-header">
@@ -41,8 +37,6 @@
             <span><%= state.label %></span>
           </button>
         <% end %>
-        <button class="gh-file-icon-button" type="button" aria-label="Comment on this file"><%= octicon(:comment, size: 16) %></button>
-        <button class="gh-file-icon-button" type="button" aria-label="More file options"><%= octicon(:kebab, size: 16) %></button>
       </div>
     <% end %>
   </header>

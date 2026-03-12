@@ -40,12 +40,6 @@
         </details>
       <% end %>
     </div>
-
-    <div class="gh-pr-actions" aria-label="Pull request actions">
-      <span class="gh-header-preview">Preview</span>
-      <span class="gh-header-pill">Ready to merge</span>
-      <span class="gh-header-button">Code</span>
-    </div>
   </div>
 
   <div class="gh-pr-meta">
@@ -71,10 +65,6 @@
       <span>Commits</span>
       <span class="gh-tab-count"><%= commits_count %></span>
     <% end %>
-    <span class="gh-tab gh-tab--disabled" aria-disabled="true">
-      <span>Checks</span>
-      <span class="gh-tab-count">0</span>
-    </span>
     <%= link_to repository_pull_request_files_path(local_repository, pull_request),
       class: ["gh-tab", ("gh-tab--active" if active_tab == :files)] do %>
       <span>Files changed</span>

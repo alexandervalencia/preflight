@@ -3,11 +3,9 @@
     <%= hidden_field_tag :layout, local_assigns.fetch(:layout, :split) %>
     <%= hidden_field_tag :compact, local_assigns.fetch(:compact_line_height, true) ? "1" : "0" %>
     <%= hidden_field_tag :tree, local_assigns.fetch(:show_file_tree, true) ? "1" : "0" %>
-    <div class="gh-file-filter__input">
-      <span class="gh-file-filter__icon" aria-hidden="true"><%= octicon(:search, size: 16) %></span>
+    <label class="gh-file-filter__input">
       <%= text_field_tag :q, query, placeholder: "Filter files..." %>
-    </div>
-    <button class="gh-file-filter__button" type="button" aria-label="Filter options"><%= octicon(:filter, size: 16) %></button>
+    </label>
   <% end %>
 
   <ul class="gh-file-tree__list">
@@ -33,7 +31,7 @@
           <div class="gh-file-tree__entry gh-file-tree__entry--directory" style="--tree-level: <%= node.level %>">
             <span class="gh-file-tree__label">
               <span class="gh-file-tree__glyph gh-file-tree__glyph--chevron" aria-hidden="true"><%= octicon(:chevron_down, size: 16) %></span>
-              <span class="gh-file-tree__glyph" aria-hidden="true"><%= octicon(:file_directory, size: 16) %></span>
+              <span class="gh-file-tree__glyph" aria-hidden="true"><%= octicon(:file_directory_open, size: 16) %></span>
               <span class="gh-file-tree__path"><%= node.name %></span>
             </span>
           </div>

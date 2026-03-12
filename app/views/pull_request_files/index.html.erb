@@ -18,13 +18,8 @@
         class: "gh-toolbar-button gh-toolbar-button--icon",
         aria: { label: (@show_file_tree ? "Collapse file tree" : "Expand file tree") }
       ) do %>
-        <%= octicon(:sidebar_collapse, size: 16) %>
+        <%= octicon((@show_file_tree ? :sidebar_collapse : :sidebar_expand), size: 16) %>
       <% end %>
-      <span class="gh-toolbar-button gh-toolbar-button--dropdown">
-        <span class="gh-toolbar-button__leading"><%= octicon(:git_commit, size: 16) %></span>
-        <span>All commits</span>
-        <span class="gh-toolbar-caret"><%= octicon(:chevron_down, size: 16) %></span>
-      </span>
       <details class="gh-diff-settings" data-role="diff-settings">
         <summary class="gh-toolbar-button gh-toolbar-button--icon" aria-label="Diff settings">
           <%= octicon(:gear, size: 16) %>
@@ -45,10 +40,6 @@
     </div>
     <div class="gh-review-toolbar__right">
       <span class="gh-viewed-summary"><%= @viewed_files_by_path.values.count { |viewed_file| viewed_file.current?(repository: @pull_request.git_repository) } %> / <%= @comparison.files.count %> viewed</span>
-      <button class="button gh-submit-review" type="button">Submit review <span class="gh-toolbar-caret"><%= octicon(:chevron_down, size: 16) %></span></button>
-      <button class="gh-toolbar-button gh-toolbar-button--icon" type="button" aria-label="Diff view settings"><%= octicon(:gear, size: 16) %></button>
-      <button class="gh-toolbar-button gh-toolbar-button--icon" type="button" aria-label="Overview panel"><%= octicon(:info, size: 16) %></button>
-      <button class="gh-toolbar-button gh-toolbar-button--icon" type="button" aria-label="Comments panel"><%= octicon(:comment, size: 16) %></button>
     </div>
   </section>
 

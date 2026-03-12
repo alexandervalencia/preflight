@@ -28,11 +28,8 @@ class PullRequestsFlowTest < ActionDispatch::IntegrationTest
       assert_select "h1", text: "feature"
       assert_select "h2", text: "Conversation"
       assert_select "summary[aria-label='Edit title']"
-      assert_select ".gh-header-pill", text: "Ready to merge"
-      assert_select ".gh-header-button", text: "Code"
       assert_select "a[href='#{repository_pull_request_path(repository, pull_request)}']", text: /Conversation/
       assert_select "a[href='#{pull_request_commits_path(pull_request)}']", text: /Commits/
-      assert_select ".gh-tab--disabled", text: /Checks/
       assert_select "a[href='#{repository_pull_request_files_path(repository, pull_request)}']", text: /Files changed/
       assert_select "[data-role='conversation-card']", text: /Review the widget work\./
       assert_select "[data-role='conversation-commit-list'] a[href='#{pull_request_commit_path(pull_request, fixture.feature_commits[:add_widget])}']", text: /Add widget/
@@ -49,8 +46,8 @@ class PullRequestsFlowTest < ActionDispatch::IntegrationTest
       assert_select "[data-role='diff-settings']"
       assert_select "[data-role='split-diff']"
       assert_select "summary[aria-label='Edit title']", count: 0
-      assert_select ".gh-toolbar-button--dropdown", text: /All commits/
-      assert_select ".gh-submit-review", text: /Submit review/
+      assert_select ".gh-repository-nav", count: 0
+      assert_select ".gh-pr-actions", count: 0
       assert_select ".gh-code .k, .gh-code .nf, .gh-code .nb", minimum: 1
       assert_select "[data-role='file-tree']", text: /app/
       assert_select "[data-role='file-tree']", text: /models/
