@@ -34,7 +34,7 @@ class PullRequestReviewTest < ActionDispatch::IntegrationTest
       get pull_request_commits_path(pull_request)
 
       assert_response :success
-      assert_select "h2", text: /Commits on/
+      assert_select "h3", text: /Commits on/
       assert_select "[data-role='commit-list-item']", text: /Add widget/
       assert_select "[data-role='commit-list-item']", text: /Refine widget/
 

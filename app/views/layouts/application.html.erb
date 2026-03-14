@@ -18,8 +18,19 @@
     <link rel="icon" href="/icon.svg" type="image/svg+xml">
     <link rel="apple-touch-icon" href="/icon.png">
 
-    <%# Includes all stylesheet files in app/assets/stylesheets %>
-    <%= stylesheet_link_tag "application" %>
+    <%= stylesheet_link_tag "variables",
+                           "base",
+                           "app-chrome",
+                           "layout",
+                           "repository",
+                           "pr-header",
+                           "conversation",
+                           "commits",
+                           "review-toolbar",
+                           "file-tree",
+                           "file-header",
+                           "diff-table",
+                           "inline-comments" %>
   </head>
 
   <body>

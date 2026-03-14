@@ -10,21 +10,31 @@
   <section class="gh-commits-index">
     <% @grouped_commits.each do |date, commits| %>
       <div class="gh-commit-group">
-        <h2><%= commit_group_title(date) %></h2>
+        <div class="gh-commit-group__header">
+          <%= octicon(:git_commit, size: 16) %>
+          <h3><%= commit_group_title(date) %></h3>
+        </div>
 
-        <% commits.each do |commit| %>
-          <article class="gh-commit-list-item" data-role="commit-list-item">
-            <div>
-              <strong><%= link_to commit.message, pull_request_commit_path(@pull_request, commit.sha) %></strong>
-              <p><%= commit.author_name %> committed <%= time_ago_in_words(commit.authored_at) %> ago</p>
-            </div>
+        <div class="gh-commit-group__list">
+          <% commits.each do |commit| %>
+            <article class="gh-commit-list-item" data-role="commit-list-item">
+              <div class="gh-commit-list-item__body">
+                <strong><%= link_to pull_request_commit_path(@pull_request, commit.sha) do %><%= format_commit_message(commit.message) %><% end %></strong>
+                <p><%= commit.author_name %> committed <%= time_ago_in_words(commit.authored_at) %> ago</p>
+              </div>
 
-            <div class="gh-commit-list-item__meta">
-              <span class="gh-verified">Verified</span>
-              <code><%= commit.short_sha %></code>
-            </div>
-          </article>
-        <% end %>
+              <div class="gh-commit-list-item__meta">
+                <span class="gh-verified">Verified</span>
+                <div class="gh-commit-sha-group">
+                  <%= link_to commit.short_sha.first(7), pull_request_commit_path(@pull_request, commit.sha), class: "gh-commit-sha" %>
+                  <%= link_to pull_request_commit_path(@pull_request, commit.sha), class: "gh-commit-browse", aria: { label: "Browse repository at this point" } do %>
+                    <%= octicon(:code, size: 16) %>
+                  <% end %>
+                </div>
+              </div>
+            </article>
+          <% end %>
+        </div>
       </div>
     <% end %>
   </section>
