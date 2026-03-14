@@ -57,16 +57,19 @@
   <nav class="gh-tabs">
     <%= link_to repository_pull_request_path(local_repository, pull_request),
       class: ["gh-tab", ("gh-tab--active" if active_tab == :conversation)] do %>
+      <%= octicon(:comment, size: 16) %>
       <span>Conversation</span>
       <span class="gh-tab-count"><%= conversation_count %></span>
     <% end %>
     <%= link_to pull_request_commits_path(pull_request),
       class: ["gh-tab", ("gh-tab--active" if active_tab == :commits)] do %>
+      <%= octicon(:git_commit, size: 16) %>
       <span>Commits</span>
       <span class="gh-tab-count"><%= commits_count %></span>
     <% end %>
     <%= link_to repository_pull_request_files_path(local_repository, pull_request),
       class: ["gh-tab", ("gh-tab--active" if active_tab == :files)] do %>
+      <%= octicon(:file, size: 16) %>
       <span>Files changed</span>
       <span class="gh-tab-count"><%= changed_files_count %></span>
     <% end %>

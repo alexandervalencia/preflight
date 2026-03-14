@@ -157,8 +157,8 @@
 .gh-tabs {
   display: flex;
   align-items: flex-end;
-  gap: 0.2rem;
-  margin-top: 0;
+  gap: 0;
+  margin-top: 16px;
   border-bottom: 1px solid var(--gh-border);
 }
 
@@ -167,19 +167,35 @@
   align-items: center;
   gap: 8px;
   padding: 8px 16px;
-  color: var(--gh-text);
-  border-bottom: 2px solid transparent;
+  margin-bottom: -1px;
+  color: var(--gh-text-muted);
+  border: 1px solid transparent;
+  border-radius: 6px 6px 0 0;
   font-size: 14px;
   font-weight: 400;
+  line-height: 20px;
+}
+
+.gh-tab svg {
+  color: var(--gh-text-muted);
+  flex-shrink: 0;
 }
 
 .gh-tab:hover {
   text-decoration: none;
-  background: rgba(110, 118, 129, 0.1);
+  color: var(--gh-text);
 }
 
 .gh-tab--active {
-  border-bottom-color: #f78166;
+  color: var(--gh-text);
+  background: var(--gh-bg);
+  border-color: var(--gh-border);
+  border-bottom-color: var(--gh-bg);
+  font-weight: 600;
+}
+
+.gh-tab--active svg {
+  color: var(--gh-text);
 }
 
 .gh-tab-count {
