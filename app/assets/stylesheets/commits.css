@@ -245,6 +245,7 @@
   gap: 0.75rem;
   padding: 8px 16px;
   border-top: 1px solid var(--gh-border);
+  background: var(--gh-bg);
   color: var(--gh-text-muted);
   font-size: 12px;
 }
