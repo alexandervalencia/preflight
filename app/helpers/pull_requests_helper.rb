@@ -57,17 +57,6 @@ module PullRequestsHelper
     blocks = 5
     add_blocks = (additions.to_f / total * blocks).floor
     del_blocks = (deletions.to_f / total * blocks).floor
-
-    # Ensure at least 1 block for non-zero counts
-    add_blocks = 1 if additions > 0 && add_blocks == 0
-    del_blocks = 1 if deletions > 0 && del_blocks == 0
-
-    # Cap to exactly 5 blocks
-    if add_blocks + del_blocks > blocks
-      add_blocks = blocks - del_blocks if del_blocks <= blocks
-      del_blocks = blocks - add_blocks if add_blocks + del_blocks > blocks
-    end
-
     neutral = blocks - add_blocks - del_blocks
 
     parts = []
