@@ -4,7 +4,7 @@
   overflow: hidden;
   border: 1px solid var(--gh-border);
   border-radius: 6px;
-  background: #0d1117;
+  background: var(--gh-bg);
 }
 
 .gh-file-filter {
@@ -67,7 +67,7 @@
 }
 
 .gh-file-tree__entry--directory {
-  color: #f0f6fc;
+  color: var(--gh-text-bright);
   font-weight: 600;
 }
 
@@ -115,7 +115,7 @@
 
 .gh-file-tree__status {
   background: transparent;
-  color: #58a6ff;
+  color: var(--gh-link);
 }
 
 .gh-file-tree__count {

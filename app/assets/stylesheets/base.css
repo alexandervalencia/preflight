@@ -16,7 +16,7 @@ body {
 }
 
 a {
-  color: #58a6ff;
+  color: var(--gh-link);
   text-decoration: none;
 }
 
@@ -62,7 +62,7 @@ pre {
 .panel-header h2 {
   margin: 0;
   font-size: 1rem;
-  color: #f0f6fc;
+  color: var(--gh-text-bright);
 }
 
 .field {

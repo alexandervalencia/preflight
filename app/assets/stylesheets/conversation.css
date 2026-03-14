@@ -25,7 +25,7 @@
 
 .gh-sidebar-section h2 {
   margin: 0 0 0.6rem;
-  color: #f0f6fc;
+  color: var(--gh-text-bright);
   font-size: 0.9rem;
 }
 
@@ -46,13 +46,13 @@
   gap: 0.5rem;
   padding: 0.85rem 1rem;
   border-bottom: 1px solid var(--gh-border);
-  background: #161b22;
+  background: var(--gh-subtle);
   color: var(--gh-text-muted);
   font-size: 0.875rem;
 }
 
 .gh-card-header strong {
-  color: #f0f6fc;
+  color: var(--gh-text-bright);
 }
 
 .gh-card-body {
@@ -115,7 +115,7 @@
   border: 2px solid var(--gh-canvas);
   border-radius: 999px;
   background: #1f6feb;
-  color: #f0f6fc;
+  color: var(--gh-text-bright);
   font-size: 0.75rem;
   font-weight: 700;
   letter-spacing: 0.02em;
@@ -129,7 +129,7 @@
 
 .gh-timeline-badge--merge {
   background: rgba(35, 134, 54, 0.22);
-  color: #3fb950;
+  color: var(--gh-success-text);
   font-size: 0.9rem;
 }
 
@@ -138,7 +138,7 @@
   height: 1.25rem;
   border-width: 1px;
   font-size: 0.65rem;
-  background: #6e7681;
+  background: var(--gh-text-subtle);
 }
 
 .gh-comment-card,
@@ -164,7 +164,7 @@
 }
 
 .gh-comment-card__meta strong {
-  color: #f0f6fc;
+  color: var(--gh-text-bright);
 }
 
 .gh-markdown-body {
@@ -173,7 +173,7 @@
 
 .gh-md-heading {
   margin: 1rem 0 0.75rem;
-  color: #f0f6fc;
+  color: var(--gh-text-bright);
   font-weight: 600;
   line-height: 1.25;
 }
@@ -247,7 +247,7 @@
 
 .gh-merge-box__header {
   margin-bottom: 0.45rem;
-  color: #f0f6fc;
+  color: var(--gh-text-bright);
   font-size: 0.95rem;
 }
 
@@ -268,5 +268,5 @@
 }
 
 .gh-timeline-event__header strong {
-  color: #f0f6fc;
+  color: var(--gh-text-bright);
 }

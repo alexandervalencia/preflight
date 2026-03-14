@@ -3,7 +3,7 @@
   overflow: hidden;
   border: 1px solid var(--gh-border);
   border-radius: 6px;
-  background: #0d1117;
+  background: var(--gh-bg);
 }
 
 .changed-file header {
@@ -14,7 +14,7 @@
   min-height: 42px;
   padding: 6px 8px;
   border-bottom: 1px solid var(--gh-border);
-  background: #161b22;
+  background: var(--gh-subtle);
 }
 
 .gh-file-header__left {
@@ -89,11 +89,11 @@
 }
 
 .gh-diffstat-block--added {
-  background: #3fb950;
+  background: var(--gh-success-text);
 }
 
 .gh-diffstat-block--deleted {
-  background: #f85149;
+  background: var(--gh-danger-text);
 }
 
 .gh-diffstat-block--neutral {
@@ -120,7 +120,7 @@
   padding: 0 8px;
   border: 1px solid var(--gh-border);
   border-radius: 6px;
-  background: #161b22;
+  background: var(--gh-subtle);
   color: var(--gh-text);
   font-size: 12px;
   line-height: 18px;
@@ -132,17 +132,17 @@
   justify-content: center;
   width: 14px;
   height: 14px;
-  border: 1px solid #6e7681;
+  border: 1px solid var(--gh-text-subtle);
   border-radius: 3px;
-  color: #0d1117;
+  color: var(--gh-bg);
   font-size: 0.65rem;
   line-height: 1;
 }
 
 .gh-view-toggle--checked .gh-view-toggle__box {
-  border-color: #3fb950;
+  border-color: var(--gh-success-text);
   background: #2ea043;
-  color: #f0f6fc;
+  color: var(--gh-text-bright);
 }
 
 .octicon {

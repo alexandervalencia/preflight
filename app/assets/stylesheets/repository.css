@@ -17,7 +17,7 @@
 }
 
 .gh-repository-owner {
-  color: #58a6ff;
+  color: var(--gh-link);
   font-weight: 500;
 }
 
@@ -47,7 +47,7 @@
 
 .page-header h1 {
   margin: 0;
-  color: #f0f6fc;
+  color: var(--gh-text-bright);
   font-size: 2rem;
   line-height: 1.25;
 }

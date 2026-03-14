@@ -33,7 +33,7 @@
   width: 1.75rem;
   height: 1.75rem;
   border-radius: 999px;
-  background: #f0f6fc;
+  background: var(--gh-text-bright);
   color: #010409;
   font-size: 0.9rem;
 }

@@ -29,7 +29,7 @@
 
 .gh-commit-list__message,
 .gh-commit-list__sha {
-  color: #58a6ff;
+  color: var(--gh-link);
   font-family: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, "Liberation Mono", monospace;
   font-size: 0.8125rem;
 }
@@ -126,7 +126,7 @@
   padding: 0.15rem 0.45rem;
   border: 1px solid rgba(63, 185, 80, 0.4);
   border-radius: 2em;
-  color: #3fb950;
+  color: var(--gh-success-text);
   font-size: 0.75rem;
   font-weight: 600;
   white-space: nowrap;
@@ -181,7 +181,7 @@
 
 .gh-commit-summary__message {
   margin: 0;
-  color: #f0f6fc;
+  color: var(--gh-text-bright);
   font-size: 14px;
   font-weight: 600;
   line-height: 1.5;

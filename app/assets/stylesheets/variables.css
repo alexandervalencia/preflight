@@ -6,12 +6,17 @@
   --gh-muted: #21262d;
   --gh-border: #30363d;
   --gh-text: #c9d1d9;
+  --gh-text-bright: #f0f6fc;
   --gh-text-muted: #8b949e;
+  --gh-text-subtle: #6e7681;
   --gh-accent: #2f81f7;
   --gh-accent-soft: rgba(56, 139, 253, 0.15);
+  --gh-link: #58a6ff;
   --gh-success: #238636;
+  --gh-success-text: #3fb950;
   --gh-success-soft: rgba(35, 134, 54, 0.18);
   --gh-danger: #da3633;
+  --gh-danger-text: #f85149;
   --gh-danger-soft: rgba(248, 81, 73, 0.16);
   --gh-code-add: rgba(46, 160, 67, 0.15);
   --gh-code-add-gutter: rgba(63, 185, 80, 0.3);
@@ -19,6 +24,5 @@
   --gh-code-del-gutter: rgba(248, 81, 73, 0.22);
   --gh-code-hunk: rgba(56, 139, 253, 0.15);
   --gh-shadow: 0 0 0 1px rgba(48, 54, 61, 0.3);
-  --gh-link: #58a6ff;
   --gh-font-mono: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, "Liberation Mono", monospace;
 }

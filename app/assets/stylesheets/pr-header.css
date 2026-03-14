@@ -39,7 +39,7 @@
 
 .gh-pr-title {
   margin: 0;
-  color: #f0f6fc;
+  color: var(--gh-text-bright);
   font-size: 32px;
   font-weight: 600;
   line-height: 1.5;
@@ -93,7 +93,7 @@
   padding: 0.75rem;
   border: 1px solid var(--gh-border);
   border-radius: 8px;
-  background: #161b22;
+  background: var(--gh-subtle);
   box-shadow: 0 8px 24px rgba(1, 4, 9, 0.45);
 }
 
@@ -108,7 +108,7 @@
   color: var(--gh-text);
   border: 1px solid var(--gh-border);
   border-radius: 6px;
-  background: #0d1117;
+  background: var(--gh-bg);
   font-size: 1rem;
 }
 
@@ -148,7 +148,7 @@
   padding: 2px 7px;
   border-radius: 999px;
   background: var(--gh-accent-soft);
-  color: #58a6ff;
+  color: var(--gh-link);
   font-family: var(--gh-font-mono);
   font-size: 12px;
   font-weight: 600;
@@ -221,9 +221,9 @@
 }
 
 .gh-additions {
-  color: #3fb950;
+  color: var(--gh-success-text);
 }
 
 .gh-deletions {
-  color: #f85149;
+  color: var(--gh-danger-text);
 }

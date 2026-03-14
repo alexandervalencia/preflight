@@ -121,7 +121,7 @@
   padding: 0.65rem;
   border: 1px solid var(--gh-border);
   border-radius: 8px;
-  background: #161b22;
+  background: var(--gh-subtle);
   box-shadow: 0 8px 24px rgba(1, 4, 9, 0.45);
 }
 
