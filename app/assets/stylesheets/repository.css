@@ -3,8 +3,8 @@
 }
 
 .gh-repository-header {
-  margin-bottom: 1.5rem;
-  padding: 1rem 0 0;
+  margin-bottom: 0;
+  padding: 16px 0;
   border-bottom: 1px solid var(--gh-border);
 }
 

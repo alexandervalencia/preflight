@@ -41,11 +41,11 @@
 }
 
 .gh-commits-index {
-  margin-top: 1rem;
+  margin-top: 16px;
 }
 
 .gh-commit-group {
-  margin-bottom: 1.5rem;
+  margin-bottom: 16px;
 }
 
 .gh-commit-group__header {
@@ -63,7 +63,7 @@
 
 .gh-commit-group__header h3 {
   margin: 0;
-  font-size: 0.875rem;
+  font-size: 14px;
   font-weight: 400;
 }
 
@@ -79,7 +79,7 @@
   justify-content: space-between;
   align-items: center;
   gap: 1rem;
-  padding: 1rem;
+  padding: 8px 16px;
 }
 
 .gh-commit-list-item + .gh-commit-list-item {
@@ -89,8 +89,8 @@
 .gh-commit-list-item__body strong {
   display: block;
   margin-bottom: 0.25rem;
-  font-size: 0.875rem;
-  font-weight: 600;
+  font-size: 16px;
+  font-weight: 500;
 }
 
 .gh-commit-list-item__body strong a {
