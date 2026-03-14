@@ -164,6 +164,7 @@
 }
 
 .gh-commit-summary {
+  margin-bottom: 16px;
   border: 1px solid var(--gh-border);
   border-radius: 6px;
   background: var(--gh-subtle);
