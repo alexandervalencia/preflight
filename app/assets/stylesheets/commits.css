@@ -1,0 +1,245 @@
+.gh-commit-list {
+  display: grid;
+  margin-bottom: 0.8rem;
+  border: 1px solid var(--gh-border);
+  border-radius: 6px;
+  overflow: hidden;
+}
+
+.gh-commit-list__item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 0.75rem 0.9rem;
+  border-top: 1px solid var(--gh-border);
+  background: var(--gh-canvas-subtle);
+}
+
+.gh-commit-list__item:first-child {
+  border-top: 0;
+}
+
+.gh-commit-list__meta {
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+  min-width: 0;
+}
+
+.gh-commit-list__message,
+.gh-commit-list__sha {
+  color: #58a6ff;
+  font-family: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, "Liberation Mono", monospace;
+  font-size: 0.8125rem;
+}
+
+.gh-commit-list__message {
+  color: var(--gh-text);
+  font-family: inherit;
+  font-weight: 500;
+}
+
+.gh-commits-index {
+  margin-top: 1rem;
+}
+
+.gh-commit-group {
+  margin-bottom: 1.5rem;
+}
+
+.gh-commit-group__header {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 0.5rem;
+  color: var(--gh-text);
+}
+
+.gh-commit-group__header svg {
+  color: var(--gh-text-muted);
+  flex-shrink: 0;
+}
+
+.gh-commit-group__header h3 {
+  margin: 0;
+  font-size: 0.875rem;
+  font-weight: 400;
+}
+
+.gh-commit-group__list {
+  border: 1px solid var(--gh-border);
+  border-radius: 6px;
+  background: var(--gh-subtle);
+  overflow: hidden;
+}
+
+.gh-commit-list-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1rem;
+  padding: 1rem;
+}
+
+.gh-commit-list-item + .gh-commit-list-item {
+  border-top: 1px solid var(--gh-border);
+}
+
+.gh-commit-list-item__body strong {
+  display: block;
+  margin-bottom: 0.25rem;
+  font-size: 0.875rem;
+  font-weight: 600;
+}
+
+.gh-commit-list-item__body strong a {
+  color: var(--gh-text);
+  text-decoration: none;
+}
+
+.gh-commit-list-item__body strong code {
+  font-family: var(--gh-font-mono);
+  font-size: 0.8rem;
+  font-weight: 400;
+}
+
+.gh-commit-list-item__body strong a:hover {
+  color: var(--gh-link);
+  text-decoration: underline;
+}
+
+.gh-commit-list-item__body p {
+  margin: 0;
+  color: var(--gh-text-muted);
+  font-size: 0.75rem;
+}
+
+.gh-commit-list-item__meta {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  flex-shrink: 0;
+}
+
+.gh-verified {
+  padding: 0.15rem 0.45rem;
+  border: 1px solid rgba(63, 185, 80, 0.4);
+  border-radius: 2em;
+  color: #3fb950;
+  font-size: 0.75rem;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.gh-commit-sha-group {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+}
+
+.gh-commit-sha {
+  font-family: var(--gh-font-mono);
+  font-size: 0.75rem;
+  color: var(--gh-text-muted);
+  text-decoration: none;
+}
+
+.gh-commit-sha:hover {
+  color: var(--gh-link);
+  text-decoration: underline;
+}
+
+.gh-commit-browse {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--gh-text-muted);
+  padding: 0.15rem;
+  border-radius: 4px;
+}
+
+.gh-commit-browse:hover {
+  color: var(--gh-link);
+}
+
+.gh-commit-summary__message {
+  margin: 0;
+  color: #f0f6fc;
+  font-size: 0.875rem;
+  font-weight: 600;
+  line-height: 1.5;
+}
+
+.gh-commit-summary__message code {
+  font-family: var(--gh-font-mono);
+  font-size: 0.8rem;
+  font-weight: 400;
+}
+
+.gh-commit-summary pre {
+  margin: 0.75rem 0 0;
+  white-space: pre-wrap;
+  color: var(--gh-text);
+  font-size: 0.8rem;
+}
+
+.gh-commit-summary__nav {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  margin-top: 0.75rem;
+}
+
+.gh-commit-summary__nav-buttons {
+  display: flex;
+  gap: 0;
+}
+
+.gh-commit-summary__nav-buttons a {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+}
+
+.gh-commit-summary__nav-buttons a:first-child {
+  border-top-right-radius: 0;
+  border-bottom-right-radius: 0;
+}
+
+.gh-commit-summary__nav-buttons a:last-child {
+  border-top-left-radius: 0;
+  border-bottom-left-radius: 0;
+  margin-left: -1px;
+}
+
+.gh-commit-summary__nav-buttons a:only-child {
+  border-radius: 6px;
+  margin-left: 0;
+}
+
+.gh-chevron-left {
+  transform: rotate(90deg);
+}
+
+.gh-chevron-right {
+  transform: rotate(-90deg);
+}
+
+.gh-commit-summary__footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  margin-top: 0.75rem;
+  padding-top: 0.75rem;
+  border-top: 1px solid var(--gh-border);
+  color: var(--gh-text-muted);
+  font-size: 0.8rem;
+}
+
+.gh-commit-summary__footer code {
+  font-family: var(--gh-font-mono);
+  font-size: 0.75rem;
+}

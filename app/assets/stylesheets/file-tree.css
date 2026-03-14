@@ -1,0 +1,128 @@
+.gh-file-tree {
+  position: sticky;
+  top: 1rem;
+  overflow: hidden;
+  border: 1px solid var(--gh-border);
+  border-radius: 6px;
+  background: #0d1117;
+}
+
+.gh-file-filter {
+  display: block;
+  padding: 8px;
+  border-bottom: 1px solid var(--gh-border);
+}
+
+.gh-file-filter__input {
+  display: flex;
+  align-items: center;
+  min-height: 32px;
+  padding: 0 10px;
+  border: 1px solid var(--gh-border);
+  border-radius: 6px;
+  background: var(--gh-bg);
+}
+
+.gh-file-filter input {
+  width: 100%;
+  padding: 0;
+  color: var(--gh-text);
+  border: 0;
+  background: transparent;
+  font-size: 12px;
+}
+
+.gh-file-filter input:focus {
+  outline: none;
+}
+
+.gh-file-tree__list {
+  max-height: 70vh;
+  margin: 0;
+  padding: 6px 0;
+  overflow: auto;
+  list-style: none;
+}
+
+.gh-file-tree__list li {
+  margin: 0;
+}
+
+.gh-file-tree__entry {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.6rem;
+  min-height: 26px;
+  padding: 3px 8px 3px calc(8px + (var(--tree-level, 0) * 20px));
+  font-family: var(--gh-font-mono);
+  color: var(--gh-text);
+  font-size: 12px;
+  line-height: 20px;
+}
+
+.gh-file-tree__entry--file:hover {
+  text-decoration: none;
+  background: rgba(110, 118, 129, 0.1);
+}
+
+.gh-file-tree__entry--directory {
+  color: #f0f6fc;
+  font-weight: 600;
+}
+
+.gh-file-tree__label {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  min-width: 0;
+}
+
+.gh-file-tree__glyph {
+  color: var(--gh-text-muted);
+  flex-shrink: 0;
+}
+
+.gh-file-tree__glyph--chevron {
+  color: #7d8590;
+}
+
+.gh-file-tree__path {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.gh-file-tree__meta {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  flex-shrink: 0;
+}
+
+.gh-file-tree__status,
+.gh-file-tree__count {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 16px;
+  padding: 0;
+  border-radius: 999px;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.gh-file-tree__status {
+  background: transparent;
+  color: #58a6ff;
+}
+
+.gh-file-tree__count {
+  background: rgba(110, 118, 129, 0.22);
+  color: var(--gh-text);
+}
+
+.gh-diff-column {
+  min-width: 0;
+}

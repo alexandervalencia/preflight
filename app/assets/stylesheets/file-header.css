@@ -1,0 +1,146 @@
+.changed-file {
+  margin-bottom: 0.75rem;
+  overflow: hidden;
+  border: 1px solid var(--gh-border);
+  border-radius: 6px;
+  background: #0d1117;
+}
+
+.changed-file header {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 0.5rem;
+  align-items: center;
+  min-height: 42px;
+  padding: 6px 8px;
+  border-bottom: 1px solid var(--gh-border);
+  background: #161b22;
+}
+
+.gh-file-header__left {
+  display: flex;
+  align-items: center;
+  gap: 0.45rem;
+  min-width: 0;
+}
+
+.gh-file-header__toggle {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 16px;
+  height: 16px;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: var(--gh-text-muted);
+}
+
+.gh-file-header {
+  min-width: 0;
+  color: var(--gh-text);
+  font-size: 12px;
+}
+
+.gh-file-header__path {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-family: var(--gh-font-mono);
+  font-size: 12px;
+  font-weight: 400;
+}
+
+.gh-file-header strong {
+  font-weight: 600;
+}
+
+.gh-file-stats {
+  display: inline-flex;
+  gap: 0.5rem;
+  align-items: center;
+  font-size: 12px;
+}
+
+.gh-diffstat {
+  display: inline-flex;
+  align-items: center;
+  gap: 2px;
+  color: var(--gh-text-muted);
+  font-size: 12px;
+  flex-shrink: 0;
+}
+
+.gh-diffstat-count {
+  margin-right: 2px;
+}
+
+.gh-diffstat-block {
+  display: inline-block;
+  width: 8px;
+  height: 8px;
+  border-radius: 1px;
+}
+
+.gh-diffstat-block--added {
+  background: #3fb950;
+}
+
+.gh-diffstat-block--deleted {
+  background: #f85149;
+}
+
+.gh-diffstat-block--neutral {
+  background: rgba(139, 148, 158, 0.2);
+}
+
+.file-review-tools {
+  display: flex;
+  align-items: center;
+  gap: 0;
+  flex-wrap: nowrap;
+}
+
+.gh-view-toggle-form {
+  margin: 0;
+}
+
+.gh-view-toggle {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 28px;
+  gap: 0.4rem;
+  padding: 0 8px;
+  border: 1px solid var(--gh-border);
+  border-radius: 6px;
+  background: #161b22;
+  color: var(--gh-text);
+  font-size: 12px;
+  line-height: 18px;
+}
+
+.gh-view-toggle__box {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 14px;
+  height: 14px;
+  border: 1px solid #6e7681;
+  border-radius: 3px;
+  color: #0d1117;
+  font-size: 0.65rem;
+  line-height: 1;
+}
+
+.gh-view-toggle--checked .gh-view-toggle__box {
+  border-color: #3fb950;
+  background: #2ea043;
+  color: #f0f6fc;
+}
+
+.octicon {
+  display: block;
+  flex: none;
+}

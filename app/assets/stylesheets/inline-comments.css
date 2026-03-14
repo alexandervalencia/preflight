@@ -1,0 +1,140 @@
+.line-code--commentable:hover .gh-inline-comment__summary,
+.gh-inline-comment[open] .gh-inline-comment__summary,
+.gh-inline-menu[open] .gh-inline-menu__summary,
+.gh-split-row:hover .gh-inline-menu__summary {
+  opacity: 1;
+}
+
+.gh-inline-comment {
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 3;
+}
+
+.gh-inline-comment__summary,
+.gh-inline-menu__summary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 20px;
+  height: 20px;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  border-radius: 6px;
+  color: #f0f6fc;
+  background: #1f6feb;
+  cursor: pointer;
+  list-style: none;
+  opacity: 0;
+  transition: opacity 120ms ease;
+  font-size: 0.7rem;
+}
+
+.gh-inline-comment__summary {
+  transform: translateX(-50%);
+}
+
+.gh-inline-comment__summary::-webkit-details-marker,
+.gh-inline-menu__summary::-webkit-details-marker {
+  display: none;
+}
+
+.gh-inline-comment__popover {
+  position: absolute;
+  top: 1.15rem;
+  left: 0.7rem;
+  width: min(22rem, 42vw);
+  padding: 0.65rem;
+  border: 1px solid var(--gh-border);
+  border-radius: 6px;
+  box-shadow: 0 8px 24px rgba(1, 4, 9, 0.45);
+  background: #161b22;
+}
+
+.line-menu {
+  width: 32px;
+  padding: 0;
+  font-size: 0;
+  line-height: 0;
+  text-align: center;
+  background: #0d1117;
+}
+
+.gh-inline-menu {
+  position: absolute;
+  top: 0;
+  right: 2px;
+  display: block;
+}
+
+.gh-inline-menu__summary {
+  background: transparent;
+  color: var(--gh-text-muted);
+}
+
+.gh-inline-menu__popover {
+  position: absolute;
+  top: 1rem;
+  right: 0.35rem;
+  z-index: 4;
+  width: min(20rem, 42vw);
+  padding: 0.65rem;
+  border: 1px solid var(--gh-border);
+  border-radius: 6px;
+  box-shadow: 0 8px 24px rgba(1, 4, 9, 0.45);
+  background: #161b22;
+}
+
+.gh-inline-menu__title {
+  margin: 0 0 0.6rem;
+  color: var(--gh-text);
+  font-size: 0.8rem;
+  font-weight: 600;
+}
+
+.inline-comment-form__actions {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.comment-row .inline-comment {
+  margin: 0.15rem 0;
+}
+
+.inline-comment-form textarea {
+  resize: vertical;
+}
+
+.comment-row td {
+  padding-top: 0;
+}
+
+.gh-inline-menu__summary,
+.gh-inline-comment__summary {
+  line-height: 16px;
+}
+
+.inline-comment-form {
+  display: grid;
+  gap: 0.4rem;
+}
+
+.inline-comment-form textarea {
+  width: 100%;
+  min-height: 64px;
+  padding: 0.5rem;
+  color: var(--gh-text);
+  border: 1px solid var(--gh-border);
+  border-radius: 6px;
+  background: var(--gh-bg);
+}
+
+.inline-comment {
+  margin: 0.5rem 0;
+  padding: 0.75rem;
+  border: 1px solid rgba(56, 139, 253, 0.4);
+  border-radius: 6px;
+  background: rgba(56, 139, 253, 0.08);
+}

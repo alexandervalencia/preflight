@@ -1,0 +1,109 @@
+.page-header {
+  margin-bottom: 1.5rem;
+}
+
+.gh-repository-header {
+  margin-bottom: 1.5rem;
+  padding: 1rem 0 0;
+  border-bottom: 1px solid var(--gh-border);
+}
+
+.gh-repository-header__path {
+  display: flex;
+  align-items: center;
+  gap: 0.45rem;
+  color: var(--gh-text);
+  font-size: 1.25rem;
+}
+
+.gh-repository-owner {
+  color: #58a6ff;
+  font-weight: 500;
+}
+
+.gh-repository-visibility {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.18rem 0.5rem;
+  border: 1px solid var(--gh-border);
+  border-radius: 999px;
+  color: var(--gh-text-muted);
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+}
+
+.gh-repository-header__location {
+  margin: 0.55rem 0 0;
+  color: var(--gh-text-muted);
+}
+
+.gh-repository-header__location code {
+  padding: 0;
+  border: 0;
+  color: inherit;
+  background: transparent;
+}
+
+.page-header h1 {
+  margin: 0;
+  color: #f0f6fc;
+  font-size: 2rem;
+  line-height: 1.25;
+}
+
+.page-header p {
+  margin: 0.5rem 0 0;
+  color: var(--gh-text-muted);
+}
+
+.page-header code {
+  padding: 0.1rem 0.35rem;
+  border: 1px solid var(--gh-border);
+  border-radius: 6px;
+  background: var(--gh-subtle);
+}
+
+.eyebrow {
+  margin: 0 0 0.5rem;
+  color: var(--gh-text-muted);
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+}
+
+.directory-actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.browse-list,
+.pull-request-list {
+  display: grid;
+  gap: 0.75rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.browse-entry,
+.pull-request-list li {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1rem;
+  padding: 1rem;
+  border: 1px solid var(--gh-border);
+  border-radius: 6px;
+  background: var(--gh-canvas);
+}
+
+.browse-entry p,
+.pull-request-list li span {
+  margin: 0.35rem 0 0;
+  color: var(--gh-text-muted);
+  font-size: 0.875rem;
+}

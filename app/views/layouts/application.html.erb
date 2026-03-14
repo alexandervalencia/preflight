@@ -19,7 +19,7 @@
     <link rel="apple-touch-icon" href="/icon.png">
 
     <%# Includes all stylesheet files in app/assets/stylesheets %>
-    <%= stylesheet_link_tag :app %>
+    <%= stylesheet_link_tag "application" %>
   </head>
 
   <body>
@@ -42,5 +42,25 @@
     <main class="app-main">
       <%= yield %>
     </main>
+
+    <script>
+      document.addEventListener("click", function(e) {
+        var btn = e.target.closest("[data-action='toggle-tree']");
+        if (!btn) return;
+
+        var layout = document.querySelector(".gh-review-layout");
+        if (!layout) return;
+
+        var hidden = layout.classList.toggle("gh-review-layout--tree-hidden");
+
+        btn.querySelector("[data-tree-icon='collapse']").hidden = hidden;
+        btn.querySelector("[data-tree-icon='expand']").hidden = !hidden;
+        btn.setAttribute("aria-label", hidden ? "Show file tree" : "Hide file tree");
+
+        var url = new URL(window.location);
+        url.searchParams.set("tree", hidden ? "0" : "1");
+        history.replaceState(null, "", url);
+      });
+    </script>
   </body>
 </html>

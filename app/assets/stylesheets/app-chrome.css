@@ -1,0 +1,72 @@
+.app-chrome {
+  border-bottom: 1px solid var(--gh-border);
+  background: #010409;
+}
+
+.app-chrome__inner {
+  display: flex;
+  align-items: center;
+  gap: 1.25rem;
+  width: min(1900px, calc(100vw - 3rem));
+  margin: 0 auto;
+  padding: 0.85rem 0;
+}
+
+.brand {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.65rem;
+  color: #fff;
+  font-size: 0.95rem;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+}
+
+.brand:hover {
+  text-decoration: none;
+}
+
+.brand-mark {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 1.75rem;
+  height: 1.75rem;
+  border-radius: 999px;
+  background: #f0f6fc;
+  color: #010409;
+  font-size: 0.9rem;
+}
+
+.app-chrome__search {
+  flex: 1;
+  max-width: 26rem;
+  padding: 0.5rem 0.8rem;
+  border: 1px solid var(--gh-border);
+  border-radius: 6px;
+  color: var(--gh-text-muted);
+  background: rgba(110, 118, 129, 0.12);
+  font-size: 0.9rem;
+}
+
+.app-chrome__nav {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-left: auto;
+}
+
+.app-chrome__link {
+  color: var(--gh-text);
+  font-size: 0.9rem;
+  font-weight: 600;
+}
+
+.app-chrome__link:hover {
+  text-decoration: none;
+  color: #fff;
+}
+
+.app-chrome__link--muted {
+  color: var(--gh-text-muted);
+}

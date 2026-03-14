@@ -1,0 +1,186 @@
+.diff-table {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0;
+  table-layout: auto;
+  font-size: 12px;
+  line-height: 20px;
+}
+
+.gh-split-diff .line-number {
+  width: 1%;
+  white-space: nowrap;
+}
+
+.gh-split-diff .line-code {
+  width: 49%;
+}
+
+.gh-unified-diff .line-number {
+  width: 1%;
+  white-space: nowrap;
+}
+
+.gh-split-row td,
+.comment-row td,
+.gh-hunk-row td {
+  vertical-align: top;
+  border-top: 0;
+}
+
+.line-number {
+  padding: 0 10px;
+  text-align: right;
+  line-height: 20px;
+  color: #6e7681;
+  background: #0d1117;
+  font-size: 12px;
+}
+
+.line-code {
+  position: relative;
+  padding: 0;
+  font-size: 0;
+  line-height: 0;
+  color: #f0f6fc;
+  background: #0d1117;
+  white-space: normal;
+}
+
+.line-code code {
+  display: block;
+  margin: 0;
+  padding: 0 8px 0 18px;
+  font-family: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, "Liberation Mono", monospace;
+  font-size: 12px;
+  line-height: 20px;
+  white-space: pre-wrap;
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+}
+
+.line-code--context {
+  background: #0d1117;
+}
+
+.line-code--addition {
+  background: var(--gh-code-add);
+}
+
+.line-number--addition {
+  color: rgba(124, 189, 134, 0.7);
+  background: var(--gh-code-add-gutter);
+}
+
+.line-code--deletion {
+  background: var(--gh-code-del);
+}
+
+.line-number--deletion {
+  color: rgba(205, 123, 120, 0.7);
+  background: var(--gh-code-del-gutter);
+}
+
+.line-number--hunk,
+.line-code--hunk {
+  color: rgba(139, 148, 158, 0.7);
+  background: rgba(56, 139, 253, 0.15);
+}
+
+.line-code--empty,
+.line-number--empty {
+  background: var(--gh-subtle);
+}
+
+.line-code__content {
+  min-height: 20px;
+}
+
+.gh-diff-table--compact .line-number {
+  line-height: 18px;
+}
+
+.gh-diff-table--compact .line-code {
+  padding-top: 0;
+  padding-bottom: 0;
+}
+
+.gh-diff-table--compact .line-code__content {
+  min-height: 18px;
+}
+
+.gh-diff-table--compact .line-code code {
+  line-height: 18px;
+}
+
+.gh-code-marker {
+  display: inline-block;
+  width: 12px;
+  color: #6e7681;
+}
+
+.line-code--addition .gh-code-marker {
+  color: #3fb950;
+}
+
+.line-code--deletion .gh-code-marker {
+  color: #ff7b72;
+}
+
+.gh-code {
+  font-family: inherit;
+}
+
+.gh-code .c,
+.gh-code .c1,
+.gh-code .cm,
+.gh-code .cp {
+  color: #8b949e;
+}
+
+.gh-code .k,
+.gh-code .kd,
+.gh-code .kp,
+.gh-code .kr,
+.gh-code .kv {
+  color: #ff7b72;
+}
+
+.gh-code .nb,
+.gh-code .bp {
+  color: #79c0ff;
+}
+
+.gh-code .nf,
+.gh-code .fm,
+.gh-code .nc,
+.gh-code .nn {
+  color: #d2a8ff;
+}
+
+.gh-code .s,
+.gh-code .s1,
+.gh-code .s2,
+.gh-code .sa,
+.gh-code .sb,
+.gh-code .sc,
+.gh-code .sd,
+.gh-code .se,
+.gh-code .sh,
+.gh-code .si,
+.gh-code .sx {
+  color: #a5d6ff;
+}
+
+.gh-code .mi,
+.gh-code .mf,
+.gh-code .mh,
+.gh-code .mo,
+.gh-code .il {
+  color: #79c0ff;
+}
+
+.gh-code .o,
+.gh-code .p {
+  color: #c9d1d9;
+}
