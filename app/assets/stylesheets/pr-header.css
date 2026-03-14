@@ -204,10 +204,6 @@
   font-size: 12px;
 }
 
-.gh-tab-summary__count {
-  color: var(--gh-text-muted);
-}
-
 .gh-additions {
   color: #3fb950;
 }

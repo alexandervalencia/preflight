@@ -77,20 +77,6 @@
   padding-top: 0.75rem;
 }
 
-.gh-section-header {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  margin-bottom: 1rem;
-}
-
-.gh-section-header h2 {
-  margin: 0;
-  color: #f0f6fc;
-  font-size: 1rem;
-  font-weight: 600;
-}
-
 .gh-timeline {
   position: relative;
   display: grid;

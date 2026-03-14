@@ -26,7 +26,6 @@ class PullRequestsFlowTest < ActionDispatch::IntegrationTest
       follow_redirect!
       assert_response :success
       assert_select "h1", text: "feature"
-      assert_select "h2", text: "Conversation"
       assert_select "summary[aria-label='Edit title']"
       assert_select "a[href='#{repository_pull_request_path(repository, pull_request)}']", text: /Conversation/
       assert_select "a[href='#{pull_request_commits_path(pull_request)}']", text: /Commits/
@@ -38,7 +37,7 @@ class PullRequestsFlowTest < ActionDispatch::IntegrationTest
       assert_select "[data-role='pr-sidebar']", count: 0
       assert_select "[data-role='branch-pill']", text: "main"
       assert_select "[data-role='branch-pill']", text: "feature"
-      assert_select "[data-role='pr-summary']", text: /2 commits/
+      assert_select "[data-role='pr-summary']"
 
       get repository_pull_request_files_path(repository, pull_request)
       assert_select ".gh-page--wide"

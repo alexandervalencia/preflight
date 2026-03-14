@@ -43,7 +43,7 @@
   </div>
 
   <div class="gh-pr-meta">
-    <span class="gh-state-badge">Open</span>
+    <span class="gh-state-badge"><%= octicon(:git_pull_request, size: 16) %> Open</span>
     <span class="gh-pr-meta__text">
       <strong><%= author_name %></strong> wants to merge
       <strong><%= pluralize(commits_count, "commit") %></strong>
@@ -72,9 +72,9 @@
     <% end %>
 
     <div class="gh-tab-summary" data-role="pr-summary">
-      <span class="gh-tab-summary__count"><%= pluralize(commits_count, "commit") %></span>
       <span class="gh-additions">+<%= summary[:additions] %></span>
       <span class="gh-deletions">-<%= summary[:deletions] %></span>
+      <%= diffstat_blocks(summary[:additions], summary[:deletions]) %>
     </div>
   </nav>
 </header>
