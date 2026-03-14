@@ -39,7 +39,6 @@ pre {
 .panel,
 .gh-card,
 .gh-file-tree,
-.gh-review-toolbar,
 .gh-sidebar-section {
   border: 1px solid var(--gh-border);
   border-radius: 6px;
