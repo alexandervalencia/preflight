@@ -41,7 +41,7 @@ class PullRequestReviewTest < ActionDispatch::IntegrationTest
       get pull_request_commit_path(pull_request, fixture.feature_commits[:refine_widget])
 
       assert_response :success
-      assert_select ".gh-page--wide"
+      assert_select ".pf-page--wide"
       assert_select "h1", text: "feature"
       assert_select "[data-role='commit-summary']", text: /Refine widget/
       assert_select "[data-role='file-tree']", text: /app/

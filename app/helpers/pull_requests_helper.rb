@@ -60,10 +60,10 @@ module PullRequestsHelper
     neutral = blocks - add_blocks - del_blocks
 
     parts = []
-    add_blocks.times { parts << content_tag(:span, "", class: "gh-diffstat-block gh-diffstat-block--added") }
-    del_blocks.times { parts << content_tag(:span, "", class: "gh-diffstat-block gh-diffstat-block--deleted") }
-    neutral.times { parts << content_tag(:span, "", class: "gh-diffstat-block gh-diffstat-block--neutral") }
-    content_tag(:span, safe_join(parts), class: "gh-diffstat-blocks")
+    add_blocks.times { parts << content_tag(:span, "", class: "pf-diffstat-block pf-diffstat-block--added") }
+    del_blocks.times { parts << content_tag(:span, "", class: "pf-diffstat-block pf-diffstat-block--deleted") }
+    neutral.times { parts << content_tag(:span, "", class: "pf-diffstat-block pf-diffstat-block--neutral") }
+    content_tag(:span, safe_join(parts), class: "pf-diffstat-blocks")
   end
 
   def split_diff_rows(file, comments_by_key)
@@ -180,7 +180,7 @@ module PullRequestsHelper
     tokens = diff_formatter.format(lexer.lex(source))
     marker_html = ERB::Util.html_escape(marker == " " ? "\u00A0" : marker)
 
-    %(<span class="gh-code-marker">#{marker_html}</span><span class="gh-code">#{tokens}</span>).html_safe
+    %(<span class="pf-code-marker">#{marker_html}</span><span class="pf-code">#{tokens}</span>).html_safe
   end
 
   def diff_layout_query(params_hash, **updates)
@@ -403,7 +403,7 @@ module PullRequestsHelper
     lexer = markdown_lexer_for(fence, code)
     highlighted = formatter.format(lexer.lex(code))
 
-    content_tag(:div, class: "gh-md-codeblock") do
+    content_tag(:div, class: "pf-md-codeblock") do
       content_tag(:pre) do
         content_tag(:code, highlighted.html_safe)
       end
@@ -413,7 +413,7 @@ module PullRequestsHelper
   def render_markdown_heading(line)
     match = line.match(/\A(#+)\s+(.+)\z/)
     level = match[1].length
-    content_tag(:"h#{level}", render_markdown_inline(match[2]), class: "gh-md-heading")
+    content_tag(:"h#{level}", render_markdown_inline(match[2]), class: "pf-md-heading")
   end
 
   def render_markdown_list(lines, start_index)
@@ -427,7 +427,7 @@ module PullRequestsHelper
 
     @markdown_next_index = index
 
-    content_tag(:ul, class: "gh-md-list") do
+    content_tag(:ul, class: "pf-md-list") do
       safe_join(items.map { |item| render_markdown_list_item(item) })
     end
   end
@@ -439,13 +439,13 @@ module PullRequestsHelper
       checked = match[1].casecmp("x").zero?
       body = match[2]
 
-      content_tag(:li, class: "gh-md-list-item gh-md-list-item--task") do
-        check = tag.input(type: "checkbox", disabled: true, checked: checked, class: "gh-md-checkbox")
+      content_tag(:li, class: "pf-md-list-item pf-md-list-item--task") do
+        check = tag.input(type: "checkbox", disabled: true, checked: checked, class: "pf-md-checkbox")
         safe_join([ check, content_tag(:span, render_markdown_inline(body)) ])
       end
     else
       body = line.sub(/\A[*-]\s+/, "")
-      content_tag(:li, render_markdown_inline(body), class: "gh-md-list-item")
+      content_tag(:li, render_markdown_inline(body), class: "pf-md-list-item")
     end
   end
 
@@ -459,7 +459,7 @@ module PullRequestsHelper
     end
 
     @markdown_next_index = index
-    content_tag(:p, render_markdown_inline(buffer.join(" ")), class: "gh-md-paragraph")
+    content_tag(:p, render_markdown_inline(buffer.join(" ")), class: "pf-md-paragraph")
   end
 
   def render_markdown_inline(text)

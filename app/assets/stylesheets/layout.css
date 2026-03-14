@@ -3,12 +3,12 @@
 }
 
 .page,
-.gh-page {
+.pf-page {
   width: min(1900px, calc(100vw - 3rem));
   margin: 0 auto;
 }
 
-.gh-page--wide {
+.pf-page--wide {
   width: calc(100vw - 3rem);
   max-width: none;
 }
@@ -17,7 +17,7 @@
   padding-top: 1.5rem;
 }
 
-.gh-page {
+.pf-page {
   padding-top: 1.5rem;
 }
 
@@ -34,12 +34,12 @@
 }
 
 @media (max-width: 1100px) {
-  .gh-content-with-sidebar,
-  .gh-review-layout {
+  .pf-content-with-sidebar,
+  .pf-review-layout {
     grid-template-columns: 1fr;
   }
 
-  .gh-file-tree {
+  .pf-file-tree {
     position: static;
   }
 }
@@ -47,11 +47,11 @@
 @media (max-width: 760px) {
   .app-chrome__inner,
   .page,
-  .gh-page {
+  .pf-page {
     width: min(100vw - 1rem, 1280px);
   }
 
-  .gh-page--wide {
+  .pf-page--wide {
     width: calc(100vw - 1rem);
   }
 
@@ -60,25 +60,25 @@
     display: none;
   }
 
-  .gh-tabs {
+  .pf-tabs {
     overflow-x: auto;
   }
 
-  .gh-tab-summary {
+  .pf-tab-summary {
     display: none;
   }
 
   .changed-file header,
   .browse-entry,
   .pull-request-list li,
-  .gh-commit-list-item {
+  .pf-commit-list-item {
     grid-template-columns: 1fr;
     flex-direction: column;
     align-items: flex-start;
   }
 
-  .gh-inline-comment__popover,
-  .gh-inline-menu__popover {
+  .pf-inline-comment__popover,
+  .pf-inline-menu__popover {
     width: min(18rem, 80vw);
   }
 }

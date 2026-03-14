@@ -1,4 +1,4 @@
-<section class="gh-page gh-page--wide">
+<section class="pf-page pf-page--wide">
   <%= render "pull_requests/repository_header", local_repository: @local_repository %>
 
   <%= render "pull_requests/pull_request_header",
@@ -7,31 +7,31 @@
     comparison: @comparison,
     active_tab: :commits %>
 
-  <section class="gh-review-toolbar">
-    <div class="gh-review-toolbar__left">
+  <section class="pf-review-toolbar">
+    <div class="pf-review-toolbar__left">
       <button type="button"
-        class="gh-toolbar-button gh-toolbar-button--icon"
+        class="pf-toolbar-button pf-toolbar-button--icon"
         data-action="toggle-tree"
         aria-label="<%= @show_file_tree ? "Hide file tree" : "Show file tree" %>">
         <span data-tree-icon="collapse" <%= 'hidden' unless @show_file_tree %>><%= octicon(:sidebar_collapse, size: 16) %></span>
         <span data-tree-icon="expand" <%= 'hidden' if @show_file_tree %>><%= octicon(:sidebar_expand, size: 16) %></span>
       </button>
-      <span class="gh-toolbar-pill">Commit <strong><%= @commit.short_sha %></strong></span>
-      <details class="gh-diff-settings" data-role="diff-settings">
-        <summary class="gh-toolbar-button gh-toolbar-button--icon" aria-label="Diff settings">
+      <span class="pf-toolbar-pill">Commit <strong><%= @commit.short_sha %></strong></span>
+      <details class="pf-diff-settings" data-role="diff-settings">
+        <summary class="pf-toolbar-button pf-toolbar-button--icon" aria-label="Diff settings">
           <%= octicon(:gear, size: 16) %>
         </summary>
-        <div class="gh-diff-settings__menu">
-          <p class="gh-diff-settings__label">Layout</p>
+        <div class="pf-diff-settings__menu">
+          <p class="pf-diff-settings__label">Layout</p>
           <%= link_to "Unified",
             pull_request_commit_path(@pull_request, @commit.sha, diff_layout_query(request.query_parameters, layout: "unified")),
-            class: ["gh-diff-settings__option", ("gh-diff-settings__option--active" if @layout == :unified)] %>
+            class: ["pf-diff-settings__option", ("pf-diff-settings__option--active" if @layout == :unified)] %>
           <%= link_to "Split",
             pull_request_commit_path(@pull_request, @commit.sha, diff_layout_query(request.query_parameters, layout: "split")),
-            class: ["gh-diff-settings__option", ("gh-diff-settings__option--active" if @layout == :split)] %>
+            class: ["pf-diff-settings__option", ("pf-diff-settings__option--active" if @layout == :split)] %>
           <%= link_to(@compact_line_height ? "Compact line height" : "Comfortable line height",
             pull_request_commit_path(@pull_request, @commit.sha, diff_layout_query(request.query_parameters, compact: (@compact_line_height ? "0" : "1"))),
-            class: ["gh-diff-settings__option", ("gh-diff-settings__option--active" if @compact_line_height)]) %>
+            class: ["pf-diff-settings__option", ("pf-diff-settings__option--active" if @compact_line_height)]) %>
         </div>
       </details>
     </div>
@@ -39,7 +39,7 @@
 
   <% ordered_files = ordered_diff_files(@files) %>
 
-  <div class="gh-review-layout <%= "gh-review-layout--tree-hidden" unless @show_file_tree %>">
+  <div class="pf-review-layout <%= "pf-review-layout--tree-hidden" unless @show_file_tree %>">
     <%= render "pull_requests/file_tree",
       files: ordered_files,
       query: @query,
@@ -49,27 +49,27 @@
       compact_line_height: @compact_line_height,
       show_file_tree: @show_file_tree %>
 
-    <section class="gh-diff-column">
-      <article class="gh-commit-summary" data-role="commit-summary">
-        <div class="gh-commit-summary__title-row">
-          <p class="gh-commit-summary__message"><%= format_commit_message(@commit.message) %></p>
-          <div class="gh-commit-summary__nav-buttons">
+    <section class="pf-diff-column">
+      <article class="pf-commit-summary" data-role="commit-summary">
+        <div class="pf-commit-summary__title-row">
+          <p class="pf-commit-summary__message"><%= format_commit_message(@commit.message) %></p>
+          <div class="pf-commit-summary__nav-buttons">
             <% if @previous_commit %>
               <%= link_to pull_request_commit_path(@pull_request, @previous_commit.sha), class: "button button-secondary button-small" do %>
-                <%= octicon(:chevron_down, size: 16, class_name: "gh-chevron-left") %> Prev
+                <%= octicon(:chevron_down, size: 16, class_name: "pf-chevron-left") %> Prev
               <% end %>
             <% end %>
             <% if @next_commit %>
               <%= link_to pull_request_commit_path(@pull_request, @next_commit.sha), class: "button button-secondary button-small" do %>
-                Next <%= octicon(:chevron_down, size: 16, class_name: "gh-chevron-right") %>
+                Next <%= octicon(:chevron_down, size: 16, class_name: "pf-chevron-right") %>
               <% end %>
             <% end %>
           </div>
         </div>
         <% if @commit.body.present? %>
-          <pre class="gh-commit-summary__body"><%= @commit.body %></pre>
+          <pre class="pf-commit-summary__body"><%= @commit.body %></pre>
         <% end %>
-        <div class="gh-commit-summary__footer">
+        <div class="pf-commit-summary__footer">
           <span><%= @commit.author_name %> committed <%= time_ago_in_words(@commit.authored_at) %> ago</span>
           <code>commit <%= @commit.sha %></code>
         </div>

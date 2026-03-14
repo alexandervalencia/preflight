@@ -1,80 +1,80 @@
-.gh-commit-list {
+.pf-commit-list {
   display: grid;
   margin-bottom: 0.8rem;
-  border: 1px solid var(--gh-border);
+  border: 1px solid var(--pf-border);
   border-radius: 6px;
   overflow: hidden;
 }
 
-.gh-commit-list__item {
+.pf-commit-list__item {
   display: flex;
   align-items: center;
   justify-content: space-between;
   gap: 1rem;
   padding: 0.75rem 0.9rem;
-  border-top: 1px solid var(--gh-border);
-  background: var(--gh-canvas-subtle);
+  border-top: 1px solid var(--pf-border);
+  background: var(--pf-canvas-subtle);
 }
 
-.gh-commit-list__item:first-child {
+.pf-commit-list__item:first-child {
   border-top: 0;
 }
 
-.gh-commit-list__meta {
+.pf-commit-list__meta {
   display: flex;
   align-items: center;
   gap: 0.65rem;
   min-width: 0;
 }
 
-.gh-commit-list__message,
-.gh-commit-list__sha {
-  color: var(--gh-link);
+.pf-commit-list__message,
+.pf-commit-list__sha {
+  color: var(--pf-link);
   font-family: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, "Liberation Mono", monospace;
   font-size: 0.8125rem;
 }
 
-.gh-commit-list__message {
-  color: var(--gh-text);
+.pf-commit-list__message {
+  color: var(--pf-text);
   font-family: inherit;
   font-weight: 500;
 }
 
-.gh-commits-index {
+.pf-commits-index {
   margin-top: 16px;
 }
 
-.gh-commit-group {
+.pf-commit-group {
   margin-bottom: 16px;
 }
 
-.gh-commit-group__header {
+.pf-commit-group__header {
   display: flex;
   align-items: center;
   gap: 0.5rem;
   margin-bottom: 0.5rem;
-  color: var(--gh-text);
+  color: var(--pf-text);
 }
 
-.gh-commit-group__header svg {
-  color: var(--gh-text-muted);
+.pf-commit-group__header svg {
+  color: var(--pf-text-muted);
   flex-shrink: 0;
 }
 
-.gh-commit-group__header h3 {
+.pf-commit-group__header h3 {
   margin: 0;
   font-size: 14px;
   font-weight: 400;
 }
 
-.gh-commit-group__list {
-  border: 1px solid var(--gh-border);
+.pf-commit-group__list {
+  border: 1px solid var(--pf-border);
   border-radius: 6px;
-  background: var(--gh-subtle);
+  background: var(--pf-subtle);
   overflow: hidden;
 }
 
-.gh-commit-list-item {
+.pf-commit-list-item {
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -82,96 +82,96 @@
   padding: 8px 16px;
 }
 
-.gh-commit-list-item + .gh-commit-list-item {
-  border-top: 1px solid var(--gh-border);
+.pf-commit-list-item + .pf-commit-list-item {
+  border-top: 1px solid var(--pf-border);
 }
 
-.gh-commit-list-item__body strong {
+.pf-commit-list-item__body strong {
   display: block;
   margin-bottom: 0.25rem;
   font-size: 16px;
   font-weight: 500;
 }
 
-.gh-commit-list-item__body strong a {
-  color: var(--gh-text);
+.pf-commit-list-item__body strong a {
+  color: var(--pf-text);
   text-decoration: none;
 }
 
-.gh-commit-list-item__body strong code {
-  font-family: var(--gh-font-mono);
+.pf-commit-list-item__body strong code {
+  font-family: var(--pf-font-mono);
   font-size: 0.8rem;
   font-weight: 400;
 }
 
-.gh-commit-list-item__body strong a:hover {
-  color: var(--gh-link);
+.pf-commit-list-item__body strong a:hover {
+  color: var(--pf-link);
   text-decoration: underline;
 }
 
-.gh-commit-list-item__body p {
+.pf-commit-list-item__body p {
   margin: 0;
-  color: var(--gh-text-muted);
+  color: var(--pf-text-muted);
   font-size: 0.75rem;
 }
 
-.gh-commit-list-item__meta {
+.pf-commit-list-item__meta {
   display: flex;
   align-items: center;
   gap: 0.75rem;
   flex-shrink: 0;
 }
 
-.gh-verified {
+.pf-verified {
   padding: 0.15rem 0.45rem;
   border: 1px solid rgba(63, 185, 80, 0.4);
   border-radius: 2em;
-  color: var(--gh-success-text);
+  color: var(--pf-success-text);
   font-size: 0.75rem;
   font-weight: 600;
   white-space: nowrap;
 }
 
-.gh-commit-sha-group {
+.pf-commit-sha-group {
   display: flex;
   align-items: center;
   gap: 0.25rem;
 }
 
-.gh-commit-sha {
-  font-family: var(--gh-font-mono);
+.pf-commit-sha {
+  font-family: var(--pf-font-mono);
   font-size: 0.75rem;
-  color: var(--gh-text-muted);
+  color: var(--pf-text-muted);
   text-decoration: none;
 }
 
-.gh-commit-sha:hover {
-  color: var(--gh-link);
+.pf-commit-sha:hover {
+  color: var(--pf-link);
   text-decoration: underline;
 }
 
-.gh-commit-browse {
+.pf-commit-browse {
   display: flex;
   align-items: center;
   justify-content: center;
-  color: var(--gh-text-muted);
+  color: var(--pf-text-muted);
   padding: 0.15rem;
   border-radius: 4px;
 }
 
-.gh-commit-browse:hover {
-  color: var(--gh-link);
+.pf-commit-browse:hover {
+  color: var(--pf-link);
 }
 
-.gh-commit-summary {
+.pf-commit-summary {
   margin-bottom: 16px;
-  border: 1px solid var(--gh-border);
+  border: 1px solid var(--pf-border);
   border-radius: 6px;
-  background: var(--gh-subtle);
+  background: var(--pf-subtle);
   overflow: hidden;
 }
 
-.gh-commit-summary__title-row {
+.pf-commit-summary__title-row {
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -179,78 +179,78 @@
   padding: 8px 16px;
 }
 
-.gh-commit-summary__message {
+.pf-commit-summary__message {
   margin: 0;
-  color: var(--gh-text-bright);
+  color: var(--pf-text-bright);
   font-size: 14px;
   font-weight: 600;
   line-height: 1.5;
   min-width: 0;
 }
 
-.gh-commit-summary__message code {
-  font-family: var(--gh-font-mono);
+.pf-commit-summary__message code {
+  font-family: var(--pf-font-mono);
   font-size: 12px;
   font-weight: 400;
 }
 
-.gh-commit-summary__body {
+.pf-commit-summary__body {
   margin: 0;
   padding: 0 16px 8px;
   white-space: pre-wrap;
-  color: var(--gh-text);
+  color: var(--pf-text);
   font-size: 12px;
 }
 
-.gh-commit-summary__nav-buttons {
+.pf-commit-summary__nav-buttons {
   display: flex;
   gap: 0;
   flex-shrink: 0;
 }
 
-.gh-commit-summary__nav-buttons a {
+.pf-commit-summary__nav-buttons a {
   display: inline-flex;
   align-items: center;
   gap: 4px;
 }
 
-.gh-commit-summary__nav-buttons a:first-child {
+.pf-commit-summary__nav-buttons a:first-child {
   border-top-right-radius: 0;
   border-bottom-right-radius: 0;
 }
 
-.gh-commit-summary__nav-buttons a:last-child {
+.pf-commit-summary__nav-buttons a:last-child {
   border-top-left-radius: 0;
   border-bottom-left-radius: 0;
   margin-left: -1px;
 }
 
-.gh-commit-summary__nav-buttons a:only-child {
+.pf-commit-summary__nav-buttons a:only-child {
   border-radius: 6px;
   margin-left: 0;
 }
 
-.gh-chevron-left {
+.pf-chevron-left {
   transform: rotate(90deg);
 }
 
-.gh-chevron-right {
+.pf-chevron-right {
   transform: rotate(-90deg);
 }
 
-.gh-commit-summary__footer {
+.pf-commit-summary__footer {
   display: flex;
   align-items: center;
   justify-content: space-between;
   gap: 0.75rem;
   padding: 8px 16px;
-  border-top: 1px solid var(--gh-border);
-  background: var(--gh-bg);
-  color: var(--gh-text-muted);
+  border-top: 1px solid var(--pf-border);
+  background: var(--pf-bg);
+  color: var(--pf-text-muted);
   font-size: 12px;
 }
 
-.gh-commit-summary__footer code {
-  font-family: var(--gh-font-mono);
+.pf-commit-summary__footer code {
+  font-family: var(--pf-font-mono);
   font-size: 12px;
 }

@@ -1,8 +1,8 @@
-<table class="diff-table gh-unified-diff <%= "gh-diff-table--compact" if compact_line_height %>" data-role="unified-diff">
+<table class="diff-table pf-unified-diff <%= "pf-diff-table--compact" if compact_line_height %>" data-role="unified-diff">
   <tbody>
     <% unified_diff_rows(file, comments_by_key).each do |row| %>
       <% if row.kind == :hunk %>
-        <tr class="gh-hunk-row">
+        <tr class="pf-hunk-row">
           <td class="line-number line-number--hunk">...</td>
           <td class="line-number line-number--hunk">...</td>
           <td class="line-code line-code--hunk" colspan="2">
@@ -14,16 +14,16 @@
 
       <% row_key = "#{file_anchor_id(file.path)}-#{row.comment_side || "none"}-#{row.comment_line_number || "none"}" %>
 
-      <tr class="gh-split-row">
+      <tr class="pf-split-row">
         <td class="line-number <%= "line-number--#{row.cell_kind}" unless row.left_number.nil? && row.right_number.nil? %>"><%= row.left_number %></td>
         <td class="line-number <%= "line-number--#{row.cell_kind}" unless row.left_number.nil? && row.right_number.nil? %>"><%= row.right_number %></td>
         <td class="line-code line-code--<%= row.cell_kind %> <%= "line-code--commentable" if row.comment_side.present? %>">
           <% if row.comment_side && row.comment_line_number %>
-            <details class="gh-inline-comment">
-              <summary class="gh-inline-comment__summary" data-role="comment-trigger" aria-label="Add comment on this line">
+            <details class="pf-inline-comment">
+              <summary class="pf-inline-comment__summary" data-role="comment-trigger" aria-label="Add comment on this line">
                 <span>+</span>
               </summary>
-              <div class="gh-inline-comment__popover">
+              <div class="pf-inline-comment__popover">
                 <%= render "pull_requests/inline_comment_form",
                   pull_request: pull_request,
                   file: file,
@@ -38,12 +38,12 @@
             <code><%= highlighted_diff_line(file.path, row.content) %></code>
           </div>
           <% if row.comment_side && row.comment_line_number %>
-            <details class="gh-inline-menu">
-              <summary class="gh-inline-menu__summary" data-role="comment-menu" aria-label="Line actions">
+            <details class="pf-inline-menu">
+              <summary class="pf-inline-menu__summary" data-role="comment-menu" aria-label="Line actions">
                 <%= octicon(:kebab, size: 16) %>
               </summary>
-              <div class="gh-inline-menu__popover" id="<%= row_key %>-menu">
-                <p class="gh-inline-menu__title">Add comment on line <%= row.comment_line_number %></p>
+              <div class="pf-inline-menu__popover" id="<%= row_key %>-menu">
+                <p class="pf-inline-menu__title">Add comment on line <%= row.comment_line_number %></p>
                 <%= render "pull_requests/inline_comment_form",
                   pull_request: pull_request,
                   file: file,

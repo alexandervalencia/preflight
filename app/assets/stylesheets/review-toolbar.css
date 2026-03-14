@@ -1,20 +1,20 @@
-.gh-comment-editor__actions {
+.pf-comment-editor__actions {
   display: flex;
   justify-content: flex-end;
 }
 
-.gh-edit-card summary {
+.pf-edit-card summary {
   cursor: pointer;
   padding: 0.85rem 1rem;
   list-style: none;
   font-weight: 600;
 }
 
-.gh-edit-card summary::-webkit-details-marker {
+.pf-edit-card summary::-webkit-details-marker {
   display: none;
 }
 
-.gh-review-toolbar {
+.pf-review-toolbar {
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -24,38 +24,38 @@
   padding: 0;
 }
 
-.gh-review-toolbar__left,
-.gh-review-toolbar__right {
+.pf-review-toolbar__left,
+.pf-review-toolbar__right {
   display: flex;
   align-items: center;
   gap: 8px;
   flex-wrap: wrap;
 }
 
-.gh-review-layout {
+.pf-review-layout {
   display: grid;
   grid-template-columns: 296px minmax(0, 1fr);
   gap: 0.75rem;
   align-items: start;
 }
 
-.gh-review-layout--tree-hidden {
+.pf-review-layout--tree-hidden {
   grid-template-columns: minmax(0, 1fr);
 }
 
-.gh-review-layout--tree-hidden .gh-file-tree {
+.pf-review-layout--tree-hidden .pf-file-tree {
   display: none;
 }
 
-.gh-toolbar-button,
-.gh-toolbar-pill {
+.pf-toolbar-button,
+.pf-toolbar-pill {
   display: inline-flex;
   align-items: center;
   justify-content: center;
   gap: 4px;
   min-height: 32px;
   padding: 0;
-  color: var(--gh-text-muted);
+  color: var(--pf-text-muted);
   border: none;
   background: none;
   font-size: 14px;
@@ -64,53 +64,53 @@
   cursor: pointer;
 }
 
-.gh-toolbar-pill {
+.pf-toolbar-pill {
   font-size: 14px;
-  color: var(--gh-text);
+  color: var(--pf-text);
 }
 
-.gh-toolbar-button:hover {
+.pf-toolbar-button:hover {
   text-decoration: none;
-  color: var(--gh-text);
+  color: var(--pf-text);
 }
 
-.gh-toolbar-button svg {
-  color: var(--gh-text-muted);
+.pf-toolbar-button svg {
+  color: var(--pf-text-muted);
 }
 
-.gh-toolbar-caret,
-.gh-file-tree__glyph,
-.gh-file-header__toggle .octicon {
+.pf-toolbar-caret,
+.pf-file-tree__glyph,
+.pf-file-header__toggle .octicon {
   display: inline-flex;
   align-items: center;
   justify-content: center;
 }
 
-.gh-toolbar-button--icon {
+.pf-toolbar-button--icon {
   width: 32px;
   padding: 0;
   min-height: auto;
 }
 
-.gh-toolbar-caret {
-  color: var(--gh-text-muted);
+.pf-toolbar-caret {
+  color: var(--pf-text-muted);
   font-size: 0;
 }
 
-.gh-viewed-summary {
-  color: var(--gh-text-muted);
+.pf-viewed-summary {
+  color: var(--pf-text-muted);
   font-size: 12px;
 }
 
-.gh-diff-settings {
+.pf-diff-settings {
   position: relative;
 }
 
-.gh-diff-settings summary::-webkit-details-marker {
+.pf-diff-settings summary::-webkit-details-marker {
   display: none;
 }
 
-.gh-diff-settings__menu {
+.pf-diff-settings__menu {
   position: absolute;
   top: calc(100% + 0.4rem);
   left: 0;
@@ -119,33 +119,33 @@
   gap: 0.2rem;
   min-width: 14rem;
   padding: 0.65rem;
-  border: 1px solid var(--gh-border);
+  border: 1px solid var(--pf-border);
   border-radius: 8px;
-  background: var(--gh-subtle);
+  background: var(--pf-subtle);
   box-shadow: 0 8px 24px rgba(1, 4, 9, 0.45);
 }
 
-.gh-diff-settings__label {
+.pf-diff-settings__label {
   margin: 0 0 0.2rem;
-  color: var(--gh-text-muted);
+  color: var(--pf-text-muted);
   font-size: 0.8rem;
   font-weight: 600;
 }
 
-.gh-diff-settings__option {
+.pf-diff-settings__option {
   display: block;
   padding: 0.55rem 0.65rem;
-  color: var(--gh-text);
+  color: var(--pf-text);
   border: 1px solid transparent;
   border-radius: 6px;
   font-size: 0.95rem;
 }
 
-.gh-diff-settings__option:hover {
+.pf-diff-settings__option:hover {
   text-decoration: none;
   background: #1c2128;
 }
 
-.gh-diff-settings__option--active {
+.pf-diff-settings__option--active {
   border-color: #1f6feb;
 }

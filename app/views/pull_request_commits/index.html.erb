@@ -1,4 +1,4 @@
-<section class="gh-page">
+<section class="pf-page">
   <%= render "pull_requests/repository_header", local_repository: @local_repository %>
 
   <%= render "pull_requests/pull_request_header",
@@ -7,27 +7,27 @@
     comparison: @comparison,
     active_tab: :commits %>
 
-  <section class="gh-commits-index">
+  <section class="pf-commits-index">
     <% @grouped_commits.each do |date, commits| %>
-      <div class="gh-commit-group">
-        <div class="gh-commit-group__header">
+      <div class="pf-commit-group">
+        <div class="pf-commit-group__header">
           <%= octicon(:git_commit, size: 16) %>
           <h3><%= commit_group_title(date) %></h3>
         </div>
 
-        <div class="gh-commit-group__list">
+        <div class="pf-commit-group__list">
           <% commits.each do |commit| %>
-            <article class="gh-commit-list-item" data-role="commit-list-item">
-              <div class="gh-commit-list-item__body">
+            <article class="pf-commit-list-item" data-role="commit-list-item">
+              <div class="pf-commit-list-item__body">
                 <strong><%= link_to pull_request_commit_path(@pull_request, commit.sha) do %><%= format_commit_message(commit.message) %><% end %></strong>
                 <p><%= commit.author_name %> committed <%= time_ago_in_words(commit.authored_at) %> ago</p>
               </div>
 
-              <div class="gh-commit-list-item__meta">
-                <span class="gh-verified">Verified</span>
-                <div class="gh-commit-sha-group">
-                  <%= link_to commit.short_sha.first(7), pull_request_commit_path(@pull_request, commit.sha), class: "gh-commit-sha" %>
-                  <%= link_to pull_request_commit_path(@pull_request, commit.sha), class: "gh-commit-browse", aria: { label: "Browse repository at this point" } do %>
+              <div class="pf-commit-list-item__meta">
+                <span class="pf-verified">Verified</span>
+                <div class="pf-commit-sha-group">
+                  <%= link_to commit.short_sha.first(7), pull_request_commit_path(@pull_request, commit.sha), class: "pf-commit-sha" %>
+                  <%= link_to pull_request_commit_path(@pull_request, commit.sha), class: "pf-commit-browse", aria: { label: "Browse repository at this point" } do %>
                     <%= octicon(:code, size: 16) %>
                   <% end %>
                 </div>

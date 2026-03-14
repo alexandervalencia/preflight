@@ -1,21 +1,21 @@
-<aside class="gh-sidebar" data-role="pr-sidebar">
-  <section class="gh-sidebar-section">
+<aside class="pf-sidebar" data-role="pr-sidebar">
+  <section class="pf-sidebar-section">
     <h2>Reviewers</h2>
     <p>No reviewers yet.</p>
   </section>
 
-  <section class="gh-sidebar-section">
+  <section class="pf-sidebar-section">
     <h2>Repository</h2>
     <p><code><%= local_repository.path %></code></p>
   </section>
 
-  <section class="gh-sidebar-section">
+  <section class="pf-sidebar-section">
     <h2>Branches</h2>
     <p><strong>Base:</strong> <%= pull_request.base_branch %></p>
     <p><strong>Head:</strong> <%= pull_request.source_branch %></p>
   </section>
 
-  <section class="gh-sidebar-section">
+  <section class="pf-sidebar-section">
     <h2>Review progress</h2>
     <p><%= pluralize(comparison.commits.count, "commit") %></p>
     <p><%= pluralize(comparison.files.count, "changed file") %></p>

@@ -59,10 +59,10 @@
         var btn = e.target.closest("[data-action='toggle-tree']");
         if (!btn) return;
 
-        var layout = document.querySelector(".gh-review-layout");
+        var layout = document.querySelector(".pf-review-layout");
         if (!layout) return;
 
-        var hidden = layout.classList.toggle("gh-review-layout--tree-hidden");
+        var hidden = layout.classList.toggle("pf-review-layout--tree-hidden");
 
         btn.querySelector("[data-tree-icon='collapse']").hidden = hidden;
         btn.querySelector("[data-tree-icon='expand']").hidden = !hidden;

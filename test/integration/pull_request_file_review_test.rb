@@ -13,7 +13,7 @@ class PullRequestFileReviewTest < ActionDispatch::IntegrationTest
 
       assert_redirected_to repository_pull_request_files_path(repository, pull_request)
       follow_redirect!
-      assert_select "[data-path='app/models/widget.rb'] .gh-view-toggle--checked", text: /Viewed/
+      assert_select "[data-path='app/models/widget.rb'] .pf-view-toggle--checked", text: /Viewed/
 
       fixture.commit_file(
         branch: "feature",
@@ -24,8 +24,8 @@ class PullRequestFileReviewTest < ActionDispatch::IntegrationTest
 
       get repository_pull_request_files_path(repository, pull_request)
 
-      assert_select "[data-path='app/models/widget.rb'] .gh-view-toggle--checked", count: 0
-      assert_select "[data-path='app/models/widget.rb'] .gh-view-toggle", text: /Viewed/
+      assert_select "[data-path='app/models/widget.rb'] .pf-view-toggle--checked", count: 0
+      assert_select "[data-path='app/models/widget.rb'] .pf-view-toggle", text: /Viewed/
     end
   end
 
@@ -48,8 +48,8 @@ class PullRequestFileReviewTest < ActionDispatch::IntegrationTest
 
       assert_redirected_to repository_pull_request_files_path(repository, pull_request)
       follow_redirect!
-      assert_select "[data-path='app/models/widget.rb'] .gh-view-toggle--checked", count: 0
-      assert_select "[data-path='app/models/widget.rb'] .gh-view-toggle", text: /Viewed/
+      assert_select "[data-path='app/models/widget.rb'] .pf-view-toggle--checked", count: 0
+      assert_select "[data-path='app/models/widget.rb'] .pf-view-toggle", text: /Viewed/
     end
   end
 end

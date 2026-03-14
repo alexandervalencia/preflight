@@ -33,21 +33,21 @@ class PullRequestsFlowTest < ActionDispatch::IntegrationTest
       assert_select "[data-role='conversation-card']", text: /Review the widget work\./
       assert_select "[data-role='conversation-commit-list'] a[href='#{pull_request_commit_path(pull_request, fixture.feature_commits[:add_widget])}']", text: /Add widget/
       assert_select "[data-role='conversation-commit-list'] a[href='#{pull_request_commit_path(pull_request, fixture.feature_commits[:refine_widget])}']", text: /Refine widget/
-      assert_select ".gh-merge-box", text: /No conflicts with base branch/
+      assert_select ".pf-merge-box", text: /No conflicts with base branch/
       assert_select "[data-role='pr-sidebar']", count: 0
       assert_select "[data-role='branch-pill']", text: "main"
       assert_select "[data-role='branch-pill']", text: "feature"
       assert_select "[data-role='pr-summary']"
 
       get repository_pull_request_files_path(repository, pull_request)
-      assert_select ".gh-page--wide"
+      assert_select ".pf-page--wide"
       assert_select "input[name='q']"
       assert_select "[data-role='diff-settings']"
       assert_select "[data-role='split-diff']"
       assert_select "summary[aria-label='Edit title']", count: 0
-      assert_select ".gh-repository-nav", count: 0
-      assert_select ".gh-pr-actions", count: 0
-      assert_select ".gh-code .k, .gh-code .nf, .gh-code .nb", minimum: 1
+      assert_select ".pf-repository-nav", count: 0
+      assert_select ".pf-pr-actions", count: 0
+      assert_select ".pf-code .k, .pf-code .nf, .pf-code .nb", minimum: 1
       assert_select "[data-role='file-tree']", text: /app/
       assert_select "[data-role='file-tree']", text: /models/
       assert_select "[data-role='file-tree']", text: /README\.md/
@@ -151,7 +151,7 @@ class PullRequestsFlowTest < ActionDispatch::IntegrationTest
       assert_redirected_to repository_pull_request_path(repository, pull_request)
       follow_redirect!
       assert_select "h1", text: "Ship retryable exec_query support"
-      assert_select ".gh-pr-number", text: "##{pull_request.id}"
+      assert_select ".pf-pr-number", text: "##{pull_request.id}"
     end
   end
 

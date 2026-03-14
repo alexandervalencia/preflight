@@ -1,5 +1,5 @@
 .app-chrome {
-  border-bottom: 1px solid var(--gh-border);
+  border-bottom: 1px solid var(--pf-border);
   background: #010409;
 }
 
@@ -33,7 +33,7 @@
   width: 1.75rem;
   height: 1.75rem;
   border-radius: 999px;
-  background: var(--gh-text-bright);
+  background: var(--pf-text-bright);
   color: #010409;
   font-size: 0.9rem;
 }
@@ -42,9 +42,9 @@
   flex: 1;
   max-width: 26rem;
   padding: 0.5rem 0.8rem;
-  border: 1px solid var(--gh-border);
+  border: 1px solid var(--pf-border);
   border-radius: 6px;
-  color: var(--gh-text-muted);
+  color: var(--pf-text-muted);
   background: rgba(110, 118, 129, 0.12);
   font-size: 0.9rem;
 }
@@ -57,7 +57,7 @@
 }
 
 .app-chrome__link {
-  color: var(--gh-text);
+  color: var(--pf-text);
   font-size: 0.9rem;
   font-weight: 600;
 }
@@ -68,5 +68,5 @@
 }
 
 .app-chrome__link--muted {
-  color: var(--gh-text-muted);
+  color: var(--pf-text-muted);
 }

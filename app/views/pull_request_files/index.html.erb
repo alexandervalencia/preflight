@@ -1,4 +1,4 @@
-<section class="gh-page gh-page--wide">
+<section class="pf-page pf-page--wide">
   <%= render "pull_requests/repository_header", local_repository: @local_repository %>
 
   <%= render "pull_requests/pull_request_header",
@@ -7,39 +7,39 @@
     comparison: @comparison,
     active_tab: :files %>
 
-  <section class="gh-review-toolbar">
-    <div class="gh-review-toolbar__left">
+  <section class="pf-review-toolbar">
+    <div class="pf-review-toolbar__left">
       <button type="button"
-        class="gh-toolbar-button gh-toolbar-button--icon"
+        class="pf-toolbar-button pf-toolbar-button--icon"
         data-action="toggle-tree"
         aria-label="<%= @show_file_tree ? "Collapse file tree" : "Expand file tree" %>">
         <span data-tree-icon="collapse" <%= 'hidden' unless @show_file_tree %>><%= octicon(:sidebar_collapse, size: 16) %></span>
         <span data-tree-icon="expand" <%= 'hidden' if @show_file_tree %>><%= octicon(:sidebar_expand, size: 16) %></span>
       </button>
-      <details class="gh-diff-settings" data-role="diff-settings">
-        <summary class="gh-toolbar-button gh-toolbar-button--icon" aria-label="Diff settings">
+      <details class="pf-diff-settings" data-role="diff-settings">
+        <summary class="pf-toolbar-button pf-toolbar-button--icon" aria-label="Diff settings">
           <%= octicon(:gear, size: 16) %>
         </summary>
-        <div class="gh-diff-settings__menu">
-          <p class="gh-diff-settings__label">Layout</p>
+        <div class="pf-diff-settings__menu">
+          <p class="pf-diff-settings__label">Layout</p>
           <%= link_to "Unified",
             repository_pull_request_files_path(@local_repository, @pull_request, diff_layout_query(request.query_parameters, layout: "unified")),
-            class: ["gh-diff-settings__option", ("gh-diff-settings__option--active" if @layout == :unified)] %>
+            class: ["pf-diff-settings__option", ("pf-diff-settings__option--active" if @layout == :unified)] %>
           <%= link_to "Split",
             repository_pull_request_files_path(@local_repository, @pull_request, diff_layout_query(request.query_parameters, layout: "split")),
-            class: ["gh-diff-settings__option", ("gh-diff-settings__option--active" if @layout == :split)] %>
+            class: ["pf-diff-settings__option", ("pf-diff-settings__option--active" if @layout == :split)] %>
           <%= link_to(@compact_line_height ? "Compact line height" : "Comfortable line height",
             repository_pull_request_files_path(@local_repository, @pull_request, diff_layout_query(request.query_parameters, compact: (@compact_line_height ? "0" : "1"))),
-            class: ["gh-diff-settings__option", ("gh-diff-settings__option--active" if @compact_line_height)]) %>
+            class: ["pf-diff-settings__option", ("pf-diff-settings__option--active" if @compact_line_height)]) %>
         </div>
       </details>
     </div>
-    <div class="gh-review-toolbar__right">
-      <span class="gh-viewed-summary"><%= @viewed_files_by_path.values.count { |viewed_file| viewed_file.current?(repository: @pull_request.git_repository) } %> / <%= @comparison.files.count %> viewed</span>
+    <div class="pf-review-toolbar__right">
+      <span class="pf-viewed-summary"><%= @viewed_files_by_path.values.count { |viewed_file| viewed_file.current?(repository: @pull_request.git_repository) } %> / <%= @comparison.files.count %> viewed</span>
     </div>
   </section>
 
-  <div class="gh-review-layout <%= "gh-review-layout--tree-hidden" unless @show_file_tree %>">
+  <div class="pf-review-layout <%= "pf-review-layout--tree-hidden" unless @show_file_tree %>">
     <% ordered_files = ordered_diff_files(@files) %>
     <%= render "pull_requests/file_tree",
       files: ordered_files,
@@ -50,7 +50,7 @@
       compact_line_height: @compact_line_height,
       show_file_tree: @show_file_tree %>
 
-    <section class="gh-diff-column">
+    <section class="pf-diff-column">
       <% ordered_files.each do |file| %>
         <%= render "pull_requests/diff_file",
           pull_request: @pull_request,

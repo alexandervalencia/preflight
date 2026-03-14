@@ -4,35 +4,35 @@
 <% changed_files_count = comparison.files.count %>
 <% author_name = pull_request_author_name(comparison) %>
 
-<header class="gh-pr-header">
-  <p class="gh-breadcrumb">
+<header class="pf-pr-header">
+  <p class="pf-breadcrumb">
     <%= link_to local_repository.name, repository_pull_requests_path(local_repository) %>
     <span>/</span>
     <span>pull request</span>
   </p>
 
-  <div class="gh-pr-title-row">
-    <div class="gh-pr-title-main">
-      <div class="gh-pr-title-stack">
-        <h1 class="gh-pr-title"><%= pull_request.title %></h1>
-        <span class="gh-pr-number">#<%= pull_request.id %></span>
+  <div class="pf-pr-title-row">
+    <div class="pf-pr-title-main">
+      <div class="pf-pr-title-stack">
+        <h1 class="pf-pr-title"><%= pull_request.title %></h1>
+        <span class="pf-pr-number">#<%= pull_request.id %></span>
       </div>
 
       <% if active_tab == :conversation %>
-        <details class="gh-title-editor">
-          <summary aria-label="Edit title" class="gh-title-editor__summary">
-            <span class="gh-title-editor__icon">&#9998;</span>
+        <details class="pf-title-editor">
+          <summary aria-label="Edit title" class="pf-title-editor__summary">
+            <span class="pf-title-editor__icon">&#9998;</span>
           </summary>
 
-          <div class="gh-title-editor__popover">
+          <div class="pf-title-editor__popover">
             <%= form_with model: pull_request,
               url: repository_pull_request_path(local_repository, pull_request),
-              class: "gh-title-editor__form" do |form| %>
+              class: "pf-title-editor__form" do |form| %>
               <%= form.label :title, "Edit title", class: "sr-only" %>
-              <%= form.text_field :title, value: pull_request.title, class: "gh-title-editor__input" %>
+              <%= form.text_field :title, value: pull_request.title, class: "pf-title-editor__input" %>
               <%= form.hidden_field :base_branch, value: pull_request.base_branch %>
               <%= form.hidden_field :description, value: pull_request.description %>
-              <div class="gh-title-editor__actions">
+              <div class="pf-title-editor__actions">
                 <%= form.submit "Save", class: "button button-small" %>
               </div>
             <% end %>
@@ -42,41 +42,41 @@
     </div>
   </div>
 
-  <div class="gh-pr-meta">
-    <span class="gh-state-badge"><%= octicon(:git_pull_request, size: 16) %> Open</span>
-    <span class="gh-pr-meta__text">
+  <div class="pf-pr-meta">
+    <span class="pf-state-badge"><%= octicon(:git_pull_request, size: 16) %> Open</span>
+    <span class="pf-pr-meta__text">
       <strong><%= author_name %></strong> wants to merge
       <strong><%= pluralize(commits_count, "commit") %></strong>
       into
-      <span class="gh-inline-branch" data-role="branch-pill"><%= pull_request.base_branch %></span>
+      <span class="pf-inline-branch" data-role="branch-pill"><%= pull_request.base_branch %></span>
       from
-      <span class="gh-inline-branch" data-role="branch-pill"><%= pull_request.source_branch %></span>
+      <span class="pf-inline-branch" data-role="branch-pill"><%= pull_request.source_branch %></span>
     </span>
   </div>
 
-  <nav class="gh-tabs">
+  <nav class="pf-tabs">
     <%= link_to repository_pull_request_path(local_repository, pull_request),
-      class: ["gh-tab", ("gh-tab--active" if active_tab == :conversation)] do %>
+      class: ["pf-tab", ("pf-tab--active" if active_tab == :conversation)] do %>
       <%= octicon(:comment, size: 16) %>
       <span>Conversation</span>
-      <span class="gh-tab-count"><%= conversation_count %></span>
+      <span class="pf-tab-count"><%= conversation_count %></span>
     <% end %>
     <%= link_to pull_request_commits_path(pull_request),
-      class: ["gh-tab", ("gh-tab--active" if active_tab == :commits)] do %>
+      class: ["pf-tab", ("pf-tab--active" if active_tab == :commits)] do %>
       <%= octicon(:git_commit, size: 16) %>
       <span>Commits</span>
-      <span class="gh-tab-count"><%= commits_count %></span>
+      <span class="pf-tab-count"><%= commits_count %></span>
     <% end %>
     <%= link_to repository_pull_request_files_path(local_repository, pull_request),
-      class: ["gh-tab", ("gh-tab--active" if active_tab == :files)] do %>
+      class: ["pf-tab", ("pf-tab--active" if active_tab == :files)] do %>
       <%= octicon(:file, size: 16) %>
       <span>Files changed</span>
-      <span class="gh-tab-count"><%= changed_files_count %></span>
+      <span class="pf-tab-count"><%= changed_files_count %></span>
     <% end %>
 
-    <div class="gh-tab-summary" data-role="pr-summary">
-      <span class="gh-additions">+<%= summary[:additions] %></span>
-      <span class="gh-deletions">-<%= summary[:deletions] %></span>
+    <div class="pf-tab-summary" data-role="pr-summary">
+      <span class="pf-additions">+<%= summary[:additions] %></span>
+      <span class="pf-deletions">-<%= summary[:deletions] %></span>
       <%= diffstat_blocks(summary[:additions], summary[:deletions]) %>
     </div>
   </nav>

@@ -1,42 +1,42 @@
-.gh-file-tree {
+.pf-file-tree {
   position: sticky;
   top: 1rem;
   overflow: hidden;
-  border: 1px solid var(--gh-border);
+  border: 1px solid var(--pf-border);
   border-radius: 6px;
-  background: var(--gh-bg);
+  background: var(--pf-bg);
 }
 
-.gh-file-filter {
+.pf-file-filter {
   display: block;
   padding: 8px;
-  border-bottom: 1px solid var(--gh-border);
+  border-bottom: 1px solid var(--pf-border);
 }
 
-.gh-file-filter__input {
+.pf-file-filter__input {
   display: flex;
   align-items: center;
   min-height: 32px;
   padding: 0 10px;
-  border: 1px solid var(--gh-border);
+  border: 1px solid var(--pf-border);
   border-radius: 6px;
-  background: var(--gh-bg);
+  background: var(--pf-bg);
 }
 
-.gh-file-filter input {
+.pf-file-filter input {
   width: 100%;
   padding: 0;
-  color: var(--gh-text);
+  color: var(--pf-text);
   border: 0;
   background: transparent;
   font-size: 12px;
 }
 
-.gh-file-filter input:focus {
+.pf-file-filter input:focus {
   outline: none;
 }
 
-.gh-file-tree__list {
+.pf-file-tree__list {
   max-height: 70vh;
   margin: 0;
   padding: 6px 0;
@@ -44,65 +44,65 @@
   list-style: none;
 }
 
-.gh-file-tree__list li {
+.pf-file-tree__list li {
   margin: 0;
 }
 
-.gh-file-tree__entry {
+.pf-file-tree__entry {
   display: flex;
   align-items: center;
   justify-content: space-between;
   gap: 0.6rem;
   min-height: 26px;
   padding: 3px 8px 3px calc(8px + (var(--tree-level, 0) * 20px));
-  font-family: var(--gh-font-mono);
-  color: var(--gh-text);
+  font-family: var(--pf-font-mono);
+  color: var(--pf-text);
   font-size: 12px;
   line-height: 20px;
 }
 
-.gh-file-tree__entry--file:hover {
+.pf-file-tree__entry--file:hover {
   text-decoration: none;
   background: rgba(110, 118, 129, 0.1);
 }
 
-.gh-file-tree__entry--directory {
-  color: var(--gh-text-bright);
+.pf-file-tree__entry--directory {
+  color: var(--pf-text-bright);
   font-weight: 600;
 }
 
-.gh-file-tree__label {
+.pf-file-tree__label {
   display: inline-flex;
   align-items: center;
   gap: 0.4rem;
   min-width: 0;
 }
 
-.gh-file-tree__glyph {
-  color: var(--gh-text-muted);
+.pf-file-tree__glyph {
+  color: var(--pf-text-muted);
   flex-shrink: 0;
 }
 
-.gh-file-tree__glyph--chevron {
+.pf-file-tree__glyph--chevron {
   color: #7d8590;
 }
 
-.gh-file-tree__path {
+.pf-file-tree__path {
   min-width: 0;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
 }
 
-.gh-file-tree__meta {
+.pf-file-tree__meta {
   display: inline-flex;
   align-items: center;
   gap: 0.45rem;
   flex-shrink: 0;
 }
 
-.gh-file-tree__status,
-.gh-file-tree__count {
+.pf-file-tree__status,
+.pf-file-tree__count {
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -113,16 +113,16 @@
   font-weight: 600;
 }
 
-.gh-file-tree__status {
+.pf-file-tree__status {
   background: transparent;
-  color: var(--gh-link);
+  color: var(--pf-link);
 }
 
-.gh-file-tree__count {
+.pf-file-tree__count {
   background: rgba(110, 118, 129, 0.22);
-  color: var(--gh-text);
+  color: var(--pf-text);
 }
 
-.gh-diff-column {
+.pf-diff-column {
   min-width: 0;
 }

@@ -1,9 +1,9 @@
 .changed-file {
   margin-bottom: 16px;
   overflow: hidden;
-  border: 1px solid var(--gh-border);
+  border: 1px solid var(--pf-border);
   border-radius: 6px;
-  background: var(--gh-bg);
+  background: var(--pf-bg);
 }
 
 .changed-file header {
@@ -13,18 +13,18 @@
   align-items: center;
   min-height: 42px;
   padding: 6px 8px;
-  border-bottom: 1px solid var(--gh-border);
-  background: var(--gh-subtle);
+  border-bottom: 1px solid var(--pf-border);
+  background: var(--pf-subtle);
 }
 
-.gh-file-header__left {
+.pf-file-header__left {
   display: flex;
   align-items: center;
   gap: 0.45rem;
   min-width: 0;
 }
 
-.gh-file-header__toggle {
+.pf-file-header__toggle {
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -33,70 +33,70 @@
   padding: 0;
   border: 0;
   background: transparent;
-  color: var(--gh-text-muted);
+  color: var(--pf-text-muted);
 }
 
-.gh-file-header {
+.pf-file-header {
   min-width: 0;
-  color: var(--gh-text);
+  color: var(--pf-text);
   font-size: 12px;
 }
 
-.gh-file-header__path {
+.pf-file-header__path {
   min-width: 0;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
-  font-family: var(--gh-font-mono);
+  font-family: var(--pf-font-mono);
   font-size: 12px;
   font-weight: 400;
 }
 
-.gh-file-header strong {
+.pf-file-header strong {
   font-weight: 600;
 }
 
-.gh-file-stats {
+.pf-file-stats {
   display: inline-flex;
   gap: 0.5rem;
   align-items: center;
   font-size: 12px;
 }
 
-.gh-diffstat {
+.pf-diffstat {
   display: inline-flex;
   align-items: center;
   gap: 2px;
-  color: var(--gh-text-muted);
+  color: var(--pf-text-muted);
   font-size: 12px;
   flex-shrink: 0;
 }
 
-.gh-diffstat-count {
+.pf-diffstat-count {
   margin-right: 2px;
 }
 
-.gh-diffstat-blocks {
+.pf-diffstat-blocks {
   display: inline-flex;
   gap: 1px;
 }
 
-.gh-diffstat-block {
+.pf-diffstat-block {
   display: inline-block;
   width: 8px;
   height: 8px;
   border-radius: 1px;
 }
 
-.gh-diffstat-block--added {
-  background: var(--gh-success-text);
+.pf-diffstat-block--added {
+  background: var(--pf-success-text);
 }
 
-.gh-diffstat-block--deleted {
-  background: var(--gh-danger-text);
+.pf-diffstat-block--deleted {
+  background: var(--pf-danger-text);
 }
 
-.gh-diffstat-block--neutral {
+.pf-diffstat-block--neutral {
   background: rgba(139, 148, 158, 0.2);
 }
 
@@ -107,42 +107,42 @@
   flex-wrap: nowrap;
 }
 
-.gh-view-toggle-form {
+.pf-view-toggle-form {
   margin: 0;
 }
 
-.gh-view-toggle {
+.pf-view-toggle {
   display: inline-flex;
   align-items: center;
   justify-content: center;
   min-height: 28px;
   gap: 0.4rem;
   padding: 0 8px;
-  border: 1px solid var(--gh-border);
+  border: 1px solid var(--pf-border);
   border-radius: 6px;
-  background: var(--gh-subtle);
-  color: var(--gh-text);
+  background: var(--pf-subtle);
+  color: var(--pf-text);
   font-size: 12px;
   line-height: 18px;
 }
 
-.gh-view-toggle__box {
+.pf-view-toggle__box {
   display: inline-flex;
   align-items: center;
   justify-content: center;
   width: 14px;
   height: 14px;
-  border: 1px solid var(--gh-text-subtle);
+  border: 1px solid var(--pf-text-subtle);
   border-radius: 3px;
-  color: var(--gh-bg);
+  color: var(--pf-bg);
   font-size: 0.65rem;
   line-height: 1;
 }
 
-.gh-view-toggle--checked .gh-view-toggle__box {
-  border-color: var(--gh-success-text);
+.pf-view-toggle--checked .pf-view-toggle__box {
+  border-color: var(--pf-success-text);
   background: #2ea043;
-  color: var(--gh-text-bright);
+  color: var(--pf-text-bright);
 }
 
 .octicon {

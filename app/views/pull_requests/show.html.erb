@@ -1,4 +1,4 @@
-<section class="gh-page">
+<section class="pf-page">
   <%= render "repository_header", local_repository: @local_repository %>
 
   <%= render "pull_request_header",
@@ -9,42 +9,42 @@
 
   <% author_name = pull_request_author_name(@comparison) %>
 
-  <section class="gh-main-column gh-main-column--solo gh-conversation-page">
-    <div class="gh-conversation-shell">
-      <ol class="gh-timeline" data-role="conversation-timeline">
-        <li class="gh-timeline-item gh-timeline-item--comment">
-          <div class="gh-timeline-badge" aria-hidden="true"><%= author_initials(author_name) %></div>
-          <article class="gh-card gh-comment-card" data-role="conversation-card">
-            <header class="gh-card-header gh-comment-card__header">
-              <div class="gh-comment-card__meta">
+  <section class="pf-main-column pf-main-column--solo pf-conversation-page">
+    <div class="pf-conversation-shell">
+      <ol class="pf-timeline" data-role="conversation-timeline">
+        <li class="pf-timeline-item pf-timeline-item--comment">
+          <div class="pf-timeline-badge" aria-hidden="true"><%= author_initials(author_name) %></div>
+          <article class="pf-card pf-comment-card" data-role="conversation-card">
+            <header class="pf-card-header pf-comment-card__header">
+              <div class="pf-comment-card__meta">
                 <strong><%= author_name %></strong>
                 <span>commented on <%= pull_request_timestamp(@pull_request.created_at) %></span>
               </div>
             </header>
 
-            <div class="gh-card-body markdown-body gh-markdown-body">
+            <div class="pf-card-body markdown-body pf-markdown-body">
               <%= render_pull_request_markdown(@pull_request.description.presence || "No description provided yet.") %>
             </div>
           </article>
         </li>
 
         <% if @comparison.commits.any? %>
-          <li class="gh-timeline-item gh-timeline-item--event">
-            <div class="gh-timeline-badge gh-timeline-badge--event" aria-hidden="true">&#8593;</div>
-            <section class="gh-timeline-event">
-              <header class="gh-timeline-event__header">
+          <li class="pf-timeline-item pf-timeline-item--event">
+            <div class="pf-timeline-badge pf-timeline-badge--event" aria-hidden="true">&#8593;</div>
+            <section class="pf-timeline-event">
+              <header class="pf-timeline-event__header">
                 <strong><%= author_name %></strong>
                 <span>added <%= pluralize(@comparison.commits.count, "commit") %> on <%= pull_request_timestamp(@comparison.commits.last.authored_at) %></span>
               </header>
 
-              <div class="gh-commit-list" data-role="conversation-commit-list">
+              <div class="pf-commit-list" data-role="conversation-commit-list">
                 <% @comparison.commits.each do |commit| %>
-                  <div class="gh-commit-list__item">
-                    <div class="gh-commit-list__meta">
-                      <span class="gh-timeline-badge gh-timeline-badge--mini" aria-hidden="true"><%= author_initials(commit.author_name) %></span>
-                      <%= link_to commit.message, pull_request_commit_path(@pull_request, commit.sha), class: "gh-commit-list__message" %>
+                  <div class="pf-commit-list__item">
+                    <div class="pf-commit-list__meta">
+                      <span class="pf-timeline-badge pf-timeline-badge--mini" aria-hidden="true"><%= author_initials(commit.author_name) %></span>
+                      <%= link_to commit.message, pull_request_commit_path(@pull_request, commit.sha), class: "pf-commit-list__message" %>
                     </div>
-                    <%= link_to commit.short_sha, pull_request_commit_path(@pull_request, commit.sha), class: "gh-commit-list__sha" %>
+                    <%= link_to commit.short_sha, pull_request_commit_path(@pull_request, commit.sha), class: "pf-commit-list__sha" %>
                   </div>
                 <% end %>
               </div>
@@ -52,25 +52,25 @@
           </li>
         <% end %>
 
-        <li class="gh-timeline-item gh-timeline-item--merge">
-          <div class="gh-timeline-badge gh-timeline-badge--merge" aria-hidden="true">&#10003;</div>
-          <section class="gh-merge-box">
-            <header class="gh-merge-box__header">
+        <li class="pf-timeline-item pf-timeline-item--merge">
+          <div class="pf-timeline-badge pf-timeline-badge--merge" aria-hidden="true">&#10003;</div>
+          <section class="pf-merge-box">
+            <header class="pf-merge-box__header">
               <strong>No conflicts with base branch</strong>
             </header>
-            <p class="gh-merge-box__body">These branches can be merged cleanly. Review the files changed and update the description before you push this branch upstream.</p>
+            <p class="pf-merge-box__body">These branches can be merged cleanly. Review the files changed and update the description before you push this branch upstream.</p>
           </section>
         </li>
 
-        <li class="gh-timeline-item gh-timeline-item--editor">
-          <div class="gh-timeline-badge gh-timeline-badge--event" aria-hidden="true">&#9998;</div>
-          <article class="gh-card gh-comment-editor">
-            <header class="gh-card-header gh-comment-editor__header">
+        <li class="pf-timeline-item pf-timeline-item--editor">
+          <div class="pf-timeline-badge pf-timeline-badge--event" aria-hidden="true">&#9998;</div>
+          <article class="pf-card pf-comment-editor">
+            <header class="pf-card-header pf-comment-editor__header">
               <strong>Edit pull request description</strong>
             </header>
 
-            <div class="gh-card-body">
-              <%= form_with model: @pull_request, url: repository_pull_request_path(@local_repository, @pull_request), method: :patch, class: "gh-form gh-comment-editor__form" do |form| %>
+            <div class="pf-card-body">
+              <%= form_with model: @pull_request, url: repository_pull_request_path(@local_repository, @pull_request), method: :patch, class: "pf-form pf-comment-editor__form" do |form| %>
                 <div class="field">
                   <%= form.label :base_branch, "Base branch" %>
                   <%= form.select :base_branch, options_for_select(@branches.map(&:name), @pull_request.base_branch) %>
@@ -81,7 +81,7 @@
                   <%= form.text_area :description, rows: 12 %>
                 </div>
 
-                <div class="gh-comment-editor__actions">
+                <div class="pf-comment-editor__actions">
                   <%= form.submit "Save changes", class: "button" %>
                 </div>
               <% end %>

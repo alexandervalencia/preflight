@@ -7,24 +7,24 @@
   <% compact_line_height = local_assigns.fetch(:compact_line_height, true) %>
 
   <header id="<%= file_anchor_id(file.path) %>">
-    <div class="gh-file-header__left">
-      <button class="gh-file-header__toggle" type="button" aria-label="Collapse file"><%= octicon(:chevron_down, size: 16) %></button>
-      <span class="gh-diffstat" aria-hidden="true"><span class="gh-diffstat-count"><%= stats[:additions] + stats[:deletions] %></span><%= diffstat_blocks(stats[:additions], stats[:deletions]) %></span>
-      <strong class="gh-file-header__path"><%= file.path %></strong>
+    <div class="pf-file-header__left">
+      <button class="pf-file-header__toggle" type="button" aria-label="Collapse file"><%= octicon(:chevron_down, size: 16) %></button>
+      <span class="pf-diffstat" aria-hidden="true"><span class="pf-diffstat-count"><%= stats[:additions] + stats[:deletions] %></span><%= diffstat_blocks(stats[:additions], stats[:deletions]) %></span>
+      <strong class="pf-file-header__path"><%= file.path %></strong>
     </div>
 
     <% if local_assigns[:show_review_state] %>
       <div class="file-review-tools">
-        <%= form_with url: pull_request_viewed_files_path(pull_request), method: :post, class: "gh-view-toggle-form" do %>
+        <%= form_with url: pull_request_viewed_files_path(pull_request), method: :post, class: "pf-view-toggle-form" do %>
           <%= hidden_field_tag :path, file.path %>
           <%= hidden_field_tag :redirect_to, redirect_path %>
           <%= hidden_field_tag :viewed, state.mark_viewed ? "1" : "0" %>
           <button
             type="submit"
-            class="<%= class_names('gh-view-toggle', ('gh-view-toggle--checked' if state.css_class == 'view-state--viewed')) %>"
+            class="<%= class_names('pf-view-toggle', ('pf-view-toggle--checked' if state.css_class == 'view-state--viewed')) %>"
             data-role="view-state"
             aria-pressed="<%= state.css_class == 'view-state--viewed' %>">
-            <span class="gh-view-toggle__box" aria-hidden="true"><%= state.css_class == "view-state--viewed" ? "✓" : "" %></span>
+            <span class="pf-view-toggle__box" aria-hidden="true"><%= state.css_class == "view-state--viewed" ? "✓" : "" %></span>
             <span><%= state.label %></span>
           </button>
         <% end %>

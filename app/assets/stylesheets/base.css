@@ -3,20 +3,20 @@
 }
 
 html {
-  background: var(--gh-bg);
+  background: var(--pf-bg);
 }
 
 body {
   margin: 0;
-  color: var(--gh-text);
-  background: var(--gh-bg);
+  color: var(--pf-text);
+  background: var(--pf-bg);
   font-family: -apple-system, "system-ui", "Segoe UI", "Noto Sans", Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji";
   font-size: 14px;
   line-height: 1.5;
 }
 
 a {
-  color: var(--gh-link);
+  color: var(--pf-link);
   text-decoration: none;
 }
 
@@ -33,17 +33,17 @@ textarea {
 
 code,
 pre {
-  font-family: var(--gh-font-mono);
+  font-family: var(--pf-font-mono);
 }
 
 .panel,
-.gh-card,
-.gh-file-tree,
-.gh-sidebar-section {
-  border: 1px solid var(--gh-border);
+.pf-card,
+.pf-file-tree,
+.pf-sidebar-section {
+  border: 1px solid var(--pf-border);
   border-radius: 6px;
-  background: var(--gh-subtle);
-  box-shadow: var(--gh-shadow);
+  background: var(--pf-subtle);
+  box-shadow: var(--pf-shadow);
 }
 
 .panel {
@@ -62,7 +62,7 @@ pre {
 .panel-header h2 {
   margin: 0;
   font-size: 1rem;
-  color: var(--gh-text-bright);
+  color: var(--pf-text-bright);
 }
 
 .field {
@@ -81,10 +81,10 @@ pre {
 .field textarea {
   width: 100%;
   padding: 0.5rem 0.75rem;
-  color: var(--gh-text);
-  border: 1px solid var(--gh-border);
+  color: var(--pf-text);
+  border: 1px solid var(--pf-border);
   border-radius: 6px;
-  background: var(--gh-bg);
+  background: var(--pf-bg);
 }
 
 .field textarea {
@@ -101,7 +101,7 @@ pre {
   color: #fff;
   border: 1px solid rgba(240, 246, 252, 0.1);
   border-radius: 6px;
-  background: var(--gh-success);
+  background: var(--pf-success);
   font-size: 0.875rem;
   font-weight: 600;
   cursor: pointer;
@@ -113,8 +113,8 @@ pre {
 }
 
 .button-secondary {
-  color: var(--gh-text);
-  background: var(--gh-muted);
+  color: var(--pf-text);
+  background: var(--pf-muted);
 }
 
 .button-small {
