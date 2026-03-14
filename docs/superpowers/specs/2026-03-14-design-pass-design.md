@@ -14,6 +14,8 @@ Tighten Preflight's visual design to match GitHub's dark-mode PR review UI. Poli
 - **px** for dense UI components: diff tables, tabs, file headers, file tree, line numbers, toolbar buttons
 - **rem** for structural elements: page widths, margins, PR title, layout grids
 
+**Important:** The `font-size: 14px` goes on `body` only. The `html` root element stays at the browser default (16px), so all existing `rem` values remain unaffected. Only properties explicitly listed in Part 2 are changed.
+
 ---
 
 ## Part 1: CSS File Breakup
@@ -23,7 +25,7 @@ Split `application.css` into 14 component files. `application.css` becomes a man
 ```
 app/assets/stylesheets/
   application.css          # @import statements only
-  variables.css            # CSS custom properties (colors, shadows)
+  variables.css            # CSS custom properties (colors, shadows, --gh-font-mono)
   base.css                 # resets, body, links, form elements, code/pre
   app-chrome.css           # top navigation bar (.app-chrome, .brand, etc.)
   layout.css               # .page, .gh-page, .gh-page--wide, .sr-only, media queries
@@ -63,6 +65,11 @@ app/assets/stylesheets/
 @import "inline-comments.css";
 ```
 
+### Notes on file ownership
+
+- **`--gh-font-mono`** is referenced 7 times in the current CSS but never defined. Define it in `variables.css` as `ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, "Liberation Mono", monospace`.
+- **Shared border/background rules** (the current combined selector for `.panel, .gh-card, .changed-file, .gh-file-tree, .gh-review-toolbar, .gh-sidebar-section`) belong in `base.css` as a shared card/panel pattern.
+
 ---
 
 ## Part 2: CSS Value Corrections
@@ -74,7 +81,7 @@ All values below come from GitHub's computed styles in dark mode, extracted via 
 | Property | Current | Target | Notes |
 |----------|---------|--------|-------|
 | `body` font-family | `ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif` | `-apple-system, "system-ui", "Segoe UI", "Noto Sans", Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji"` | Match GitHub's stack exactly |
-| `body` font-size | unset (browser 16px) | `14px` | GitHub's base size |
+| `body` font-size | unset (browser 16px) | `14px` | GitHub's base size. Set on `body` only — `html` stays at browser default so `rem` values are unaffected |
 | `body` line-height | unset | `1.5` | 21px at 14px base |
 
 ### PR Title (`.gh-pr-title`)
@@ -82,14 +89,14 @@ All values below come from GitHub's computed styles in dark mode, extracted via 
 | Property | Current | Target |
 |----------|---------|--------|
 | font-weight | `500` | `600` |
-| font-size | `2rem` | `2rem` (32px at 16px, but with 14px base this becomes 28px — use `32px` explicitly) |
+| font-size | `2rem` | `32px` |
 | line-height | `1.5` | `1.5` |
 
 ### PR Number (`.gh-pr-number`)
 
 | Property | Current | Target |
 |----------|---------|--------|
-| font-size | `2rem` | `32px` (same fix as title) |
+| font-size | `2rem` | `32px` |
 
 ### Tabs (`.gh-tab`)
 
@@ -186,29 +193,33 @@ All values below come from GitHub's computed styles in dark mode, extracted via 
 
 **File:** `app/views/pull_requests/_pull_request_header.html.erb`
 
-Replace the text-only summary (`3 commits +23 -4`) with the `+23 -4 █████` format using the existing `diffstat_blocks` helper.
+Replace the content inside `.gh-tab-summary`. Remove the `.gh-tab-summary__count` span (which shows "N commits") and replace the entire summary with `+23 -4 █████` format using the existing `diffstat_blocks` helper.
 
-Before:
+Before (current spans inside `.gh-tab-summary`):
 ```
-3 commits  +23  -4
+<span class="gh-tab-summary__count">3 commits</span>
+<span class="gh-additions">+23</span>
+<span class="gh-deletions">-4</span>
 ```
 
 After:
 ```
-+23  -4  █████
+<span class="gh-additions">+23</span>
+<span class="gh-deletions">-4</span>
+<%= diffstat_blocks(additions, deletions) %>
 ```
 
 ### 3b. Remove "Conversation" section heading
 
 **File:** `app/views/pull_requests/show.html.erb`
 
-Remove the `<h2>Conversation</h2>` section header. GitHub flows directly from tabs into the timeline without an intermediate heading.
+Remove the entire `<header class="gh-section-header">` wrapper element (which contains the `<h2>Conversation</h2>`), not just the heading text. This also removes the `margin-bottom: 1rem` that the wrapper contributes. GitHub flows directly from tabs into the timeline without an intermediate heading.
 
 ### 3c. Repository header tightening
 
 **File:** `app/views/pull_requests/_pull_request_header.html.erb` (and potentially `_repository_header.html.erb`)
 
-Reduce vertical spacing between repo header, breadcrumb, and PR title. This is primarily CSS margin/padding changes, but may involve removing unnecessary wrapper `<div>`s if they add unwanted spacing.
+Reduce vertical spacing between repo header, breadcrumb, and PR title. This is purely CSS margin/padding changes as listed in the Spacing Tightening table in Part 2. The existing HTML structure is already minimal.
 
 ---
 
