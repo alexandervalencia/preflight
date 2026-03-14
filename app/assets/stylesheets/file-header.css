@@ -76,6 +76,11 @@
   margin-right: 2px;
 }
 
+.gh-diffstat-blocks {
+  display: inline-flex;
+  gap: 1px;
+}
+
 .gh-diffstat-block {
   display: inline-block;
   width: 8px;

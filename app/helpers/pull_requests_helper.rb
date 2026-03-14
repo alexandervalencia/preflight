@@ -74,7 +74,7 @@ module PullRequestsHelper
     add_blocks.times { parts << content_tag(:span, "", class: "gh-diffstat-block gh-diffstat-block--added") }
     del_blocks.times { parts << content_tag(:span, "", class: "gh-diffstat-block gh-diffstat-block--deleted") }
     neutral.times { parts << content_tag(:span, "", class: "gh-diffstat-block gh-diffstat-block--neutral") }
-    safe_join(parts)
+    content_tag(:span, safe_join(parts), class: "gh-diffstat-blocks")
   end
 
   def split_diff_rows(file, comments_by_key)
