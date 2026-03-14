@@ -19,7 +19,7 @@
       <span class="gh-toolbar-pill">Commit <strong><%= @commit.short_sha %></strong></span>
       <details class="gh-diff-settings" data-role="diff-settings">
         <summary class="gh-toolbar-button gh-toolbar-button--icon" aria-label="Diff settings">
-          <span>&#9881;</span>
+          <%= octicon(:gear, size: 16) %>
         </summary>
         <div class="gh-diff-settings__menu">
           <p class="gh-diff-settings__label">Layout</p>
