@@ -50,35 +50,28 @@
       show_file_tree: @show_file_tree %>
 
     <section class="gh-diff-column">
-      <article class="gh-card gh-commit-summary" data-role="commit-summary">
-        <div class="gh-card-body">
+      <article class="gh-commit-summary" data-role="commit-summary">
+        <div class="gh-commit-summary__title-row">
           <p class="gh-commit-summary__message"><%= format_commit_message(@commit.message) %></p>
-          <% if @commit.body.present? %>
-            <pre><%= @commit.body %></pre>
-          <% end %>
-
-          <div class="gh-commit-summary__nav">
-            <div class="gh-commit-summary__nav-buttons">
-              <% if @previous_commit %>
-                <%= link_to pull_request_commit_path(@pull_request, @previous_commit.sha), class: "button button-secondary button-small" do %>
-                  <%= octicon(:chevron_down, size: 16, class_name: "gh-chevron-left") %> Prev
-                <% end %>
+          <div class="gh-commit-summary__nav-buttons">
+            <% if @previous_commit %>
+              <%= link_to pull_request_commit_path(@pull_request, @previous_commit.sha), class: "button button-secondary button-small" do %>
+                <%= octicon(:chevron_down, size: 16, class_name: "gh-chevron-left") %> Prev
               <% end %>
-              <% if @next_commit %>
-                <%= link_to pull_request_commit_path(@pull_request, @next_commit.sha), class: "button button-secondary button-small" do %>
-                  Next <%= octicon(:chevron_down, size: 16, class_name: "gh-chevron-right") %>
-                <% end %>
+            <% end %>
+            <% if @next_commit %>
+              <%= link_to pull_request_commit_path(@pull_request, @next_commit.sha), class: "button button-secondary button-small" do %>
+                Next <%= octicon(:chevron_down, size: 16, class_name: "gh-chevron-right") %>
               <% end %>
-            </div>
-            <%= link_to repository_pull_request_files_path(@local_repository, @pull_request), class: "button button-secondary button-small" do %>
-              <%= octicon(:code, size: 16) %> Browse files
             <% end %>
           </div>
-
-          <div class="gh-commit-summary__footer">
-            <span><%= @commit.author_name %> committed <%= time_ago_in_words(@commit.authored_at) %> ago</span>
-            <code>commit <%= @commit.short_sha.first(7) %></code>
-          </div>
+        </div>
+        <% if @commit.body.present? %>
+          <pre class="gh-commit-summary__body"><%= @commit.body %></pre>
+        <% end %>
+        <div class="gh-commit-summary__footer">
+          <span><%= @commit.author_name %> committed <%= time_ago_in_words(@commit.authored_at) %> ago</span>
+          <code>commit <%= @commit.sha %></code>
         </div>
       </article>
 
