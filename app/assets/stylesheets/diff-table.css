@@ -120,12 +120,9 @@
   color: #6e7681;
 }
 
-.line-code--addition .gh-code-marker {
-  color: #3fb950;
-}
-
+.line-code--addition .gh-code-marker,
 .line-code--deletion .gh-code-marker {
-  color: #ff7b72;
+  color: #c9d1d9;
 }
 
 .gh-code {
