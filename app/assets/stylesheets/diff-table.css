@@ -15,10 +15,6 @@
   width: calc(50% - 50px);
 }
 
-.pf-unified-diff .line-number {
-  width: 1%;
-  white-space: nowrap;
-}
 
 .pf-split-row td,
 .comment-row td,

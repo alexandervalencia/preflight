@@ -1,4 +1,9 @@
 <table class="diff-table pf-unified-diff <%= "pf-diff-table--compact" if compact_line_height %>" data-role="unified-diff">
+  <colgroup>
+    <col class="pf-col-number">
+    <col class="pf-col-number">
+    <col>
+  </colgroup>
   <tbody>
     <% unified_diff_rows(file, comments_by_key).each do |row| %>
       <% if row.kind == :hunk %>
