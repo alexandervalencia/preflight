@@ -88,41 +88,32 @@ module PullRequestsHelper
         next
       end
 
-      if line.type == :deletion && lines[index + 1]&.type == :addition
-        deletion = lines[index]
-        addition = lines[index + 1]
-        rows << build_split_row(
-          left: SplitDiffCell.new(number: deletion.old_number, content: deletion.content, kind: :deletion),
-          right: SplitDiffCell.new(number: addition.new_number, content: addition.content, kind: :addition),
-          comment_side: "right",
-          comment_line_number: addition.new_number,
-          comments_by_key: comments_by_key,
-          path: file.path
-        )
-        index += 2
+      if line.type == :deletion
+        deletions = []
+        while index < lines.length && lines[index].type == :deletion
+          deletions << lines[index]
+          index += 1
+        end
+        additions = []
+        while index < lines.length && lines[index].type == :addition
+          additions << lines[index]
+          index += 1
+        end
+
+        max = [deletions.length, additions.length].max
+        max.times do |i|
+          del = deletions[i]
+          add = additions[i]
+          left = del ? SplitDiffCell.new(number: del.old_number, content: del.content, kind: :deletion) : SplitDiffCell.new(number: nil, content: "", kind: :empty)
+          right = add ? SplitDiffCell.new(number: add.new_number, content: add.content, kind: :addition) : SplitDiffCell.new(number: nil, content: "", kind: :empty)
+          comment_side = add ? "right" : "left"
+          comment_line = add ? add.new_number : del&.old_number
+          rows << build_split_row(left: left, right: right, comment_side: comment_side, comment_line_number: comment_line, comments_by_key: comments_by_key, path: file.path)
+        end
         next
       end
 
-      case line.type
-      when :context
-        rows << build_split_row(
-          left: SplitDiffCell.new(number: line.old_number, content: line.content, kind: :context),
-          right: SplitDiffCell.new(number: line.new_number, content: line.content, kind: :context),
-          comment_side: "right",
-          comment_line_number: line.new_number,
-          comments_by_key: comments_by_key,
-          path: file.path
-        )
-      when :deletion
-        rows << build_split_row(
-          left: SplitDiffCell.new(number: line.old_number, content: line.content, kind: :deletion),
-          right: SplitDiffCell.new(number: nil, content: "", kind: :empty),
-          comment_side: "left",
-          comment_line_number: line.old_number,
-          comments_by_key: comments_by_key,
-          path: file.path
-        )
-      when :addition
+      if line.type == :addition
         rows << build_split_row(
           left: SplitDiffCell.new(number: nil, content: "", kind: :empty),
           right: SplitDiffCell.new(number: line.new_number, content: line.content, kind: :addition),
@@ -131,7 +122,18 @@ module PullRequestsHelper
           comments_by_key: comments_by_key,
           path: file.path
         )
+        index += 1
+        next
       end
+
+      rows << build_split_row(
+        left: SplitDiffCell.new(number: line.old_number, content: line.content, kind: :context),
+        right: SplitDiffCell.new(number: line.new_number, content: line.content, kind: :context),
+        comment_side: "right",
+        comment_line_number: line.new_number,
+        comments_by_key: comments_by_key,
+        path: file.path
+      )
 
       index += 1
     end
