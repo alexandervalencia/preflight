@@ -56,29 +56,15 @@
 
     <script>
       (function() {
-        var KEYS = ["layout", "compact", "tree"];
-        var params = new URLSearchParams(window.location.search);
-
-        // On page load: save any explicit params to localStorage,
-        // then apply stored defaults for any missing params
-        var changed = false;
-        KEYS.forEach(function(key) {
-          if (params.has(key)) {
-            localStorage.setItem("pf_" + key, params.get(key));
-          } else {
-            var stored = localStorage.getItem("pf_" + key);
-            if (stored !== null) {
-              params.set(key, stored);
-              changed = true;
-            }
-          }
-        });
-
-        if (changed && document.querySelector(".pf-review-layout")) {
-          var url = new URL(window.location);
-          url.search = params.toString();
-          window.location.replace(url);
+        function setCookie(name, value) {
+          document.cookie = name + "=" + value + ";path=/;max-age=31536000;SameSite=Lax";
         }
+
+        // Save any explicit query params to cookies for future requests
+        var params = new URLSearchParams(window.location.search);
+        ["layout", "compact", "tree"].forEach(function(key) {
+          if (params.has(key)) setCookie("pf_" + key, params.get(key));
+        });
 
         // Tree toggle
         document.addEventListener("click", function(e) {
@@ -94,7 +80,7 @@
           btn.querySelector("[data-tree-icon='expand']").hidden = !hidden;
           btn.setAttribute("aria-label", hidden ? "Show file tree" : "Hide file tree");
 
-          localStorage.setItem("pf_tree", hidden ? "0" : "1");
+          setCookie("pf_tree", hidden ? "0" : "1");
           var url = new URL(window.location);
           url.searchParams.set("tree", hidden ? "0" : "1");
           history.replaceState(null, "", url);
