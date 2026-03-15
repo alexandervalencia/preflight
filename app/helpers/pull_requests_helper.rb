@@ -3,7 +3,11 @@ require "cgi"
 
 module PullRequestsHelper
   FileViewState = Data.define(:label, :css_class, :mark_viewed)
-  SplitDiffCell = Data.define(:number, :content, :kind)
+  SplitDiffCell = Data.define(:number, :content, :kind, :highlights) do
+    def initialize(number:, content:, kind:, highlights: nil)
+      super(number: number, content: content, kind: kind, highlights: highlights)
+    end
+  end
   SplitDiffRow = Data.define(:kind, :left, :right, :comment_side, :comment_line_number, :comments, :hunk)
   UnifiedDiffRow = Data.define(:kind, :left_number, :right_number, :content, :cell_kind, :comment_side, :comment_line_number, :comments, :hunk)
   FileTreeNode = Data.define(:name, :path, :children, :file, :level, :directory)
@@ -104,8 +108,13 @@ module PullRequestsHelper
         max.times do |i|
           del = deletions[i]
           add = additions[i]
-          left = del ? SplitDiffCell.new(number: del.old_number, content: del.content, kind: :deletion) : SplitDiffCell.new(number: nil, content: "", kind: :empty)
-          right = add ? SplitDiffCell.new(number: add.new_number, content: add.content, kind: :addition) : SplitDiffCell.new(number: nil, content: "", kind: :empty)
+          old_hl, new_hl = if del && add
+            compute_word_highlights(del.content, add.content)
+          else
+            [nil, nil]
+          end
+          left = del ? SplitDiffCell.new(number: del.old_number, content: del.content, kind: :deletion, highlights: old_hl) : SplitDiffCell.new(number: nil, content: "", kind: :empty)
+          right = add ? SplitDiffCell.new(number: add.new_number, content: add.content, kind: :addition, highlights: new_hl) : SplitDiffCell.new(number: nil, content: "", kind: :empty)
           comment_side = add ? "right" : "left"
           comment_line = add ? add.new_number : del&.old_number
           rows << build_split_row(left: left, right: right, comment_side: comment_side, comment_line_number: comment_line, comments_by_key: comments_by_key, path: file.path)
@@ -173,7 +182,7 @@ module PullRequestsHelper
     end
   end
 
-  def highlighted_diff_line(path, content)
+  def highlighted_diff_line(path, content, highlights: nil)
     return "".html_safe if content.blank?
 
     marker = content[0]
@@ -182,7 +191,140 @@ module PullRequestsHelper
     tokens = diff_formatter.format(lexer.lex(source))
     marker_html = ERB::Util.html_escape(marker == " " ? "\u00A0" : marker)
 
+    if highlights.present?
+      tokens = apply_word_highlights(tokens, highlights)
+    end
+
     %(<span class="pf-code-marker">#{marker_html}</span><span class="pf-code">#{tokens}</span>).html_safe
+  end
+
+  def compute_word_highlights(old_content, new_content)
+    old_src = (old_content || "")[1..] || ""
+    new_src = (new_content || "")[1..] || ""
+
+    old_tokens = old_src.scan(/\w+|\S|\s+/)
+    new_tokens = new_src.scan(/\w+|\S|\s+/)
+
+    lcs = lcs_table(old_tokens, new_tokens)
+    old_ranges = diff_ranges(old_tokens, new_tokens, lcs, :old)
+    new_ranges = diff_ranges(old_tokens, new_tokens, lcs, :new)
+
+    [old_ranges, new_ranges]
+  end
+
+  private
+
+  def lcs_table(a, b)
+    m = a.length
+    n = b.length
+    table = Array.new(m + 1) { Array.new(n + 1, 0) }
+    (1..m).each do |i|
+      (1..n).each do |j|
+        table[i][j] = if a[i - 1] == b[j - 1]
+          table[i - 1][j - 1] + 1
+        else
+          [table[i - 1][j], table[i][j - 1]].max
+        end
+      end
+    end
+    table
+  end
+
+  def diff_ranges(old_tokens, new_tokens, lcs, side)
+    ranges = []
+    i = old_tokens.length
+    j = new_tokens.length
+    changed_indices = []
+
+    while i > 0 && j > 0
+      if old_tokens[i - 1] == new_tokens[j - 1]
+        i -= 1
+        j -= 1
+      elsif lcs[i - 1][j] >= lcs[i][j - 1]
+        i -= 1
+        changed_indices.unshift(i) if side == :old
+      else
+        j -= 1
+        changed_indices.unshift(j) if side == :new
+      end
+    end
+
+    while i > 0
+      i -= 1
+      changed_indices.unshift(i) if side == :old
+    end
+    while j > 0
+      j -= 1
+      changed_indices.unshift(j) if side == :new
+    end
+
+    tokens = side == :old ? old_tokens : new_tokens
+    pos = 0
+    changed_indices.each do |idx|
+      offset = tokens[0...idx].sum(&:length)
+      len = tokens[idx].length
+      ranges << (offset...(offset + len))
+    end
+
+    merge_adjacent_ranges(ranges)
+  end
+
+  def merge_adjacent_ranges(ranges)
+    return [] if ranges.empty?
+    merged = [ranges.first]
+    ranges[1..].each do |r|
+      if r.begin <= merged.last.end
+        merged[-1] = (merged.last.begin...[merged.last.end, r.end].max)
+      else
+        merged << r
+      end
+    end
+    merged
+  end
+
+  def apply_word_highlights(html, ranges)
+    return html if ranges.empty?
+
+    # Map source-text character positions to positions in the HTML string,
+    # skipping over HTML tags
+    text_pos = 0
+    html_pos = 0
+    in_tag = false
+    source_to_html = {}
+
+    html.each_char.with_index do |char, idx|
+      if char == "<"
+        in_tag = true
+      elsif char == ">" && in_tag
+        in_tag = false
+        next
+      end
+
+      unless in_tag
+        source_to_html[text_pos] = idx
+        text_pos += 1
+      end
+    end
+    source_to_html[text_pos] = html.length
+
+    result = +""
+    last_html_pos = 0
+    css_class = "pf-word-highlight"
+
+    ranges.each do |range|
+      start_html = source_to_html[range.begin]
+      end_html = source_to_html[range.end]
+      next unless start_html && end_html
+
+      result << html[last_html_pos...start_html]
+      result << %(<mark class="#{css_class}">)
+      result << html[start_html...end_html]
+      result << %(</mark>)
+      last_html_pos = end_html
+    end
+
+    result << html[last_html_pos..]
+    result
   end
 
   def diff_layout_query(params_hash, **updates)

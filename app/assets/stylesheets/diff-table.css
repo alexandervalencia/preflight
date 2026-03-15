@@ -123,6 +123,19 @@
   color: var(--pf-text);
 }
 
+.pf-word-highlight {
+  background: none;
+  border-radius: 3px;
+}
+
+.line-code--addition .pf-word-highlight {
+  background: rgba(46, 160, 67, 0.4);
+}
+
+.line-code--deletion .pf-word-highlight {
+  background: rgba(248, 81, 73, 0.4);
+}
+
 .pf-code {
   font-family: inherit;
 }

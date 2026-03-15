@@ -42,7 +42,7 @@
             </details>
           <% end %>
           <div class="line-code__content">
-            <code><%= highlighted_diff_line(file.path, left.content) %></code>
+            <code><%= highlighted_diff_line(file.path, left.content, highlights: left.highlights) %></code>
           </div>
         </td>
         <td class="line-number <%= "line-number--#{right.kind}" unless right.kind == :empty %>"><%= right.number %></td>
@@ -64,7 +64,7 @@
             </details>
           <% end %>
           <div class="line-code__content">
-            <code><%= highlighted_diff_line(file.path, right.content) %></code>
+            <code><%= highlighted_diff_line(file.path, right.content, highlights: right.highlights) %></code>
           </div>
           <% if row.comment_side && row.comment_line_number %>
             <details class="pf-inline-menu">
