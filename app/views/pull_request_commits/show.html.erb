@@ -53,18 +53,28 @@
       <article class="pf-commit-summary" data-role="commit-summary">
         <div class="pf-commit-summary__title-row">
           <p class="pf-commit-summary__message"><%= format_commit_message(@commit.message) %></p>
-          <div class="pf-commit-summary__nav-buttons">
-            <% if @previous_commit %>
-              <%= link_to pull_request_commit_path(@pull_request, @previous_commit.sha), class: "button button-secondary button-small" do %>
-                <%= octicon(:chevron_down, size: 16, class_name: "pf-chevron-left") %> Prev
+          <% if @comparison.commits.length > 1 %>
+            <div class="pf-commit-summary__nav-buttons">
+              <% if @previous_commit %>
+                <%= link_to pull_request_commit_path(@pull_request, @previous_commit.sha), class: "button button-secondary button-small" do %>
+                  <%= octicon(:chevron_down, size: 16, class_name: "pf-chevron-left") %> Prev
+                <% end %>
+              <% else %>
+                <span class="button button-secondary button-small pf-button--disabled">
+                  <%= octicon(:chevron_down, size: 16, class_name: "pf-chevron-left") %> Prev
+                </span>
               <% end %>
-            <% end %>
-            <% if @next_commit %>
-              <%= link_to pull_request_commit_path(@pull_request, @next_commit.sha), class: "button button-secondary button-small" do %>
-                Next <%= octicon(:chevron_down, size: 16, class_name: "pf-chevron-right") %>
+              <% if @next_commit %>
+                <%= link_to pull_request_commit_path(@pull_request, @next_commit.sha), class: "button button-secondary button-small" do %>
+                  Next <%= octicon(:chevron_down, size: 16, class_name: "pf-chevron-right") %>
+                <% end %>
+              <% else %>
+                <span class="button button-secondary button-small pf-button--disabled">
+                  Next <%= octicon(:chevron_down, size: 16, class_name: "pf-chevron-right") %>
+                </span>
               <% end %>
-            <% end %>
-          </div>
+            </div>
+          <% end %>
         </div>
         <% if @commit.body.present? %>
           <pre class="pf-commit-summary__body"><%= @commit.body %></pre>
