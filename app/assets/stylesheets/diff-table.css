@@ -124,16 +124,8 @@
 }
 
 .pf-word-highlight {
-  background: none;
+  all: unset;
   border-radius: 3px;
-}
-
-.line-code--addition .pf-word-highlight {
-  background: rgba(46, 160, 67, 0.4);
-}
-
-.line-code--deletion .pf-word-highlight {
-  background: rgba(248, 81, 73, 0.4);
 }
 
 .pf-code {
@@ -192,4 +184,17 @@
 .pf-code .o,
 .pf-code .p {
   color: var(--pf-text);
+}
+
+/* Word diff highlights — must come after Rouge syntax rules to win specificity */
+.line-code--addition .pf-code .pf-word-highlight,
+.line-code--addition .pf-code .pf-word-highlight span {
+  background: rgba(46, 160, 67, 0.4);
+  color: var(--pf-text-bright);
+}
+
+.line-code--deletion .pf-code .pf-word-highlight,
+.line-code--deletion .pf-code .pf-word-highlight span {
+  background: rgba(248, 81, 73, 0.4);
+  color: var(--pf-text-bright);
 }
