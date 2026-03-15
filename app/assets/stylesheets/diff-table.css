@@ -2,18 +2,17 @@
   width: 100%;
   border-collapse: separate;
   border-spacing: 0;
-  table-layout: auto;
+  table-layout: fixed;
   font-size: 12px;
   line-height: 20px;
 }
 
-.pf-split-diff .line-number {
-  width: 1%;
-  white-space: nowrap;
+.pf-col-number {
+  width: 50px;
 }
 
-.pf-split-diff .line-code {
-  width: 49%;
+.pf-col-code {
+  width: calc(50% - 50px);
 }
 
 .pf-unified-diff .line-number {
