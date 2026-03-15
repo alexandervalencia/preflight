@@ -1,0 +1,64 @@
+<section class="page">
+  <%= render "repository_header", local_repository: @local_repository %>
+
+  <header class="page-header">
+    <p class="eyebrow">Open A Pull Request</p>
+    <h1>Compare changes</h1>
+    <p>Select the base and compare branches you want to review locally before you push them upstream.</p>
+  </header>
+
+  <section class="panel">
+    <%= form_with url: repository_compare_path(@local_repository), method: :get, class: "compare-form" do |form| %>
+      <div class="field">
+        <%= form.label :base_branch, "Base branch" %>
+        <%= form.select :base_branch,
+          options_for_select(@branches.map(&:name), @pull_request.base_branch),
+          {},
+          onchange: "this.form.requestSubmit()" %>
+      </div>
+
+      <div class="field">
+        <%= form.label :source_branch, "Compare branch" %>
+        <%= form.select :source_branch,
+          options_for_select(@branches.map(&:name), @pull_request.source_branch),
+          {},
+          onchange: "this.form.requestSubmit()" %>
+      </div>
+    <% end %>
+  </section>
+
+  <% if @existing_pull_request %>
+    <section class="panel" data-role="existing-pr-preview">
+      <div class="panel-header">
+        <h2><%= @existing_pull_request.source_branch %> #<%= @existing_pull_request.id %></h2>
+      </div>
+      <p>This branch already has a local pull request.</p>
+      <p><%= @existing_pull_request.description.presence || "No description provided yet." %></p>
+      <p>
+        <%= link_to "View pull request",
+          repository_pull_path(@local_repository, @existing_pull_request),
+          class: "button" %>
+      </p>
+    </section>
+  <% else %>
+    <section class="panel">
+      <%= form_with model: @pull_request, url: repository_pulls_path(@local_repository), class: "compare-form" do |form| %>
+        <%= form.hidden_field :base_branch %>
+        <%= form.hidden_field :source_branch %>
+
+        <div class="field">
+          <%= form.label :description, "Description" %>
+          <%= form.text_area :description, rows: 5 %>
+        </div>
+
+        <% if @pull_request.errors.any? %>
+          <div class="errors">
+            <%= @pull_request.errors.full_messages.to_sentence %>
+          </div>
+        <% end %>
+
+        <%= form.submit "Create local pull request", class: "button" %>
+      <% end %>
+    </section>
+  <% end %>
+</section>

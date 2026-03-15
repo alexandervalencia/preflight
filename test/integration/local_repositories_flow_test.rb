@@ -3,7 +3,7 @@ require "test_helper"
 class LocalRepositoriesFlowTest < ActionDispatch::IntegrationTest
   test "browses local directories to add a repository" do
     with_sample_repository do |fixture|
-      get browse_repositories_path(directory: File.dirname(fixture.path))
+      get browse_path(directory: File.dirname(fixture.path))
 
       assert_response :success
       assert_select "h1", text: "Browse local folders"
@@ -27,13 +27,12 @@ class LocalRepositoriesFlowTest < ActionDispatch::IntegrationTest
 
       repository = LocalRepository.order(:created_at).last
 
-      assert_redirected_to repository_pull_requests_path(repository)
+      assert_redirected_to repository_pulls_path(repository)
       follow_redirect!
       assert_response :success
       assert_select ".pf-repository-header__path", text: /#{Regexp.escape(repository.name)}/
-      assert_select "h1", text: "Compare changes"
-      assert_select "form[action='#{repository_pull_requests_path(repository)}']"
-      assert_select "a", text: "Browse folders"
+      assert_select "h1", text: "Pull requests"
+      assert_select "a", text: "New pull request"
     end
   end
 end

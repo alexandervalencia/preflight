@@ -4,16 +4,16 @@ class PullRequestsFlowTest < ActionDispatch::IntegrationTest
   test "creates a local pull request from a branch comparison" do
     with_sample_repository do |fixture|
       repository = create_local_repository!(fixture)
-      get repository_pull_requests_path(repository)
+      get repository_compare_path(repository)
 
       assert_response :success
-      assert_select "form[action='#{repository_pull_requests_path(repository)}']"
+      assert_select "form[action='#{repository_pulls_path(repository)}']"
       assert_select "select[name='source_branch'] option", text: "feature"
       assert_select "select[name='base_branch'] option[selected='selected']", text: "main"
       assert_select "input[name='pull_request[source_branch]'][value='feature']", count: 1
       assert_select "input[name='pull_request[base_branch]'][value='main']", count: 1
 
-      post repository_pull_requests_path(repository), params: {
+      post repository_pulls_path(repository), params: {
         pull_request: {
           source_branch: "feature",
           description: "Review the widget work."
@@ -22,24 +22,24 @@ class PullRequestsFlowTest < ActionDispatch::IntegrationTest
 
       pull_request = PullRequest.order(:created_at).last
 
-      assert_redirected_to repository_pull_request_path(repository, pull_request)
+      assert_redirected_to repository_pull_path(repository, pull_request)
       follow_redirect!
       assert_response :success
       assert_select "h1", text: "feature"
       assert_select "summary[aria-label='Edit title']"
-      assert_select "a[href='#{repository_pull_request_path(repository, pull_request)}']", text: /Conversation/
-      assert_select "a[href='#{pull_request_commits_path(pull_request)}']", text: /Commits/
-      assert_select "a[href='#{repository_pull_request_files_path(repository, pull_request)}']", text: /Files changed/
+      assert_select "a[href='#{repository_pull_path(repository, pull_request)}']", text: /Conversation/
+      assert_select "a[href='#{repository_pull_commits_path(repository, pull_request)}']", text: /Commits/
+      assert_select "a[href='#{repository_pull_files_path(repository, pull_request)}']", text: /Files changed/
       assert_select "[data-role='conversation-card']", text: /Review the widget work\./
-      assert_select "[data-role='conversation-commit-list'] a[href='#{pull_request_commit_path(pull_request, fixture.feature_commits[:add_widget])}']", text: /Add widget/
-      assert_select "[data-role='conversation-commit-list'] a[href='#{pull_request_commit_path(pull_request, fixture.feature_commits[:refine_widget])}']", text: /Refine widget/
+      assert_select "[data-role='conversation-commit-list'] a[href='#{repository_pull_commit_path(repository, pull_request, fixture.feature_commits[:add_widget])}']", text: /Add widget/
+      assert_select "[data-role='conversation-commit-list'] a[href='#{repository_pull_commit_path(repository, pull_request, fixture.feature_commits[:refine_widget])}']", text: /Refine widget/
       assert_select ".pf-merge-box", text: /No conflicts with base branch/
       assert_select "[data-role='pr-sidebar']", count: 0
       assert_select "[data-role='branch-pill']", text: "main"
       assert_select "[data-role='branch-pill']", text: "feature"
       assert_select "[data-role='pr-summary']"
 
-      get repository_pull_request_files_path(repository, pull_request)
+      get repository_pull_files_path(repository, pull_request)
       assert_select ".pf-page--wide"
       assert_select "input[name='q']"
       assert_select "[data-role='diff-settings']"
@@ -66,7 +66,7 @@ class PullRequestsFlowTest < ActionDispatch::IntegrationTest
       repository = create_local_repository!(fixture)
       pull_request = PullRequest.create!(local_repository: repository, source_branch: "feature", base_branch: "main")
 
-      get repository_pull_request_files_path(repository, pull_request), params: { layout: "unified" }
+      get repository_pull_files_path(repository, pull_request), params: { layout: "unified" }
 
       assert_response :success
       assert_select "[data-role='unified-diff']"
@@ -79,7 +79,7 @@ class PullRequestsFlowTest < ActionDispatch::IntegrationTest
       fixture.git("checkout", "main")
       repository = create_local_repository!(fixture)
 
-      get repository_pull_requests_path(repository)
+      get repository_compare_path(repository)
 
       assert_response :success
       assert_select "select[name='base_branch'] option[selected='selected']", text: "main"
@@ -92,14 +92,14 @@ class PullRequestsFlowTest < ActionDispatch::IntegrationTest
       repository = create_local_repository!(fixture)
       pull_request = PullRequest.create!(local_repository: repository, source_branch: "feature", base_branch: "main", description: "Draft")
 
-      patch repository_pull_request_path(repository, pull_request), params: {
+      patch repository_pull_path(repository, pull_request), params: {
         pull_request: {
           base_branch: "main",
           description: "Ready to merge once the widget lands."
         }
       }
 
-      assert_redirected_to repository_pull_request_path(repository, pull_request)
+      assert_redirected_to repository_pull_path(repository, pull_request)
       follow_redirect!
       assert_select "[data-role='conversation-card']", text: /Ready to merge once the widget lands\./
     end
@@ -125,7 +125,7 @@ class PullRequestsFlowTest < ActionDispatch::IntegrationTest
         MARKDOWN
       )
 
-      get repository_pull_request_path(repository, pull_request)
+      get repository_pull_path(repository, pull_request)
 
       assert_response :success
       assert_select "[data-role='conversation-card'] h3", text: "Motivation"
@@ -140,7 +140,7 @@ class PullRequestsFlowTest < ActionDispatch::IntegrationTest
       repository = create_local_repository!(fixture)
       pull_request = PullRequest.create!(local_repository: repository, source_branch: "feature", base_branch: "main")
 
-      patch repository_pull_request_path(repository, pull_request), params: {
+      patch repository_pull_path(repository, pull_request), params: {
         pull_request: {
           title: "Ship retryable exec_query support",
           base_branch: "main",
@@ -148,7 +148,7 @@ class PullRequestsFlowTest < ActionDispatch::IntegrationTest
         }
       }
 
-      assert_redirected_to repository_pull_request_path(repository, pull_request)
+      assert_redirected_to repository_pull_path(repository, pull_request)
       follow_redirect!
       assert_select "h1", text: "Ship retryable exec_query support"
       assert_select ".pf-pr-number", text: "##{pull_request.id}"
@@ -165,7 +165,7 @@ class PullRequestsFlowTest < ActionDispatch::IntegrationTest
         description: "Existing review in progress."
       )
 
-      get repository_pull_requests_path(repository), params: {
+      get repository_compare_path(repository), params: {
         source_branch: "feature",
         base_branch: "main"
       }
@@ -173,7 +173,7 @@ class PullRequestsFlowTest < ActionDispatch::IntegrationTest
       assert_response :success
       assert_select "[data-role='existing-pr-preview']", text: /feature/
       assert_select "[data-role='existing-pr-preview']", text: /Existing review in progress\./
-      assert_select "a[href='#{repository_pull_request_path(repository, pull_request)}']", text: "View pull request"
+      assert_select "a[href='#{repository_pull_path(repository, pull_request)}']", text: "View pull request"
       assert_select "input[type='submit'][value='Create local pull request']", count: 0
     end
   end
@@ -183,7 +183,7 @@ class PullRequestsFlowTest < ActionDispatch::IntegrationTest
       repository = create_local_repository!(fixture)
       pull_request = PullRequest.create!(local_repository: repository, source_branch: "feature", base_branch: "main")
 
-      post repository_pull_requests_path(repository), params: {
+      post repository_pulls_path(repository), params: {
         pull_request: {
           source_branch: "feature",
           base_branch: "main",
@@ -191,7 +191,7 @@ class PullRequestsFlowTest < ActionDispatch::IntegrationTest
         }
       }
 
-      assert_redirected_to repository_pull_request_path(repository, pull_request)
+      assert_redirected_to repository_pull_path(repository, pull_request)
       assert_equal 1, repository.pull_requests.where(source_branch: "feature").count
     end
   end

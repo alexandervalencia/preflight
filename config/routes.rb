@@ -11,21 +11,28 @@ Rails.application.routes.draw do
 
   root "local_repositories#index"
 
-  resources :repositories, controller: "local_repositories", only: [:index, :create] do
-    collection do
-      get :browse
+  # Repository management (keep existing paths)
+  resources :repositories, controller: "local_repositories", only: [:create]
+  get "browse", to: "local_repositories#browse"
+
+  # GitHub-style routes scoped under repository name
+  scope "/:repository_name" do
+    get "pulls", to: "pull_requests#index", as: :repository_pulls
+    get "compare", to: "pull_requests#compare", as: :repository_compare
+    post "pulls", to: "pull_requests#create"
+
+    scope "/pull/:id", controller: "pull_requests" do
+      get "/", action: :show, as: :repository_pull
+      patch "/", action: :update
     end
 
-    resources :pull_requests, only: [:index, :create, :show, :update]
-  end
+    get "pull/:id/files", to: "pull_request_files#index", as: :repository_pull_files
 
-  get "repositories/:repository_id/pull_requests/:id/files",
-    to: "pull_request_files#index",
-    as: :repository_pull_request_files
-
-  resources :pull_requests, only: [] do
-    resources :commits, controller: "pull_request_commits", only: [:index, :show]
-    resources :inline_comments, only: [:create]
-    resources :viewed_files, only: [:create]
+    scope "/pull/:pull_request_id" do
+      get "commits", to: "pull_request_commits#index", as: :repository_pull_commits
+      get "commits/:id", to: "pull_request_commits#show", as: :repository_pull_commit
+      post "comments", to: "inline_comments#create", as: :repository_pull_comments
+      post "viewed_files", to: "viewed_files#create", as: :repository_pull_viewed_files
+    end
   end
 end

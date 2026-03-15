@@ -3,30 +3,32 @@ class PullRequestsController < ApplicationController
   before_action :set_pull_request, only: [:show, :update]
 
   def index
+    @pull_requests = @local_repository.pull_requests.order(created_at: :desc)
+  end
+
+  def compare
     @pull_request = PullRequest.new(
       base_branch: selected_base_branch,
       source_branch: selected_source_branch
     )
-    @pull_requests = @local_repository.pull_requests.order(created_at: :desc)
     @branches = @local_repository.branches
     @existing_pull_request = existing_pull_request_for(@pull_request.source_branch)
   end
 
   def create
     if (existing_pull_request = existing_pull_request_for(pull_request_params[:source_branch]))
-      redirect_to repository_pull_request_path(@local_repository, existing_pull_request)
+      redirect_to repository_pull_path(@local_repository, existing_pull_request)
       return
     end
 
     @pull_request = @local_repository.pull_requests.new(pull_request_params)
 
     if @pull_request.save
-      redirect_to repository_pull_request_path(@local_repository, @pull_request)
+      redirect_to repository_pull_path(@local_repository, @pull_request)
     else
-      @pull_requests = @local_repository.pull_requests.order(created_at: :desc)
       @branches = @local_repository.branches
       @existing_pull_request = existing_pull_request_for(@pull_request.source_branch)
-      render :index, status: :unprocessable_entity
+      render :compare, status: :unprocessable_entity
     end
   end
 
@@ -36,7 +38,7 @@ class PullRequestsController < ApplicationController
 
   def update
     if @pull_request.update(pull_request_update_params)
-      redirect_to repository_pull_request_path(@local_repository, @pull_request)
+      redirect_to repository_pull_path(@local_repository, @pull_request)
     else
       load_pull_request_data
       render :show, status: :unprocessable_entity
@@ -46,7 +48,7 @@ class PullRequestsController < ApplicationController
   private
 
   def set_local_repository
-    @local_repository = LocalRepository.find(params[:repository_id])
+    @local_repository = LocalRepository.find_by!(name: params[:repository_name])
   end
 
   def set_pull_request

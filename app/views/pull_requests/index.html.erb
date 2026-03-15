@@ -1,84 +1,31 @@
 <section class="page">
   <%= render "repository_header", local_repository: @local_repository %>
 
-  <header class="page-header">
-    <p class="eyebrow">Open A Pull Request</p>
-    <h1>Compare changes</h1>
-    <p>Select the base and compare branches you want to review locally before you push them upstream.</p>
-    <p><%= link_to "Browse folders", browse_repositories_path(directory: File.dirname(@local_repository.path)), class: "button button-secondary" %></p>
-  </header>
+  <div class="pf-pulls-header">
+    <h1>Pull requests</h1>
+    <%= link_to "New pull request", repository_compare_path(@local_repository), class: "button" %>
+  </div>
 
-  <section class="panel">
-    <%= form_with url: repository_pull_requests_path(@local_repository), method: :get, class: "compare-form" do |form| %>
-      <div class="field">
-        <%= form.label :base_branch, "Base branch" %>
-        <%= form.select :base_branch,
-          options_for_select(@branches.map(&:name), @pull_request.base_branch),
-          {},
-          onchange: "this.form.requestSubmit()" %>
-      </div>
-
-      <div class="field">
-        <%= form.label :source_branch, "Compare branch" %>
-        <%= form.select :source_branch,
-          options_for_select(@branches.map(&:name), @pull_request.source_branch),
-          {},
-          onchange: "this.form.requestSubmit()" %>
-      </div>
-    <% end %>
-  </section>
-
-  <% if @existing_pull_request %>
-    <section class="panel" data-role="existing-pr-preview">
-      <div class="panel-header">
-        <h2><%= @existing_pull_request.source_branch %> #<%= @existing_pull_request.id %></h2>
-      </div>
-      <p>This branch already has a local pull request.</p>
-      <p><%= @existing_pull_request.description.presence || "No description provided yet." %></p>
-      <p>
-        <%= link_to "View pull request",
-          repository_pull_request_path(@local_repository, @existing_pull_request),
-          class: "button" %>
-      </p>
-    </section>
-  <% else %>
-    <section class="panel">
-      <%= form_with model: @pull_request, url: repository_pull_requests_path(@local_repository), class: "compare-form" do |form| %>
-        <%= form.hidden_field :base_branch %>
-        <%= form.hidden_field :source_branch %>
-
-        <div class="field">
-          <%= form.label :description, "Description" %>
-          <%= form.text_area :description, rows: 5 %>
-        </div>
-
-        <% if @pull_request.errors.any? %>
-          <div class="errors">
-            <%= @pull_request.errors.full_messages.to_sentence %>
+  <% if @pull_requests.any? %>
+    <ul class="pf-pull-list">
+      <% @pull_requests.each do |pull_request| %>
+        <li class="pf-pull-list__item">
+          <div class="pf-pull-list__info">
+            <%= link_to repository_pull_path(@local_repository, pull_request), class: "pf-pull-list__title" do %>
+              <%= octicon(:git_pull_request, size: 16) %>
+              <strong><%= pull_request.title %></strong>
+            <% end %>
+            <span class="pf-pull-list__meta">
+              #<%= pull_request.id %> opened <%= time_ago_in_words(pull_request.created_at) %> ago
+              &middot; <%= pull_request.base_branch %> &larr; <%= pull_request.source_branch %>
+            </span>
           </div>
-        <% end %>
-
-        <%= form.submit "Create local pull request", class: "button" %>
+        </li>
       <% end %>
-    </section>
-  <% end %>
-
-  <section class="panel">
-    <div class="panel-header">
-      <h2>Local pull requests</h2>
+    </ul>
+  <% else %>
+    <div class="panel">
+      <p>No local pull requests yet. <%= link_to "Create one", repository_compare_path(@local_repository) %>.</p>
     </div>
-
-    <% if @pull_requests.any? %>
-      <ul class="pull-request-list">
-        <% @pull_requests.each do |pull_request| %>
-          <li>
-            <%= link_to pull_request.source_branch, repository_pull_request_path(@local_repository, pull_request) %>
-            <span><%= pull_request.base_branch %> ← <%= pull_request.source_branch %></span>
-          </li>
-        <% end %>
-      </ul>
-    <% else %>
-      <p>No local pull requests yet.</p>
-    <% end %>
-  </section>
+  <% end %>
 </section>
