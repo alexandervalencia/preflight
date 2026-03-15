@@ -286,23 +286,26 @@ module PullRequestsHelper
     return html if ranges.empty?
 
     # Map source-text character positions to positions in the HTML string,
-    # skipping over HTML tags
+    # skipping over HTML tags and counting HTML entities as single chars
     text_pos = 0
-    html_pos = 0
-    in_tag = false
     source_to_html = {}
+    i = 0
 
-    html.each_char.with_index do |char, idx|
-      if char == "<"
-        in_tag = true
-      elsif char == ">" && in_tag
-        in_tag = false
-        next
-      end
-
-      unless in_tag
-        source_to_html[text_pos] = idx
+    while i < html.length
+      if html[i] == "<"
+        # Skip entire tag
+        close = html.index(">", i)
+        i = close ? close + 1 : i + 1
+      elsif html[i] == "&"
+        # HTML entity — maps to one source character
+        source_to_html[text_pos] = i
         text_pos += 1
+        semi = html.index(";", i)
+        i = semi ? semi + 1 : i + 1
+      else
+        source_to_html[text_pos] = i
+        text_pos += 1
+        i += 1
       end
     end
     source_to_html[text_pos] = html.length
