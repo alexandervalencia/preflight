@@ -167,3 +167,90 @@
   color: var(--pf-text-muted);
   font-size: 12px;
 }
+
+/* Compare page */
+
+.pf-compare-selector {
+  border: 1px solid var(--pf-border);
+  border-radius: 6px;
+  overflow: hidden;
+  margin-bottom: 16px;
+}
+
+.pf-compare-form {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 16px;
+}
+
+.pf-compare-form svg {
+  color: var(--pf-text-muted);
+  flex-shrink: 0;
+}
+
+.pf-compare-label {
+  color: var(--pf-text-muted);
+  font-size: 14px;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.pf-compare-dropdown {
+  padding: 4px 8px;
+  border: 1px solid var(--pf-border);
+  border-radius: 6px;
+  background: var(--pf-subtle);
+  color: var(--pf-text);
+  font-size: 12px;
+}
+
+.pf-compare-arrow {
+  color: var(--pf-text-muted);
+  font-size: 14px;
+}
+
+.pf-compare-banner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 8px 16px;
+  border-top: 1px solid var(--pf-border);
+  font-size: 14px;
+}
+
+.pf-compare-banner p {
+  margin: 0;
+  color: var(--pf-text-muted);
+}
+
+.pf-compare-banner--existing {
+  background: var(--pf-subtle);
+}
+
+.pf-compare-summary {
+  display: flex;
+  align-items: center;
+  gap: 24px;
+  padding: 12px 16px;
+  border: 1px solid var(--pf-border);
+  border-radius: 6px;
+  margin-bottom: 16px;
+  font-size: 14px;
+  color: var(--pf-text);
+}
+
+.pf-compare-summary span {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.pf-compare-summary svg {
+  color: var(--pf-text-muted);
+}
+
+.pf-compare-diffs {
+  margin-top: 16px;
+}

@@ -12,10 +12,15 @@ class PullRequestsFlowTest < ActionDispatch::IntegrationTest
       assert_select "select[name='base_branch'] option[selected='selected']", text: "main"
       assert_select "input[name='pull_request[source_branch]'][value='feature']", count: 1
       assert_select "input[name='pull_request[base_branch]'][value='main']", count: 1
+      assert_select ".pf-compare-summary", text: /2 commits/
+      assert_select ".pf-compare-summary", text: /2 files changed/
+      assert_select ".pf-commit-list-item", count: 2
+      assert_select "[data-role='changed-file']", minimum: 1
 
       post repository_pulls_path(repository), params: {
         pull_request: {
           source_branch: "feature",
+          title: "Feature",
           description: "Review the widget work."
         }
       }
@@ -25,7 +30,7 @@ class PullRequestsFlowTest < ActionDispatch::IntegrationTest
       assert_redirected_to repository_pull_path(repository, pull_request)
       follow_redirect!
       assert_response :success
-      assert_select "h1", text: "feature"
+      assert_select "h1", text: "Feature"
       assert_select "summary[aria-label='Edit title']"
       assert_select "a[href='#{repository_pull_path(repository, pull_request)}']", text: /Conversation/
       assert_select "a[href='#{repository_pull_commits_path(repository, pull_request)}']", text: /Commits/
@@ -172,9 +177,8 @@ class PullRequestsFlowTest < ActionDispatch::IntegrationTest
 
       assert_response :success
       assert_select "[data-role='existing-pr-preview']", text: /feature/
-      assert_select "[data-role='existing-pr-preview']", text: /Existing review in progress\./
-      assert_select "a[href='#{repository_pull_path(repository, pull_request)}']", text: "View pull request"
-      assert_select "input[type='submit'][value='Create local pull request']", count: 0
+      assert_select "a[href='#{repository_pull_path(repository, pull_request)}']", text: /View pull request/
+      assert_select "input[type='submit'][value='Create pull request']", count: 0
     end
   end
 

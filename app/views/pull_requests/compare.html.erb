@@ -2,49 +2,64 @@
   <%= render "repository_header", local_repository: @local_repository %>
 
   <header class="page-header">
-    <p class="eyebrow">Open A Pull Request</p>
-    <h1>Compare changes</h1>
-    <p>Select the base and compare branches you want to review locally before you push them upstream.</p>
+    <h1>Comparing changes</h1>
+    <p>Choose two branches to see what's changed or to start a new pull request.</p>
   </header>
 
-  <section class="panel">
-    <%= form_with url: repository_compare_path(@local_repository), method: :get, class: "compare-form" do |form| %>
-      <div class="field">
-        <%= form.label :base_branch, "Base branch" %>
-        <%= form.select :base_branch,
-          options_for_select(@branches.map(&:name), @pull_request.base_branch),
-          {},
-          onchange: "this.form.requestSubmit()" %>
-      </div>
+  <%# Branch selector card %>
+  <div class="pf-compare-selector">
+    <%= form_with url: repository_compare_path(@local_repository), method: :get, class: "pf-compare-form" do |form| %>
+      <%= octicon(:git_pull_request, size: 16) %>
+      <label class="pf-compare-label">base:</label>
+      <%= form.select :base_branch,
+        options_for_select(@branches.map(&:name), @pull_request.base_branch),
+        {},
+        class: "pf-compare-dropdown",
+        onchange: "this.form.requestSubmit()" %>
+      <span class="pf-compare-arrow">&larr;</span>
+      <label class="pf-compare-label">compare:</label>
+      <%= form.select :source_branch,
+        options_for_select(@branches.map(&:name), @pull_request.source_branch),
+        {},
+        class: "pf-compare-dropdown",
+        onchange: "this.form.requestSubmit()" %>
+    <% end %>
 
-      <div class="field">
-        <%= form.label :source_branch, "Compare branch" %>
-        <%= form.select :source_branch,
-          options_for_select(@branches.map(&:name), @pull_request.source_branch),
-          {},
-          onchange: "this.form.requestSubmit()" %>
+    <%# Action banner %>
+    <% if @pull_request.base_branch == @pull_request.source_branch %>
+      <div class="pf-compare-banner">
+        <p>Choose different branches to compare.</p>
+      </div>
+    <% elsif @existing_pull_request %>
+      <div class="pf-compare-banner pf-compare-banner--existing" data-role="existing-pr-preview">
+        <div>
+          <strong><%= @existing_pull_request.title %></strong> #<%= @existing_pull_request.id %>
+        </div>
+        <%= link_to repository_pull_path(@local_repository, @existing_pull_request), class: "button" do %>
+          <%= octicon(:git_pull_request, size: 16) %> View pull request
+        <% end %>
+      </div>
+    <% else %>
+      <div class="pf-compare-banner">
+        <p>These branches can be compared.</p>
+        <button type="button" class="button" id="pf-create-btn" onclick="document.getElementById('pf-create-form').hidden = false; this.hidden = true;">
+          Create pull request
+        </button>
       </div>
     <% end %>
-  </section>
+  </div>
 
-  <% if @existing_pull_request %>
-    <section class="panel" data-role="existing-pr-preview">
-      <div class="panel-header">
-        <h2><%= @existing_pull_request.source_branch %> #<%= @existing_pull_request.id %></h2>
-      </div>
-      <p>This branch already has a local pull request.</p>
-      <p><%= @existing_pull_request.description.presence || "No description provided yet." %></p>
-      <p>
-        <%= link_to "View pull request",
-          repository_pull_path(@local_repository, @existing_pull_request),
-          class: "button" %>
-      </p>
-    </section>
-  <% else %>
-    <section class="panel">
-      <%= form_with model: @pull_request, url: repository_pulls_path(@local_repository), class: "compare-form" do |form| %>
+  <%# Create PR form (hidden until button clicked) %>
+  <% unless @existing_pull_request || @pull_request.base_branch == @pull_request.source_branch %>
+    <section class="panel" id="pf-create-form" hidden>
+      <%= form_with model: @pull_request, url: repository_pulls_path(@local_repository) do |form| %>
         <%= form.hidden_field :base_branch %>
         <%= form.hidden_field :source_branch %>
+
+        <div class="field">
+          <%= form.label :title, "Title" %>
+          <%= form.text_field :title, value: @pull_request.source_branch.titleize, class: "pf-create-title" %>
+        </div>
 
         <div class="field">
           <%= form.label :description, "Description" %>
@@ -57,7 +72,97 @@
           </div>
         <% end %>
 
-        <%= form.submit "Create local pull request", class: "button" %>
+        <%= form.submit "Create pull request", class: "button" %>
+      <% end %>
+    </section>
+  <% end %>
+
+  <%# Comparison details (only when branches differ) %>
+  <% if @comparison %>
+    <%# Summary bar %>
+    <div class="pf-compare-summary">
+      <span><%= octicon(:git_commit, size: 16) %> <%= pluralize(@commits.length, "commit") %></span>
+      <span><%= octicon(:file, size: 16) %> <%= pluralize(@files.length, "file") %> changed</span>
+    </div>
+
+    <%# Commit list grouped by date %>
+    <div class="pf-commits-index">
+      <% @grouped_commits.each do |date, commits| %>
+        <div class="pf-commit-group">
+          <div class="pf-commit-group__header">
+            <%= octicon(:git_commit, size: 16) %>
+            <h3><%= commit_group_title(date) %></h3>
+          </div>
+
+          <div class="pf-commit-group__list">
+            <% commits.each do |commit| %>
+              <article class="pf-commit-list-item">
+                <div class="pf-commit-list-item__body">
+                  <strong><%= format_commit_message(commit.message) %></strong>
+                  <p><%= commit.author_name %> committed <%= time_ago_in_words(commit.authored_at) %> ago</p>
+                </div>
+
+                <div class="pf-commit-list-item__meta">
+                  <span class="pf-commit-sha-group">
+                    <code class="pf-commit-sha"><%= commit.short_sha.first(7) %></code>
+                  </span>
+                </div>
+              </article>
+            <% end %>
+          </div>
+        </div>
+      <% end %>
+    </div>
+
+    <%# File diffs (unified) %>
+    <section class="pf-compare-diffs">
+      <% @files.each do |file| %>
+        <% stats = diff_stats(file) %>
+        <div class="changed-file" data-role="changed-file">
+          <header>
+            <div class="pf-file-header__left">
+              <div class="pf-file-header">
+                <span class="pf-file-header__path"><%= file.path %></span>
+              </div>
+            </div>
+            <div class="pf-file-stats">
+              <span class="pf-diffstat" aria-hidden="true">
+                <span class="pf-diffstat-count"><%= stats[:additions] + stats[:deletions] %></span>
+                <%= diffstat_blocks(stats[:additions], stats[:deletions]) %>
+              </span>
+            </div>
+          </header>
+          <table class="diff-table pf-unified-diff">
+            <colgroup>
+              <col class="pf-col-number">
+              <col class="pf-col-number">
+              <col>
+            </colgroup>
+            <tbody>
+              <% unified_diff_rows(file, {}).each do |row| %>
+                <% if row.kind == :hunk %>
+                  <tr class="pf-hunk-row">
+                    <td class="line-number line-number--hunk">...</td>
+                    <td class="line-number line-number--hunk">...</td>
+                    <td class="line-code line-code--hunk" colspan="2">
+                      <code><%= row.hunk %></code>
+                    </td>
+                  </tr>
+                <% else %>
+                  <tr>
+                    <td class="line-number <%= "line-number--#{row.cell_kind}" %>"><%= row.left_number %></td>
+                    <td class="line-number <%= "line-number--#{row.cell_kind}" %>"><%= row.right_number %></td>
+                    <td class="line-code line-code--<%= row.cell_kind %>">
+                      <div class="line-code__content">
+                        <code><%= highlighted_diff_line(file.path, row.content) %></code>
+                      </div>
+                    </td>
+                  </tr>
+                <% end %>
+              <% end %>
+            </tbody>
+          </table>
+        </div>
       <% end %>
     </section>
   <% end %>

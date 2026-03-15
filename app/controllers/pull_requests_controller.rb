@@ -13,6 +13,7 @@ class PullRequestsController < ApplicationController
     )
     @branches = @local_repository.branches
     @existing_pull_request = existing_pull_request_for(@pull_request.source_branch)
+    load_comparison if @pull_request.base_branch != @pull_request.source_branch
   end
 
   def create
@@ -28,6 +29,7 @@ class PullRequestsController < ApplicationController
     else
       @branches = @local_repository.branches
       @existing_pull_request = existing_pull_request_for(@pull_request.source_branch)
+      load_comparison if @pull_request.base_branch != @pull_request.source_branch
       render :compare, status: :unprocessable_entity
     end
   end
@@ -86,5 +88,15 @@ class PullRequestsController < ApplicationController
   def load_pull_request_data
     @comparison = @pull_request.comparison
     @branches = @local_repository.branches
+  end
+
+  def load_comparison
+    @comparison = @local_repository.git_repository.compare(
+      base: @pull_request.base_branch,
+      head: @pull_request.source_branch
+    )
+    @commits = @comparison.commits
+    @grouped_commits = @commits.group_by { |c| c.authored_at.to_date }
+    @files = @comparison.files
   end
 end
