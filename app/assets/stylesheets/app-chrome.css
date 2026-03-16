@@ -28,12 +28,12 @@
 .app-chrome__repo {
   display: inline-flex;
   align-items: center;
-  gap: 0.5rem;
 }
 
 .app-chrome__separator {
   color: var(--pf-text-muted);
   font-size: 1.1rem;
+  margin: 0 0.4rem;
 }
 
 .app-chrome__repo-name {
