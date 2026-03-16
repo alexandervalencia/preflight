@@ -5,16 +5,19 @@ class LocalRepositoriesFlowTest < ActionDispatch::IntegrationTest
     with_sample_repository do |fixture|
       get browse_path(directory: File.dirname(fixture.path))
 
+      assert_response :redirect
+      follow_redirect!
+
       assert_response :success
-      assert_select "h1", text: "Browse local folders"
+      assert_select "h1", text: "Add repository"
       assert_select "form[action='#{repositories_path}'] input[value='#{fixture.path}']"
-      assert_select "button", text: /Add #{File.basename(fixture.path)}/
+      assert_select "button", text: "Add"
     end
   end
 
   test "registers a local repository path and lands on its compare page" do
     with_sample_repository do |fixture|
-      get root_path
+      get new_repository_path
 
       assert_response :success
       assert_select "form[action='#{repositories_path}']"

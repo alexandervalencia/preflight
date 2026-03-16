@@ -1,4 +1,4 @@
-<section class="page">
+<div class="pf-page--conversation">
   <%= render "repository_header", local_repository: @local_repository %>
 
   <div class="pf-pulls-header">
@@ -28,4 +28,4 @@
       <p>No local pull requests yet. <%= link_to "Create one", repository_compare_path(@local_repository) %>.</p>
     </div>
   <% end %>
-</section>
+</div>

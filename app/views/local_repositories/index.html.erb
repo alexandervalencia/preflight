@@ -1,49 +1,33 @@
-<section class="page">
-  <header class="page-header">
-    <p class="eyebrow">Preflight</p>
-    <h1>Choose a repository</h1>
-    <p>Register the local git repository you want to review before opening a pull request-style diff.</p>
-    <p><%= link_to "Browse folders", browse_path(directory: Dir.home), class: "button button-secondary" %></p>
-  </header>
+<div class="pf-page--conversation">
+  <div class="pf-pulls-header">
+    <h1>Repositories</h1>
+    <%= link_to "Add repository", new_repository_path, class: "button" %>
+  </div>
 
-  <section class="panel">
-    <%= form_with model: @local_repository, url: repositories_path, class: "compare-form" do |form| %>
-      <div class="field">
-        <%= form.label :path, "Repository path" %>
-        <%= form.text_field :path, placeholder: "/Users/alex/Code/my-project" %>
-      </div>
-
-      <div class="field">
-        <%= form.label :name, "Name (optional)" %>
-        <%= form.text_field :name, placeholder: "my-project" %>
-      </div>
-
-      <% if @local_repository.errors.any? %>
-        <div class="errors">
-          <%= @local_repository.errors.full_messages.to_sentence %>
-        </div>
+  <% if @local_repositories.any? %>
+    <ul class="pf-repo-list">
+      <% @local_repositories.each do |repo| %>
+        <li class="pf-repo-list__item">
+          <div class="pf-repo-list__info">
+            <%= link_to repository_pulls_path(repo), class: "pf-repo-list__title" do %>
+              <%= octicon(:repo) %>
+              <strong><%= repo.name %></strong>
+            <% end %>
+            <span class="pf-repo-list__meta">
+              <code><%= repo.path %></code>
+              <span class="pf-inline-branch"><%= repo.default_branch %></span>
+              <%= pluralize(@pr_counts[repo.id] || 0, "pull request") %>
+            </span>
+          </div>
+        </li>
       <% end %>
-
-      <%= form.submit "Add repository", class: "button" %>
-    <% end %>
-  </section>
-
-  <section class="panel">
-    <div class="panel-header">
-      <h2>Repositories</h2>
+    </ul>
+  <% else %>
+    <div class="pf-repo-list__empty">
+      <%= octicon(:repo, size: 24) %>
+      <h2>Add your first repository</h2>
+      <p>Register a local git repository to start reviewing changes before opening a pull request.</p>
+      <%= link_to "Add a repository", new_repository_path, class: "button" %>
     </div>
-
-    <% if @local_repositories.any? %>
-      <ul class="pull-request-list">
-        <% @local_repositories.each do |local_repository| %>
-          <li>
-            <%= link_to local_repository.name, repository_pulls_path(local_repository) %>
-            <span><%= local_repository.path %></span>
-          </li>
-        <% end %>
-      </ul>
-    <% else %>
-      <p>No repositories added yet.</p>
-    <% end %>
-  </section>
-</section>
+  <% end %>
+</div>

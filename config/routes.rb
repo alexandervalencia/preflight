@@ -12,7 +12,7 @@ Rails.application.routes.draw do
   root "local_repositories#index"
 
   # Repository management (keep existing paths)
-  resources :repositories, controller: "local_repositories", only: [:create]
+  resources :repositories, controller: "local_repositories", only: [:new, :create]
   get "browse", to: "local_repositories#browse"
 
   # GitHub-style routes scoped under repository name

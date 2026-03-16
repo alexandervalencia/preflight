@@ -1,0 +1,110 @@
+<div class="pf-page--conversation">
+  <div class="pf-pulls-header">
+    <h1>Add repository</h1>
+    <%= link_to "Cancel", root_path, class: "button button-secondary" %>
+  </div>
+
+  <% if @directory %>
+    <p class="pf-back-link"><%= link_to "&larr; Back to discovered repositories".html_safe, new_repository_path %></p>
+
+    <nav class="pf-browse-breadcrumb">
+      <% segments = @directory.to_s.split("/").reject(&:empty?) %>
+      <% segments.each_with_index do |segment, i| %>
+        <% segment_path = "/" + segments.first(i + 1).join("/") %>
+        <% if i < segments.length - 1 %>
+          <%= link_to segment, new_repository_path(directory: segment_path) %><span class="pf-browse-breadcrumb__sep">/</span>
+        <% else %>
+          <span class="pf-browse-breadcrumb__current"><%= segment %></span>
+        <% end %>
+      <% end %>
+    </nav>
+
+    <% if @entries.any? %>
+      <ul class="pf-repo-list">
+        <% @entries.each do |entry| %>
+          <li class="pf-repo-list__item pf-repo-list__item--row">
+            <div class="pf-repo-list__info">
+              <span class="pf-repo-list__title">
+                <%= octicon(entry.git_repository ? :repo : :file_directory) %>
+                <strong><%= entry.name %></strong>
+              </span>
+              <span class="pf-repo-list__meta"><code><%= entry.path %></code></span>
+            </div>
+            <div class="pf-repo-list__action">
+              <% if entry.git_repository %>
+                <%= form_with model: LocalRepository.new, url: repositories_path do |form| %>
+                  <%= form.hidden_field :path, value: entry.path %>
+                  <%= form.hidden_field :name, value: entry.name %>
+                  <%= button_tag "Add", type: "submit", class: "button" %>
+                <% end %>
+              <% else %>
+                <%= link_to "Open", new_repository_path(directory: entry.path), class: "button button-secondary" %>
+              <% end %>
+            </div>
+          </li>
+        <% end %>
+      </ul>
+    <% else %>
+      <p class="pf-text-empty">This folder is empty.</p>
+    <% end %>
+  <% else %>
+    <% if @discovered_repos.any? %>
+      <ul class="pf-repo-list">
+        <% @discovered_repos.each do |repo| %>
+          <li class="pf-repo-list__item pf-repo-list__item--row">
+            <div class="pf-repo-list__info">
+              <span class="pf-repo-list__title">
+                <%= octicon(:repo) %>
+                <strong><%= repo.name %></strong>
+              </span>
+              <span class="pf-repo-list__meta"><code><%= repo.path %></code></span>
+            </div>
+            <div class="pf-repo-list__action">
+              <%= form_with model: LocalRepository.new, url: repositories_path do |form| %>
+                <%= form.hidden_field :path, value: repo.path %>
+                <%= form.hidden_field :name, value: repo.name %>
+                <%= button_tag "Add", type: "submit", class: "button" %>
+              <% end %>
+            </div>
+          </li>
+        <% end %>
+      </ul>
+    <% else %>
+      <% code_dir = Pathname.new(Dir.home).join("Code") %>
+      <% if code_dir.directory? %>
+        <p class="pf-text-empty">All repositories in ~/Code have been added.</p>
+      <% else %>
+        <p class="pf-text-empty">No git repositories found in ~/Code.</p>
+      <% end %>
+    <% end %>
+
+    <p style="margin-top: 12px"><%= link_to "Browse folders", new_repository_path(directory: Dir.home), class: "button button-secondary" %></p>
+  <% end %>
+
+  <details class="pf-details-manual">
+    <summary>Add by path</summary>
+    <div class="pf-details-manual__body">
+      <%= form_with model: @local_repository, url: repositories_path do |form| %>
+        <div class="field">
+          <%= form.label :path, "Repository path" %>
+          <%= form.text_field :path, placeholder: "/Users/alex/Code/my-project" %>
+        </div>
+
+        <div class="field">
+          <%= form.label :name, "Name (optional)" %>
+          <%= form.text_field :name, placeholder: "my-project" %>
+        </div>
+
+        <% if @local_repository.errors.any? %>
+          <div class="errors">
+            <%= @local_repository.errors.full_messages.to_sentence %>
+          </div>
+        <% end %>
+
+        <div class="pf-form-actions">
+          <%= form.submit "Add repository", class: "button" %>
+        </div>
+      <% end %>
+    </div>
+  </details>
+</div>
