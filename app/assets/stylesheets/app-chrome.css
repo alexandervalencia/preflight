@@ -6,7 +6,6 @@
 .app-chrome__inner {
   display: flex;
   align-items: center;
-  gap: 1.25rem;
   width: min(1900px, calc(100vw - 3rem));
   margin: 0 auto;
   padding: 0.85rem 0;
@@ -36,37 +35,4 @@
   background: var(--pf-text-bright);
   color: #010409;
   font-size: 0.9rem;
-}
-
-.app-chrome__search {
-  flex: 1;
-  max-width: 26rem;
-  padding: 0.5rem 0.8rem;
-  border: 1px solid var(--pf-border);
-  border-radius: 6px;
-  color: var(--pf-text-muted);
-  background: rgba(110, 118, 129, 0.12);
-  font-size: 0.9rem;
-}
-
-.app-chrome__nav {
-  display: flex;
-  align-items: center;
-  gap: 1rem;
-  margin-left: auto;
-}
-
-.app-chrome__link {
-  color: var(--pf-text);
-  font-size: 0.9rem;
-  font-weight: 600;
-}
-
-.app-chrome__link:hover {
-  text-decoration: none;
-  color: #fff;
-}
-
-.app-chrome__link--muted {
-  color: var(--pf-text-muted);
 }
