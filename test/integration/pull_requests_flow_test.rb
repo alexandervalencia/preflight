@@ -31,7 +31,7 @@ class PullRequestsFlowTest < ActionDispatch::IntegrationTest
       follow_redirect!
       assert_response :success
       assert_select "h1", text: "Feature"
-      assert_select "summary[aria-label='Edit title']"
+      assert_select "button[aria-label='Edit title']"
       assert_select "a[href='#{repository_pull_path(repository, pull_request)}']", text: /Conversation/
       assert_select "a[href='#{repository_pull_commits_path(repository, pull_request)}']", text: /Commits/
       assert_select "a[href='#{repository_pull_files_path(repository, pull_request)}']", text: /Files changed/
@@ -49,7 +49,7 @@ class PullRequestsFlowTest < ActionDispatch::IntegrationTest
       assert_select "input[name='q']"
       assert_select "[data-role='diff-settings']"
       assert_select "[data-role='split-diff']"
-      assert_select "summary[aria-label='Edit title']", count: 0
+      assert_select "button[aria-label='Edit title']", count: 0
       assert_select ".pf-repository-nav", count: 0
       assert_select ".pf-pr-actions", count: 0
       assert_select ".pf-code .k, .pf-code .nf, .pf-code .nb", minimum: 1

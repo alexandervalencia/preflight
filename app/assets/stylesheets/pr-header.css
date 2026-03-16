@@ -16,25 +16,44 @@
 }
 
 .pf-pr-title-row {
+  margin-bottom: 8px;
+}
+
+.pf-pr-title-display {
   display: flex;
-  align-items: center;
-  justify-content: space-between;
+  align-items: baseline;
   gap: 0.6rem;
   flex-wrap: wrap;
 }
 
-.pf-pr-title-main {
+.pf-pr-title-edit {
   display: flex;
   align-items: center;
-  gap: 0.6rem;
-  min-width: 0;
+  gap: 0.5rem;
+  flex-wrap: wrap;
 }
 
-.pf-pr-title-stack {
+.pf-pr-title-edit[hidden] {
+  display: none;
+}
+
+.pf-title-edit__input {
+  flex: 1;
+  min-width: 200px;
+  padding: 4px 12px;
+  color: var(--pf-text);
+  border: 1px solid var(--pf-border);
+  border-radius: 6px;
+  background: var(--pf-bg);
+  font-size: 32px;
+  font-weight: 600;
+  line-height: 1.5;
+}
+
+.pf-title-edit__actions {
   display: flex;
-  align-items: baseline;
-  gap: 0.6rem;
-  min-width: 0;
+  gap: 4px;
+  flex-shrink: 0;
 }
 
 .pf-pr-title {
@@ -51,71 +70,6 @@
   font-weight: 400;
 }
 
-.pf-title-editor {
-  position: relative;
-}
-
-.pf-title-editor__summary {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  width: 40px;
-  height: 40px;
-  margin: 0;
-  border: 1px solid var(--pf-border);
-  border-radius: 10px;
-  background: #212830;
-  color: var(--pf-text-muted);
-  cursor: pointer;
-  list-style: none;
-}
-
-.pf-title-editor__summary:hover {
-  color: var(--pf-text);
-  background: #262c36;
-}
-
-.pf-title-editor__summary::-webkit-details-marker {
-  display: none;
-}
-
-.pf-title-editor__icon {
-  font-size: 1rem;
-  line-height: 1;
-}
-
-.pf-title-editor__popover {
-  position: absolute;
-  top: calc(100% + 0.5rem);
-  left: 0;
-  z-index: 10;
-  width: min(28rem, 70vw);
-  padding: 0.75rem;
-  border: 1px solid var(--pf-border);
-  border-radius: 8px;
-  background: var(--pf-subtle);
-  box-shadow: 0 8px 24px rgba(1, 4, 9, 0.45);
-}
-
-.pf-title-editor__form {
-  display: grid;
-  gap: 0.65rem;
-}
-
-.pf-title-editor__input {
-  width: 100%;
-  padding: 0.5rem 0.75rem;
-  color: var(--pf-text);
-  border: 1px solid var(--pf-border);
-  border-radius: 6px;
-  background: var(--pf-bg);
-  font-size: 1rem;
-}
-
-.pf-title-editor__actions {
-  display: flex;
-  justify-content: flex-end;
-}
 
 .pf-pr-meta {
   display: flex;

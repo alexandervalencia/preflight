@@ -85,6 +85,27 @@
           url.searchParams.set("tree", hidden ? "0" : "1");
           history.replaceState(null, "", url);
         });
+        // Inline title editing
+        document.addEventListener("click", function(e) {
+          var editBtn = e.target.closest("[data-action='edit-title']");
+          if (editBtn) {
+            var row = editBtn.closest(".pf-pr-title-row");
+            row.querySelector("[data-role='title-display']").hidden = true;
+            var form = row.querySelector("[data-role='title-form']");
+            form.hidden = false;
+            form.querySelector(".pf-title-edit__input").focus();
+            form.querySelector(".pf-title-edit__input").select();
+            return;
+          }
+
+          var cancelBtn = e.target.closest("[data-action='cancel-title']");
+          if (cancelBtn) {
+            var row = cancelBtn.closest(".pf-pr-title-row");
+            row.querySelector("[data-role='title-display']").hidden = false;
+            row.querySelector("[data-role='title-form']").hidden = true;
+            return;
+          }
+        });
       })();
     </script>
   </body>

@@ -68,9 +68,8 @@
   margin-top: 0;
 }
 
-.pf-conversation-page,
-.pf-conversation-shell {
-  max-width: none;
+.pf-conversation-page {
+  max-width: 960px;
 }
 
 .pf-conversation-shell {

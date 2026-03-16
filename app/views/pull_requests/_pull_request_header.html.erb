@@ -6,40 +6,34 @@
 
 <header class="pf-pr-header">
   <p class="pf-breadcrumb">
-    <%= link_to local_repository.name, repository_pull_requests_path(local_repository) %>
+    <%= link_to local_repository.name, repository_pulls_path(local_repository) %>
     <span>/</span>
     <span>pull request</span>
   </p>
 
-  <div class="pf-pr-title-row">
-    <div class="pf-pr-title-main">
-      <div class="pf-pr-title-stack">
-        <h1 class="pf-pr-title"><%= pull_request.title %></h1>
-        <span class="pf-pr-number">#<%= pull_request.id %></span>
-      </div>
-
+  <div class="pf-pr-title-row" data-controller="title-edit">
+    <div class="pf-pr-title-display" data-role="title-display">
+      <h1 class="pf-pr-title"><%= pull_request.title %></h1>
+      <span class="pf-pr-number">#<%= pull_request.id %></span>
       <% if active_tab == :conversation %>
-        <details class="pf-title-editor">
-          <summary aria-label="Edit title" class="pf-title-editor__summary">
-            <span class="pf-title-editor__icon">&#9998;</span>
-          </summary>
-
-          <div class="pf-title-editor__popover">
-            <%= form_with model: pull_request,
-              url: repository_pull_request_path(local_repository, pull_request),
-              class: "pf-title-editor__form" do |form| %>
-              <%= form.label :title, "Edit title", class: "sr-only" %>
-              <%= form.text_field :title, value: pull_request.title, class: "pf-title-editor__input" %>
-              <%= form.hidden_field :base_branch, value: pull_request.base_branch %>
-              <%= form.hidden_field :description, value: pull_request.description %>
-              <div class="pf-title-editor__actions">
-                <%= form.submit "Save", class: "button button-small" %>
-              </div>
-            <% end %>
-          </div>
-        </details>
+        <button type="button" class="button button-secondary button-small" aria-label="Edit title" data-action="edit-title">Edit</button>
       <% end %>
     </div>
+
+    <% if active_tab == :conversation %>
+      <%= form_with model: pull_request,
+        url: repository_pull_path(local_repository, pull_request),
+        class: "pf-pr-title-edit", data: { role: "title-form" }, html: { hidden: true } do |form| %>
+        <%= form.text_field :title, value: pull_request.title, class: "pf-title-edit__input" %>
+        <%= form.hidden_field :base_branch, value: pull_request.base_branch %>
+        <%= form.hidden_field :description, value: pull_request.description %>
+        <span class="pf-pr-number">#<%= pull_request.id %></span>
+        <div class="pf-title-edit__actions">
+          <%= form.submit "Save", class: "button button-small" %>
+          <button type="button" class="button button-secondary button-small" data-action="cancel-title">Cancel</button>
+        </div>
+      <% end %>
+    <% end %>
   </div>
 
   <div class="pf-pr-meta">
@@ -55,19 +49,19 @@
   </div>
 
   <nav class="pf-tabs">
-    <%= link_to repository_pull_request_path(local_repository, pull_request),
+    <%= link_to repository_pull_path(local_repository, pull_request),
       class: ["pf-tab", ("pf-tab--active" if active_tab == :conversation)] do %>
       <%= octicon(:comment, size: 16) %>
       <span>Conversation</span>
       <span class="pf-tab-count"><%= conversation_count %></span>
     <% end %>
-    <%= link_to pull_request_commits_path(pull_request),
+    <%= link_to repository_pull_commits_path(local_repository, pull_request),
       class: ["pf-tab", ("pf-tab--active" if active_tab == :commits)] do %>
       <%= octicon(:git_commit, size: 16) %>
       <span>Commits</span>
       <span class="pf-tab-count"><%= commits_count %></span>
     <% end %>
-    <%= link_to repository_pull_request_files_path(local_repository, pull_request),
+    <%= link_to repository_pull_files_path(local_repository, pull_request),
       class: ["pf-tab", ("pf-tab--active" if active_tab == :files)] do %>
       <%= octicon(:file, size: 16) %>
       <span>Files changed</span>
