@@ -11,7 +11,6 @@
   <ul class="pf-file-tree__list">
     <% file_tree_nodes(files).each do |node| %>
       <% if node.file %>
-        <% comment_count = local_assigns.fetch(:comment_counts, {}).fetch(node.file.path, 0) %>
         <li>
           <a href="#<%= file_anchor_id(node.file.path) %>" class="pf-file-tree__entry pf-file-tree__entry--file" style="--tree-level: <%= node.level %>">
             <span class="pf-file-tree__label">
@@ -19,9 +18,6 @@
               <span class="pf-file-tree__path"><%= node.name %></span>
             </span>
             <span class="pf-file-tree__meta">
-              <% if comment_count.positive? %>
-                <span class="pf-file-tree__count" data-role="file-tree-count"><%= comment_count %></span>
-              <% end %>
               <span class="pf-file-tree__status"><%= node.file.status %></span>
             </span>
           </a>

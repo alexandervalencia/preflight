@@ -1,7 +1,5 @@
 class PullRequest < ApplicationRecord
   belongs_to :local_repository
-  has_many :inline_comments, dependent: :destroy
-  has_many :viewed_files, dependent: :destroy
 
   validates :local_repository, presence: true
   validates :title, presence: true

@@ -43,7 +43,6 @@
     <%= render "pull_requests/file_tree",
       files: ordered_files,
       query: @query,
-      comment_counts: @comment_counts,
       filter_path: repository_pull_commit_path(@local_repository, @pull_request, @commit.sha),
       layout: @layout,
       compact_line_height: @compact_line_height,
@@ -56,20 +55,20 @@
           <% if @comparison.commits.length > 1 %>
             <div class="pf-commit-summary__nav-buttons">
               <% if @previous_commit %>
-                <%= link_to repository_pull_commit_path(@local_repository, @pull_request, @previous_commit.sha), class: "button button-secondary button-small" do %>
+                <%= link_to repository_pull_commit_path(@local_repository, @pull_request, @previous_commit.sha), class: "pf-button pf-button--secondary pf-button--small" do %>
                   <%= octicon(:chevron_down, size: 16, class_name: "pf-chevron-left") %> Prev
                 <% end %>
               <% else %>
-                <span class="button button-secondary button-small pf-button--disabled">
+                <span class="pf-button pf-button--secondary pf-button--small pf-button--disabled">
                   <%= octicon(:chevron_down, size: 16, class_name: "pf-chevron-left") %> Prev
                 </span>
               <% end %>
               <% if @next_commit %>
-                <%= link_to repository_pull_commit_path(@local_repository, @pull_request, @next_commit.sha), class: "button button-secondary button-small" do %>
+                <%= link_to repository_pull_commit_path(@local_repository, @pull_request, @next_commit.sha), class: "pf-button pf-button--secondary pf-button--small" do %>
                   Next <%= octicon(:chevron_down, size: 16, class_name: "pf-chevron-right") %>
                 <% end %>
               <% else %>
-                <span class="button button-secondary button-small pf-button--disabled">
+                <span class="pf-button pf-button--secondary pf-button--small pf-button--disabled">
                   Next <%= octicon(:chevron_down, size: 16, class_name: "pf-chevron-right") %>
                 </span>
               <% end %>
@@ -90,7 +89,6 @@
           local_repository: @local_repository,
           pull_request: @pull_request,
           file: file,
-          comments_by_key: @comments_by_key,
           commit_sha: @commit.sha,
           redirect_path: repository_pull_commit_path(@local_repository, @pull_request, @commit.sha),
           layout: @layout,

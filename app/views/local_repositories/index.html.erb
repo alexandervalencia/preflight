@@ -1,7 +1,7 @@
 <div class="pf-page--conversation">
   <div class="pf-pulls-header">
     <h1>Repositories</h1>
-    <%= link_to "Add repository", new_repository_path, class: "button" %>
+    <%= link_to "Add repository", new_repository_path, class: "pf-button" %>
   </div>
 
   <% if @local_repositories.any? %>
@@ -27,7 +27,7 @@
       <%= octicon(:repo, size: 24) %>
       <h2>Add your first repository</h2>
       <p>Register a local git repository to start reviewing changes before opening a pull request.</p>
-      <%= link_to "Add a repository", new_repository_path, class: "button" %>
+      <%= link_to "Add a repository", new_repository_path, class: "pf-button" %>
     </div>
   <% end %>
 </div>

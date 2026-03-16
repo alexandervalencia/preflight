@@ -35,7 +35,6 @@
       </details>
     </div>
     <div class="pf-review-toolbar__right">
-      <span class="pf-viewed-summary"><%= @viewed_files_by_path.values.count { |viewed_file| viewed_file.current?(repository: @pull_request.git_repository) } %> / <%= @comparison.files.count %> viewed</span>
     </div>
   </section>
 
@@ -44,7 +43,6 @@
     <%= render "pull_requests/file_tree",
       files: ordered_files,
       query: @query,
-      comment_counts: @comment_counts,
       filter_path: repository_pull_files_path(@local_repository, @pull_request),
       layout: @layout,
       compact_line_height: @compact_line_height,
@@ -56,13 +54,10 @@
           local_repository: @local_repository,
           pull_request: @pull_request,
           file: file,
-          comments_by_key: @comments_by_key,
           commit_sha: nil,
           redirect_path: repository_pull_files_path(@local_repository, @pull_request),
           layout: @layout,
-          compact_line_height: @compact_line_height,
-          show_review_state: true,
-          viewed_file: @viewed_files_by_path[file.path] %>
+          compact_line_height: @compact_line_height %>
       <% end %>
     </section>
   </div>

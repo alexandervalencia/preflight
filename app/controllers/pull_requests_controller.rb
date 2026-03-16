@@ -1,5 +1,6 @@
 class PullRequestsController < ApplicationController
-  before_action :set_local_repository
+  include RepositoryScoped
+
   before_action :set_pull_request, only: [:show, :update]
 
   def index
@@ -48,10 +49,6 @@ class PullRequestsController < ApplicationController
   end
 
   private
-
-  def set_local_repository
-    @local_repository = LocalRepository.find_by!(name: params[:repository_name])
-  end
 
   def set_pull_request
     @pull_request = @local_repository.pull_requests.find(params[:id])

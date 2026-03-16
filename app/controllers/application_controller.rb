@@ -4,10 +4,6 @@ class ApplicationController < ActionController::Base
 
   private
 
-  def comments_by_key(comments)
-    comments.group_by { |comment| [comment.path, comment.side, comment.line_number] }
-  end
-
   def diff_preference(key)
     params[key].presence || cookies["pf_#{key}"]
   end

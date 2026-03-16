@@ -1,5 +1,6 @@
 class PullRequestFilesController < ApplicationController
-  before_action :set_local_repository
+  include RepositoryScoped
+
   before_action :set_pull_request
 
   def index
@@ -13,20 +14,12 @@ class PullRequestFilesController < ApplicationController
 
   private
 
-  def set_local_repository
-    @local_repository = LocalRepository.find_by!(name: params[:repository_name])
-  end
-
   def set_pull_request
     @pull_request = @local_repository.pull_requests.find(params[:id])
   end
 
   def load_review_data
     @comparison = @pull_request.comparison
-    comments = @pull_request.inline_comments.where(commit_sha: nil)
-    @comments_by_key = comments_by_key(comments)
-    @comment_counts = comments.group(:path).count
-    @viewed_files_by_path = @pull_request.viewed_files.index_by(&:path)
   end
 
   def filtered_files(files, query)

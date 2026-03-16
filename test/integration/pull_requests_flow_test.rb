@@ -61,8 +61,6 @@ class PullRequestsFlowTest < ActionDispatch::IntegrationTest
       assert_select "[data-role='file-tree'] a[href='#file-app-models-widget-rb']"
       assert_select "[data-role='changed-file']", text: /README.md/
       assert_select "[data-role='changed-file']", text: /app\/models\/widget.rb/
-      assert_select "[data-role='comment-trigger']"
-      assert_select "[data-role='comment-menu']"
     end
   end
 

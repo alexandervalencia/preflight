@@ -100,51 +100,6 @@
   background: rgba(139, 148, 158, 0.2);
 }
 
-.file-review-tools {
-  display: flex;
-  align-items: center;
-  gap: 0;
-  flex-wrap: nowrap;
-}
-
-.pf-view-toggle-form {
-  margin: 0;
-}
-
-.pf-view-toggle {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  min-height: 28px;
-  gap: 0.4rem;
-  padding: 0 8px;
-  border: 1px solid var(--pf-border);
-  border-radius: 6px;
-  background: var(--pf-subtle);
-  color: var(--pf-text);
-  font-size: 12px;
-  line-height: 18px;
-}
-
-.pf-view-toggle__box {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  width: 14px;
-  height: 14px;
-  border: 1px solid var(--pf-text-subtle);
-  border-radius: 3px;
-  color: var(--pf-bg);
-  font-size: 0.65rem;
-  line-height: 1;
-}
-
-.pf-view-toggle--checked .pf-view-toggle__box {
-  border-color: var(--pf-success-text);
-  background: #2ea043;
-  color: var(--pf-text-bright);
-}
-
 .octicon {
   display: block;
   flex: none;

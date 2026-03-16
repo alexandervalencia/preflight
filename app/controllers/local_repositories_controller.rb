@@ -37,6 +37,7 @@ class LocalRepositoriesController < ApplicationController
 
   def load_new_page_data
     @discovered_repos = discover_repositories
+    @code_dir_exists = Pathname.new(Dir.home).join("Code").directory?
 
     if params[:directory].present?
       @directory = Pathname.new(params[:directory]).expand_path

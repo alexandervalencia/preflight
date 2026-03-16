@@ -3,7 +3,7 @@
 
   <div class="pf-pulls-header">
     <h1>Pull requests</h1>
-    <%= link_to "New pull request", repository_compare_path(@local_repository), class: "button" %>
+    <%= link_to "New pull request", repository_compare_path(@local_repository), class: "pf-button" %>
   </div>
 
   <% if @pull_requests.any? %>
@@ -24,8 +24,11 @@
       <% end %>
     </ul>
   <% else %>
-    <div class="panel">
-      <p>No local pull requests yet. <%= link_to "Create one", repository_compare_path(@local_repository) %>.</p>
+    <div class="pf-repo-list__empty">
+      <%= octicon(:git_pull_request, size: 24) %>
+      <h2>No pull requests yet</h2>
+      <p>Compare branches and open your first pull request.</p>
+      <%= link_to "New pull request", repository_compare_path(@local_repository), class: "pf-button" %>
     </div>
   <% end %>
 </div>

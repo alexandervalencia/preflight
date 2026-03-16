@@ -36,7 +36,7 @@ pre {
   font-family: var(--pf-font-mono);
 }
 
-.panel,
+.pf-panel,
 .pf-card,
 .pf-file-tree,
 .pf-sidebar-section {
@@ -46,39 +46,25 @@ pre {
   box-shadow: var(--pf-shadow);
 }
 
-.panel {
+.pf-panel {
   margin-bottom: 1rem;
   padding: 1rem;
 }
 
-.panel-header {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 1rem;
-  margin-bottom: 1rem;
-}
-
-.panel-header h2 {
-  margin: 0;
-  font-size: 1rem;
-  color: var(--pf-text-bright);
-}
-
-.field {
+.pf-field {
   display: grid;
   gap: 0.4rem;
   margin-bottom: 1rem;
 }
 
-.field label {
+.pf-field label {
   font-size: 0.875rem;
   font-weight: 600;
 }
 
-.field input,
-.field select,
-.field textarea {
+.pf-field input,
+.pf-field select,
+.pf-field textarea {
   width: 100%;
   padding: 0.5rem 0.75rem;
   color: var(--pf-text);
@@ -87,18 +73,18 @@ pre {
   background: var(--pf-bg);
 }
 
-.field textarea {
+.pf-field textarea {
   resize: vertical;
 }
 
-.button {
+.pf-button {
   display: inline-flex;
   align-items: center;
   justify-content: center;
   gap: 0.35rem;
   min-height: 32px;
   padding: 0 0.85rem;
-  color: #fff;
+  color: var(--pf-text-on-emphasis);
   border: 1px solid rgba(240, 246, 252, 0.1);
   border-radius: 6px;
   background: var(--pf-success);
@@ -107,17 +93,17 @@ pre {
   cursor: pointer;
 }
 
-.button:hover {
+.pf-button:hover {
   text-decoration: none;
   filter: brightness(1.05);
 }
 
-.button-secondary {
+.pf-button--secondary {
   color: var(--pf-text);
   background: var(--pf-muted);
 }
 
-.button-small {
+.pf-button--small {
   min-height: 28px;
   padding: 0 0.7rem;
   font-size: 0.8rem;
@@ -129,7 +115,7 @@ pre {
   pointer-events: none;
 }
 
-.errors {
+.pf-errors {
   margin-bottom: 1rem;
-  color: #ffb1af;
+  color: var(--pf-danger-text);
 }

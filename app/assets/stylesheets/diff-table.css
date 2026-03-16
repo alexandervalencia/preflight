@@ -20,7 +20,6 @@
 
 
 .pf-split-row td,
-.comment-row td,
 .pf-hunk-row td {
   vertical-align: top;
   border-top: 0;
@@ -50,7 +49,7 @@
   display: block;
   margin: 0;
   padding: 0 8px 0 16px;
-  font-family: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, "Liberation Mono", monospace;
+  font-family: var(--pf-font-mono);
   font-size: 12px;
   line-height: 20px;
   white-space: pre-wrap;

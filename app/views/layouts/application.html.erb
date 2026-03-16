@@ -20,24 +20,24 @@
 
     <%= stylesheet_link_tag "variables",
                            "base",
-                           "app-chrome",
+                           "app-header",
                            "layout",
                            "repository",
+                           "compare",
                            "pr-header",
                            "conversation",
                            "commits",
                            "review-toolbar",
                            "file-tree",
                            "file-header",
-                           "diff-table",
-                           "inline-comments" %>
+                           "diff-table" %>
   </head>
 
   <body>
-    <header class="app-chrome">
-      <div class="app-chrome__inner">
-        <%= link_to root_path, class: "brand" do %>
-          <span class="brand-mark">P</span>
+    <header class="app-header">
+      <div class="app-header__inner">
+        <%= link_to root_path, class: "pf-brand" do %>
+          <span class="pf-brand-mark">P</span>
           <span>Preflight</span>
         <% end %>
         <%= yield :nav_context %>

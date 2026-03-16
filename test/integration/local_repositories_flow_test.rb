@@ -33,7 +33,7 @@ class LocalRepositoriesFlowTest < ActionDispatch::IntegrationTest
       assert_redirected_to repository_pulls_path(repository)
       follow_redirect!
       assert_response :success
-      assert_select ".app-chrome__repo-name", text: repository.name
+      assert_select ".app-header__repo-name", text: repository.name
       assert_select "h1", text: "Pull requests"
       assert_select "a", text: "New pull request"
     end

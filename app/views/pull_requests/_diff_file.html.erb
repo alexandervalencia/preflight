@@ -1,7 +1,4 @@
 <article class="changed-file" data-role="changed-file" data-path="<%= file.path %>">
-  <% if local_assigns[:show_review_state] %>
-    <% state = file_view_state(pull_request, viewed_file) %>
-  <% end %>
   <% stats = diff_stats(file) %>
   <% layout = local_assigns.fetch(:layout, :split) %>
   <% compact_line_height = local_assigns.fetch(:compact_line_height, true) %>
@@ -12,43 +9,15 @@
       <span class="pf-diffstat" aria-hidden="true"><span class="pf-diffstat-count"><%= stats[:additions] + stats[:deletions] %></span><%= diffstat_blocks(stats[:additions], stats[:deletions]) %></span>
       <strong class="pf-file-header__path"><%= file.path %></strong>
     </div>
-
-    <% if local_assigns[:show_review_state] %>
-      <div class="file-review-tools">
-        <%= form_with url: repository_pull_viewed_files_path(local_repository, pull_request), method: :post, class: "pf-view-toggle-form" do %>
-          <%= hidden_field_tag :path, file.path %>
-          <%= hidden_field_tag :redirect_to, redirect_path %>
-          <%= hidden_field_tag :viewed, state.mark_viewed ? "1" : "0" %>
-          <button
-            type="submit"
-            class="<%= class_names('pf-view-toggle', ('pf-view-toggle--checked' if state.css_class == 'view-state--viewed')) %>"
-            data-role="view-state"
-            aria-pressed="<%= state.css_class == 'view-state--viewed' %>">
-            <span class="pf-view-toggle__box" aria-hidden="true"><%= state.css_class == "view-state--viewed" ? "✓" : "" %></span>
-            <span><%= state.label %></span>
-          </button>
-        <% end %>
-      </div>
-    <% end %>
   </header>
 
   <% if layout == :unified %>
     <%= render "pull_requests/unified_diff_table",
-      local_repository: local_repository,
       file: file,
-      comments_by_key: comments_by_key,
-      compact_line_height: compact_line_height,
-      pull_request: pull_request,
-      commit_sha: commit_sha,
-      redirect_path: redirect_path %>
+      compact_line_height: compact_line_height %>
   <% else %>
     <%= render "pull_requests/split_diff_table",
-      local_repository: local_repository,
       file: file,
-      comments_by_key: comments_by_key,
-      compact_line_height: compact_line_height,
-      pull_request: pull_request,
-      commit_sha: commit_sha,
-      redirect_path: redirect_path %>
+      compact_line_height: compact_line_height %>
   <% end %>
 </article>

@@ -1,23 +1,22 @@
 <div class="pf-page--conversation">
   <%= render "repository_header", local_repository: @local_repository %>
 
-  <header class="page-header">
+  <div class="pf-pulls-header">
     <h1>Comparing changes</h1>
-    <p>Choose two branches to see what's changed or to start a new pull request.</p>
-  </header>
+  </div>
 
   <%# Branch selector card %>
   <div class="pf-compare-selector">
     <%= form_with url: repository_compare_path(@local_repository), method: :get, class: "pf-compare-form" do |form| %>
       <%= octicon(:git_pull_request, size: 16) %>
-      <label class="pf-compare-label">base:</label>
+      <label class="pf-compare-label" for="base_branch">base:</label>
       <%= form.select :base_branch,
         options_for_select(@branches.map(&:name), @pull_request.base_branch),
         {},
         class: "pf-compare-dropdown",
         onchange: "this.form.requestSubmit()" %>
       <span class="pf-compare-arrow">&larr;</span>
-      <label class="pf-compare-label">compare:</label>
+      <label class="pf-compare-label" for="source_branch">compare:</label>
       <%= form.select :source_branch,
         options_for_select(@branches.map(&:name), @pull_request.source_branch),
         {},
@@ -35,14 +34,14 @@
         <div>
           <strong><%= @existing_pull_request.title %></strong> #<%= @existing_pull_request.id %>
         </div>
-        <%= link_to repository_pull_path(@local_repository, @existing_pull_request), class: "button" do %>
+        <%= link_to repository_pull_path(@local_repository, @existing_pull_request), class: "pf-button" do %>
           <%= octicon(:git_pull_request, size: 16) %> View pull request
         <% end %>
       </div>
     <% else %>
       <div class="pf-compare-banner">
         <p>These branches can be compared.</p>
-        <button type="button" class="button" id="pf-create-btn" onclick="document.getElementById('pf-create-form').hidden = false; this.hidden = true;">
+        <button type="button" class="pf-button" id="pf-create-btn" onclick="document.getElementById('pf-create-form').hidden = false; this.hidden = true;">
           Create pull request
         </button>
       </div>
@@ -51,28 +50,28 @@
 
   <%# Create PR form (hidden until button clicked) %>
   <% unless @existing_pull_request || @pull_request.base_branch == @pull_request.source_branch %>
-    <section class="panel" id="pf-create-form" hidden>
+    <section class="pf-panel" id="pf-create-form" hidden>
       <%= form_with model: @pull_request, url: repository_pulls_path(@local_repository) do |form| %>
         <%= form.hidden_field :base_branch %>
         <%= form.hidden_field :source_branch %>
 
-        <div class="field">
+        <div class="pf-field">
           <%= form.label :title, "Title" %>
           <%= form.text_field :title, value: @pull_request.source_branch.titleize, class: "pf-create-title" %>
         </div>
 
-        <div class="field">
+        <div class="pf-field">
           <%= form.label :description, "Description" %>
           <%= form.text_area :description, rows: 5 %>
         </div>
 
         <% if @pull_request.errors.any? %>
-          <div class="errors">
+          <div class="pf-errors">
             <%= @pull_request.errors.full_messages.to_sentence %>
           </div>
         <% end %>
 
-        <%= form.submit "Create pull request", class: "button" %>
+        <%= form.submit "Create pull request", class: "pf-button" %>
       <% end %>
     </section>
   <% end %>
@@ -139,7 +138,7 @@
               <col>
             </colgroup>
             <tbody>
-              <% unified_diff_rows(file, {}).each do |row| %>
+              <% unified_diff_rows(file).each do |row| %>
                 <% if row.kind == :hunk %>
                   <tr class="pf-hunk-row">
                     <td class="line-number line-number--hunk">...</td>

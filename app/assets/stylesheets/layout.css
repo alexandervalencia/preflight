@@ -40,7 +40,6 @@
 }
 
 @media (max-width: 1100px) {
-  .pf-content-with-sidebar,
   .pf-review-layout {
     grid-template-columns: 1fr;
   }
@@ -51,7 +50,7 @@
 }
 
 @media (max-width: 760px) {
-  .app-chrome__inner,
+  .app-header__inner,
   .page,
   .pf-page {
     width: min(100vw - 1rem, 1280px);
@@ -59,11 +58,6 @@
 
   .pf-page--wide {
     width: calc(100vw - 1rem);
-  }
-
-  .app-chrome__search,
-  .app-chrome__nav {
-    display: none;
   }
 
   .pf-tabs {
@@ -75,17 +69,10 @@
   }
 
   .changed-file header,
-  .browse-entry,
-  .pull-request-list li,
   .pf-commit-list-item,
   .pf-repo-list__item--row {
     grid-template-columns: 1fr;
     flex-direction: column;
     align-items: flex-start;
-  }
-
-  .pf-inline-comment__popover,
-  .pf-inline-menu__popover {
-    width: min(18rem, 80vw);
   }
 }

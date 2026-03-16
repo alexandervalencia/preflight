@@ -1,5 +1,4 @@
 <% summary = pr_status_summary(comparison) %>
-<% conversation_count = pull_request.inline_comments.count %>
 <% commits_count = comparison.commits.count %>
 <% changed_files_count = comparison.files.count %>
 <% author_name = pull_request_author_name(comparison) %>
@@ -22,8 +21,8 @@
         <%= form.hidden_field :base_branch, value: pull_request.base_branch %>
         <%= form.hidden_field :description, value: pull_request.description %>
         <div class="pf-title-edit__actions">
-          <%= form.submit "Save", class: "button button-small" %>
-          <button type="button" class="button button-secondary button-small" data-action="cancel-title">Cancel</button>
+          <%= form.submit "Save", class: "pf-button pf-button--small" %>
+          <button type="button" class="pf-button pf-button--secondary pf-button--small" data-action="cancel-title">Cancel</button>
         </div>
       <% end %>
     <% end %>
@@ -41,12 +40,11 @@
     </span>
   </div>
 
-  <nav class="pf-tabs">
+  <nav class="pf-tabs" aria-label="Pull request">
     <%= link_to repository_pull_path(local_repository, pull_request),
       class: ["pf-tab", ("pf-tab--active" if active_tab == :conversation)] do %>
       <%= octicon(:comment, size: 16) %>
       <span>Conversation</span>
-      <span class="pf-tab-count"><%= conversation_count %></span>
     <% end %>
     <%= link_to repository_pull_commits_path(local_repository, pull_request),
       class: ["pf-tab", ("pf-tab--active" if active_tab == :commits)] do %>

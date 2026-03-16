@@ -1,9 +1,9 @@
-.app-chrome {
+.app-header {
   border-bottom: 1px solid var(--pf-border);
-  background: #010409;
+  background: var(--pf-bg-inset);
 }
 
-.app-chrome__inner {
+.app-header__inner {
   display: flex;
   align-items: center;
   width: min(1900px, calc(100vw - 3rem));
@@ -11,47 +11,47 @@
   padding: 0.85rem 0;
 }
 
-.brand {
+.pf-brand {
   display: inline-flex;
   align-items: center;
   gap: 0.65rem;
-  color: #fff;
+  color: var(--pf-text-on-emphasis);
   font-size: 0.95rem;
   font-weight: 700;
   letter-spacing: 0.02em;
 }
 
-.brand:hover {
+.pf-brand:hover {
   text-decoration: none;
 }
 
-.app-chrome__repo {
+.app-header__repo {
   display: inline-flex;
   align-items: center;
   gap: 0.35rem;
 }
 
-.app-chrome__repo svg {
+.app-header__repo svg {
   color: var(--pf-text-muted);
 }
 
-.app-chrome__separator {
+.app-header__separator {
   color: var(--pf-text-muted);
   font-size: 1.1rem;
   margin: 0 0.4rem;
 }
 
-.app-chrome__repo-name {
-  color: #fff;
+.app-header__repo-name {
+  color: var(--pf-text-on-emphasis);
   font-size: 0.95rem;
   font-weight: 700;
 }
 
-.app-chrome__repo-name:hover {
+.app-header__repo-name:hover {
   text-decoration: underline;
 }
 
-.brand-mark {
+.pf-brand-mark {
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -59,6 +59,6 @@
   height: 1.75rem;
   border-radius: 999px;
   background: var(--pf-text-bright);
-  color: #010409;
+  color: var(--pf-bg-inset);
   font-size: 0.9rem;
 }

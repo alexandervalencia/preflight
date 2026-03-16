@@ -20,7 +20,7 @@
                 <strong><%= author_name %></strong>
                 <span>commented on <%= pull_request_timestamp(@pull_request.created_at) %></span>
               </div>
-              <button type="button" class="button button-secondary button-small" data-action="edit-description">Edit</button>
+              <button type="button" class="pf-button pf-button--secondary pf-button--small" data-action="edit-description">Edit</button>
             </header>
 
             <div class="pf-card-body markdown-body pf-markdown-body" data-role="description-display">
@@ -32,8 +32,8 @@
                 <%= form.hidden_field :base_branch, value: @pull_request.base_branch %>
                 <%= form.text_area :description, rows: 16, class: "pf-description-edit__textarea" %>
                 <div class="pf-description-edit__actions">
-                  <button type="button" class="button button-secondary button-small" data-action="cancel-description">Cancel</button>
-                  <%= form.submit "Update comment", class: "button button-small" %>
+                  <button type="button" class="pf-button pf-button--secondary pf-button--small" data-action="cancel-description">Cancel</button>
+                  <%= form.submit "Update comment", class: "pf-button pf-button--small" %>
                 </div>
               <% end %>
             </div>

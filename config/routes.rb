@@ -31,8 +31,6 @@ Rails.application.routes.draw do
     scope "/pull/:pull_request_id" do
       get "commits", to: "pull_request_commits#index", as: :repository_pull_commits
       get "commits/:id", to: "pull_request_commits#show", as: :repository_pull_commit
-      post "comments", to: "inline_comments#create", as: :repository_pull_comments
-      post "viewed_files", to: "viewed_files#create", as: :repository_pull_viewed_files
     end
   end
 end

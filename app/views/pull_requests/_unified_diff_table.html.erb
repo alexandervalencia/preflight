@@ -5,7 +5,7 @@
     <col>
   </colgroup>
   <tbody>
-    <% unified_diff_rows(file, comments_by_key).each do |row| %>
+    <% unified_diff_rows(file).each do |row| %>
       <% if row.kind == :hunk %>
         <tr class="pf-hunk-row">
           <td class="line-number line-number--hunk">...</td>
@@ -17,61 +17,15 @@
         <% next %>
       <% end %>
 
-      <% row_key = "#{file_anchor_id(file.path)}-#{row.comment_side || "none"}-#{row.comment_line_number || "none"}" %>
-
       <tr class="pf-split-row">
         <td class="line-number <%= "line-number--#{row.cell_kind}" unless row.left_number.nil? && row.right_number.nil? %>"><%= row.left_number %></td>
         <td class="line-number <%= "line-number--#{row.cell_kind}" unless row.left_number.nil? && row.right_number.nil? %>"><%= row.right_number %></td>
-        <td class="line-code line-code--<%= row.cell_kind %> <%= "line-code--commentable" if row.comment_side.present? %>">
-          <% if row.comment_side && row.comment_line_number %>
-            <details class="pf-inline-comment">
-              <summary class="pf-inline-comment__summary" data-role="comment-trigger" aria-label="Add comment on this line">
-                <span>+</span>
-              </summary>
-              <div class="pf-inline-comment__popover">
-                <%= render "pull_requests/inline_comment_form",
-                  local_repository: local_repository,
-                  pull_request: pull_request,
-                  file: file,
-                  side: row.comment_side,
-                  line_number: row.comment_line_number,
-                  commit_sha: commit_sha,
-                  redirect_path: redirect_path %>
-              </div>
-            </details>
-          <% end %>
+        <td class="line-code line-code--<%= row.cell_kind %>">
           <div class="line-code__content">
             <code><%= highlighted_diff_line(file.path, row.content) %></code>
           </div>
-          <% if row.comment_side && row.comment_line_number %>
-            <details class="pf-inline-menu">
-              <summary class="pf-inline-menu__summary" data-role="comment-menu" aria-label="Line actions">
-                <%= octicon(:kebab, size: 16) %>
-              </summary>
-              <div class="pf-inline-menu__popover" id="<%= row_key %>-menu">
-                <p class="pf-inline-menu__title">Add comment on line <%= row.comment_line_number %></p>
-                <%= render "pull_requests/inline_comment_form",
-                  local_repository: local_repository,
-                  pull_request: pull_request,
-                  file: file,
-                  side: row.comment_side,
-                  line_number: row.comment_line_number,
-                  commit_sha: commit_sha,
-                  redirect_path: redirect_path %>
-              </div>
-            </details>
-          <% end %>
         </td>
       </tr>
-
-      <% row.comments.each do |comment| %>
-        <tr class="comment-row">
-          <td></td>
-          <td></td>
-          <td></td>
-          <td><div class="inline-comment" data-role="inline-comment"><%= comment.body %></div></td>
-        </tr>
-      <% end %>
     <% end %>
   </tbody>
 </table>
