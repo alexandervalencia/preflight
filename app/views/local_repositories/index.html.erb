@@ -3,7 +3,7 @@
     <p class="eyebrow">Preflight</p>
     <h1>Choose a repository</h1>
     <p>Register the local git repository you want to review before opening a pull request-style diff.</p>
-    <p><%= link_to "Browse folders", browse_repositories_path(directory: Dir.home), class: "button button-secondary" %></p>
+    <p><%= link_to "Browse folders", browse_path(directory: Dir.home), class: "button button-secondary" %></p>
   </header>
 
   <section class="panel">
@@ -37,7 +37,7 @@
       <ul class="pull-request-list">
         <% @local_repositories.each do |local_repository| %>
           <li>
-            <%= link_to local_repository.name, repository_pull_requests_path(local_repository) %>
+            <%= link_to local_repository.name, repository_pulls_path(local_repository) %>
             <span><%= local_repository.path %></span>
           </li>
         <% end %>

@@ -6,12 +6,12 @@ class PullRequestFileReviewTest < ActionDispatch::IntegrationTest
       repository = create_local_repository!(fixture)
       pull_request = PullRequest.create!(local_repository: repository, source_branch: "feature", base_branch: "main")
 
-      post pull_request_viewed_files_path(pull_request), params: {
+      post repository_pull_viewed_files_path(repository, pull_request), params: {
         path: "app/models/widget.rb",
-        redirect_to: repository_pull_request_files_path(repository, pull_request)
+        redirect_to: repository_pull_files_path(repository, pull_request)
       }
 
-      assert_redirected_to repository_pull_request_files_path(repository, pull_request)
+      assert_redirected_to repository_pull_files_path(repository, pull_request)
       follow_redirect!
       assert_select "[data-path='app/models/widget.rb'] .pf-view-toggle--checked", text: /Viewed/
 
@@ -22,7 +22,7 @@ class PullRequestFileReviewTest < ActionDispatch::IntegrationTest
         message: "Ship widget"
       )
 
-      get repository_pull_request_files_path(repository, pull_request)
+      get repository_pull_files_path(repository, pull_request)
 
       assert_select "[data-path='app/models/widget.rb'] .pf-view-toggle--checked", count: 0
       assert_select "[data-path='app/models/widget.rb'] .pf-view-toggle", text: /Viewed/
@@ -34,19 +34,19 @@ class PullRequestFileReviewTest < ActionDispatch::IntegrationTest
       repository = create_local_repository!(fixture)
       pull_request = PullRequest.create!(local_repository: repository, source_branch: "feature", base_branch: "main")
 
-      post pull_request_viewed_files_path(pull_request), params: {
+      post repository_pull_viewed_files_path(repository, pull_request), params: {
         path: "app/models/widget.rb",
         viewed: "1",
-        redirect_to: repository_pull_request_files_path(repository, pull_request)
+        redirect_to: repository_pull_files_path(repository, pull_request)
       }
 
-      post pull_request_viewed_files_path(pull_request), params: {
+      post repository_pull_viewed_files_path(repository, pull_request), params: {
         path: "app/models/widget.rb",
         viewed: "0",
-        redirect_to: repository_pull_request_files_path(repository, pull_request)
+        redirect_to: repository_pull_files_path(repository, pull_request)
       }
 
-      assert_redirected_to repository_pull_request_files_path(repository, pull_request)
+      assert_redirected_to repository_pull_files_path(repository, pull_request)
       follow_redirect!
       assert_select "[data-path='app/models/widget.rb'] .pf-view-toggle--checked", count: 0
       assert_select "[data-path='app/models/widget.rb'] .pf-view-toggle", text: /Viewed/

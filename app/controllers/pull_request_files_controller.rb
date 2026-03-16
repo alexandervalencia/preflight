@@ -14,7 +14,7 @@ class PullRequestFilesController < ApplicationController
   private
 
   def set_local_repository
-    @local_repository = LocalRepository.find(params[:repository_id])
+    @local_repository = LocalRepository.find_by!(name: params[:repository_name])
   end
 
   def set_pull_request

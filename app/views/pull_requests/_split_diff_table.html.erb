@@ -32,6 +32,7 @@
               </summary>
               <div class="pf-inline-comment__popover">
                 <%= render "pull_requests/inline_comment_form",
+                  local_repository: local_repository,
                   pull_request: pull_request,
                   file: file,
                   side: row.comment_side,
@@ -54,6 +55,7 @@
               </summary>
               <div class="pf-inline-comment__popover">
                 <%= render "pull_requests/inline_comment_form",
+                  local_repository: local_repository,
                   pull_request: pull_request,
                   file: file,
                   side: row.comment_side,
@@ -74,6 +76,7 @@
               <div class="pf-inline-menu__popover" id="<%= row_key %>-menu">
                 <p class="pf-inline-menu__title">Add comment on line <%= row.comment_line_number %></p>
                 <%= render "pull_requests/inline_comment_form",
+                  local_repository: local_repository,
                   pull_request: pull_request,
                   file: file,
                   side: row.comment_side,

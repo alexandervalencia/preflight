@@ -1,4 +1,4 @@
-<%= form_with url: pull_request_inline_comments_path(pull_request), class: "inline-comment-form" do %>
+<%= form_with url: repository_pull_comments_path(local_repository, pull_request), class: "inline-comment-form" do %>
   <%= hidden_field_tag "inline_comment[path]", file.path %>
   <%= hidden_field_tag "inline_comment[side]", side %>
   <%= hidden_field_tag "inline_comment[line_number]", line_number %>

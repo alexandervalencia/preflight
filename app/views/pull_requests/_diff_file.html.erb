@@ -15,7 +15,7 @@
 
     <% if local_assigns[:show_review_state] %>
       <div class="file-review-tools">
-        <%= form_with url: pull_request_viewed_files_path(pull_request), method: :post, class: "pf-view-toggle-form" do %>
+        <%= form_with url: repository_pull_viewed_files_path(local_repository, pull_request), method: :post, class: "pf-view-toggle-form" do %>
           <%= hidden_field_tag :path, file.path %>
           <%= hidden_field_tag :redirect_to, redirect_path %>
           <%= hidden_field_tag :viewed, state.mark_viewed ? "1" : "0" %>
@@ -34,6 +34,7 @@
 
   <% if layout == :unified %>
     <%= render "pull_requests/unified_diff_table",
+      local_repository: local_repository,
       file: file,
       comments_by_key: comments_by_key,
       compact_line_height: compact_line_height,
@@ -42,6 +43,7 @@
       redirect_path: redirect_path %>
   <% else %>
     <%= render "pull_requests/split_diff_table",
+      local_repository: local_repository,
       file: file,
       comments_by_key: comments_by_key,
       compact_line_height: compact_line_height,

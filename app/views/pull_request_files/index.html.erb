@@ -23,13 +23,13 @@
         <div class="pf-diff-settings__menu">
           <p class="pf-diff-settings__label">Layout</p>
           <%= link_to "Unified",
-            repository_pull_request_files_path(@local_repository, @pull_request, diff_layout_query(request.query_parameters, layout: "unified")),
+            repository_pull_files_path(@local_repository, @pull_request, diff_layout_query(request.query_parameters, layout: "unified")),
             class: ["pf-diff-settings__option", ("pf-diff-settings__option--active" if @layout == :unified)] %>
           <%= link_to "Split",
-            repository_pull_request_files_path(@local_repository, @pull_request, diff_layout_query(request.query_parameters, layout: "split")),
+            repository_pull_files_path(@local_repository, @pull_request, diff_layout_query(request.query_parameters, layout: "split")),
             class: ["pf-diff-settings__option", ("pf-diff-settings__option--active" if @layout == :split)] %>
           <%= link_to(@compact_line_height ? "Compact line height" : "Comfortable line height",
-            repository_pull_request_files_path(@local_repository, @pull_request, diff_layout_query(request.query_parameters, compact: (@compact_line_height ? "0" : "1"))),
+            repository_pull_files_path(@local_repository, @pull_request, diff_layout_query(request.query_parameters, compact: (@compact_line_height ? "0" : "1"))),
             class: ["pf-diff-settings__option", ("pf-diff-settings__option--active" if @compact_line_height)]) %>
         </div>
       </details>
@@ -45,7 +45,7 @@
       files: ordered_files,
       query: @query,
       comment_counts: @comment_counts,
-      filter_path: repository_pull_request_files_path(@local_repository, @pull_request),
+      filter_path: repository_pull_files_path(@local_repository, @pull_request),
       layout: @layout,
       compact_line_height: @compact_line_height,
       show_file_tree: @show_file_tree %>
@@ -53,11 +53,12 @@
     <section class="pf-diff-column">
       <% ordered_files.each do |file| %>
         <%= render "pull_requests/diff_file",
+          local_repository: @local_repository,
           pull_request: @pull_request,
           file: file,
           comments_by_key: @comments_by_key,
           commit_sha: nil,
-          redirect_path: repository_pull_request_files_path(@local_repository, @pull_request),
+          redirect_path: repository_pull_files_path(@local_repository, @pull_request),
           layout: @layout,
           compact_line_height: @compact_line_height,
           show_review_state: true,

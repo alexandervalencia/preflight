@@ -1,6 +1,7 @@
 class ViewedFilesController < ApplicationController
   def create
-    pull_request = PullRequest.find(params[:pull_request_id])
+    @local_repository = LocalRepository.find_by!(name: params[:repository_name])
+    pull_request = @local_repository.pull_requests.find(params[:pull_request_id])
     viewed_file = pull_request.viewed_files.find_or_initialize_by(path: params[:path])
 
     mark_viewed = params[:viewed].nil? || ActiveModel::Type::Boolean.new.cast(params[:viewed])
@@ -11,6 +12,6 @@ class ViewedFilesController < ApplicationController
       viewed_file.destroy! if viewed_file.persisted?
     end
 
-    redirect_to params[:redirect_to].presence || repository_pull_request_files_path(pull_request.local_repository, pull_request)
+    redirect_to params[:redirect_to].presence || repository_pull_files_path(@local_repository, pull_request)
   end
 end

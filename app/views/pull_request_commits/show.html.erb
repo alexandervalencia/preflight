@@ -24,13 +24,13 @@
         <div class="pf-diff-settings__menu">
           <p class="pf-diff-settings__label">Layout</p>
           <%= link_to "Unified",
-            pull_request_commit_path(@pull_request, @commit.sha, diff_layout_query(request.query_parameters, layout: "unified")),
+            repository_pull_commit_path(@local_repository, @pull_request, @commit.sha, diff_layout_query(request.query_parameters, layout: "unified")),
             class: ["pf-diff-settings__option", ("pf-diff-settings__option--active" if @layout == :unified)] %>
           <%= link_to "Split",
-            pull_request_commit_path(@pull_request, @commit.sha, diff_layout_query(request.query_parameters, layout: "split")),
+            repository_pull_commit_path(@local_repository, @pull_request, @commit.sha, diff_layout_query(request.query_parameters, layout: "split")),
             class: ["pf-diff-settings__option", ("pf-diff-settings__option--active" if @layout == :split)] %>
           <%= link_to(@compact_line_height ? "Compact line height" : "Comfortable line height",
-            pull_request_commit_path(@pull_request, @commit.sha, diff_layout_query(request.query_parameters, compact: (@compact_line_height ? "0" : "1"))),
+            repository_pull_commit_path(@local_repository, @pull_request, @commit.sha, diff_layout_query(request.query_parameters, compact: (@compact_line_height ? "0" : "1"))),
             class: ["pf-diff-settings__option", ("pf-diff-settings__option--active" if @compact_line_height)]) %>
         </div>
       </details>
@@ -44,7 +44,7 @@
       files: ordered_files,
       query: @query,
       comment_counts: @comment_counts,
-      filter_path: pull_request_commit_path(@pull_request, @commit.sha),
+      filter_path: repository_pull_commit_path(@local_repository, @pull_request, @commit.sha),
       layout: @layout,
       compact_line_height: @compact_line_height,
       show_file_tree: @show_file_tree %>
@@ -56,7 +56,7 @@
           <% if @comparison.commits.length > 1 %>
             <div class="pf-commit-summary__nav-buttons">
               <% if @previous_commit %>
-                <%= link_to pull_request_commit_path(@pull_request, @previous_commit.sha), class: "button button-secondary button-small" do %>
+                <%= link_to repository_pull_commit_path(@local_repository, @pull_request, @previous_commit.sha), class: "button button-secondary button-small" do %>
                   <%= octicon(:chevron_down, size: 16, class_name: "pf-chevron-left") %> Prev
                 <% end %>
               <% else %>
@@ -65,7 +65,7 @@
                 </span>
               <% end %>
               <% if @next_commit %>
-                <%= link_to pull_request_commit_path(@pull_request, @next_commit.sha), class: "button button-secondary button-small" do %>
+                <%= link_to repository_pull_commit_path(@local_repository, @pull_request, @next_commit.sha), class: "button button-secondary button-small" do %>
                   Next <%= octicon(:chevron_down, size: 16, class_name: "pf-chevron-right") %>
                 <% end %>
               <% else %>
@@ -87,11 +87,12 @@
 
       <% ordered_files.each do |file| %>
         <%= render "pull_requests/diff_file",
+          local_repository: @local_repository,
           pull_request: @pull_request,
           file: file,
           comments_by_key: @comments_by_key,
           commit_sha: @commit.sha,
-          redirect_path: pull_request_commit_path(@pull_request, @commit.sha),
+          redirect_path: repository_pull_commit_path(@local_repository, @pull_request, @commit.sha),
           layout: @layout,
           compact_line_height: @compact_line_height,
           show_review_state: false %>

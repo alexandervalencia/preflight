@@ -10,7 +10,7 @@
       <h2><%= @directory %></h2>
       <div class="directory-actions">
         <% if @parent_directory %>
-          <%= link_to "Up one level", browse_repositories_path(directory: @parent_directory.to_s), class: "button button-secondary" %>
+          <%= link_to "Up one level", browse_path(directory: @parent_directory.to_s), class: "button button-secondary" %>
         <% end %>
         <%= link_to "Back to repositories", root_path, class: "button button-secondary" %>
       </div>
@@ -32,7 +32,7 @@
                 <%= button_tag "Add #{entry.name}", type: "submit", class: "button" %>
               <% end %>
             <% else %>
-              <%= link_to "Open folder", browse_repositories_path(directory: entry.path), class: "button button-secondary" %>
+              <%= link_to "Open folder", browse_path(directory: entry.path), class: "button button-secondary" %>
             <% end %>
           </div>
         </article>

@@ -7,6 +7,10 @@ class LocalRepository < ApplicationRecord
 
   before_validation :assign_name
 
+  def to_param
+    name
+  end
+
   def git_repository
     @git_repository ||= GitRepository.new(path: path)
   end

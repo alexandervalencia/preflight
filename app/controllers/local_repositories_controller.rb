@@ -18,7 +18,7 @@ class LocalRepositoriesController < ApplicationController
     @local_repository = LocalRepository.new(local_repository_params)
 
     if @local_repository.save
-      redirect_to repository_pull_requests_path(@local_repository)
+      redirect_to repository_pulls_path(@local_repository)
     else
       @local_repositories = LocalRepository.order(:name)
       render :index, status: :unprocessable_entity

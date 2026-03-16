@@ -19,15 +19,15 @@
           <% commits.each do |commit| %>
             <article class="pf-commit-list-item" data-role="commit-list-item">
               <div class="pf-commit-list-item__body">
-                <strong><%= link_to pull_request_commit_path(@pull_request, commit.sha) do %><%= format_commit_message(commit.message) %><% end %></strong>
+                <strong><%= link_to repository_pull_commit_path(@local_repository, @pull_request, commit.sha) do %><%= format_commit_message(commit.message) %><% end %></strong>
                 <p><%= commit.author_name %> committed <%= time_ago_in_words(commit.authored_at) %> ago</p>
               </div>
 
               <div class="pf-commit-list-item__meta">
                 <span class="pf-verified">Verified</span>
                 <div class="pf-commit-sha-group">
-                  <%= link_to commit.short_sha.first(7), pull_request_commit_path(@pull_request, commit.sha), class: "pf-commit-sha" %>
-                  <%= link_to pull_request_commit_path(@pull_request, commit.sha), class: "pf-commit-browse", aria: { label: "Browse repository at this point" } do %>
+                  <%= link_to commit.short_sha.first(7), repository_pull_commit_path(@local_repository, @pull_request, commit.sha), class: "pf-commit-sha" %>
+                  <%= link_to repository_pull_commit_path(@local_repository, @pull_request, commit.sha), class: "pf-commit-browse", aria: { label: "Browse repository at this point" } do %>
                     <%= octicon(:code, size: 16) %>
                   <% end %>
                 </div>
