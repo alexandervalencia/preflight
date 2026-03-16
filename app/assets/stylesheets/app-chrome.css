@@ -25,6 +25,27 @@
   text-decoration: none;
 }
 
+.app-chrome__repo {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.app-chrome__separator {
+  color: var(--pf-text-muted);
+  font-size: 1.1rem;
+}
+
+.app-chrome__repo-name {
+  color: #fff;
+  font-size: 0.95rem;
+  font-weight: 700;
+}
+
+.app-chrome__repo-name:hover {
+  text-decoration: underline;
+}
+
 .brand-mark {
   display: inline-flex;
   align-items: center;

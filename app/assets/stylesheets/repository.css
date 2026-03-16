@@ -2,48 +2,6 @@
   margin-bottom: 1.5rem;
 }
 
-.pf-repository-header {
-  margin-bottom: 0;
-  padding: 16px 0;
-  border-bottom: 1px solid var(--pf-border);
-}
-
-.pf-repository-header__path {
-  display: flex;
-  align-items: center;
-  gap: 0.45rem;
-  color: var(--pf-text);
-  font-size: 1.25rem;
-}
-
-.pf-repository-owner {
-  color: var(--pf-link);
-  font-weight: 500;
-}
-
-.pf-repository-visibility {
-  display: inline-flex;
-  align-items: center;
-  padding: 0.18rem 0.5rem;
-  border: 1px solid var(--pf-border);
-  border-radius: 999px;
-  color: var(--pf-text-muted);
-  font-size: 0.75rem;
-  font-weight: 600;
-  text-transform: uppercase;
-}
-
-.pf-repository-header__location {
-  margin: 0.55rem 0 0;
-  color: var(--pf-text-muted);
-}
-
-.pf-repository-header__location code {
-  padding: 0;
-  border: 0;
-  color: inherit;
-  background: transparent;
-}
 
 .page-header h1 {
   margin: 0;

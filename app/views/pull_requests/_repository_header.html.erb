@@ -1,10 +1,6 @@
-<header class="pf-repository-header">
-  <div class="pf-repository-header__path">
-    <span class="pf-repository-owner">local</span>
-    <span>/</span>
-    <strong><%= local_repository.name %></strong>
-    <span class="pf-repository-visibility">Local</span>
-  </div>
-
-  <p class="pf-repository-header__location"><code><%= local_repository.path %></code></p>
-</header>
+<% content_for :nav_context do %>
+  <nav class="app-chrome__repo">
+    <span class="app-chrome__separator">/</span>
+    <%= link_to local_repository.name, repository_pulls_path(local_repository), class: "app-chrome__repo-name" %>
+  </nav>
+<% end %>
