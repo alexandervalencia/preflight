@@ -1,6 +1,7 @@
 <% content_for :nav_context do %>
   <nav class="app-chrome__repo">
     <span class="app-chrome__separator">/</span>
+    <%= octicon(:repo, size: 16) %>
     <%= link_to local_repository.name, repository_pulls_path(local_repository), class: "app-chrome__repo-name" %>
   </nav>
 <% end %>

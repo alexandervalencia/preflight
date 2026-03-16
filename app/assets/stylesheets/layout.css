@@ -13,6 +13,12 @@
   max-width: none;
 }
 
+.pf-page--conversation {
+  max-width: 1012px;
+  margin: 0 auto;
+  padding: 1.5rem 16px 0;
+}
+
 .page {
   padding-top: 1.5rem;
 }

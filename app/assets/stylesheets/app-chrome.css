@@ -28,6 +28,11 @@
 .app-chrome__repo {
   display: inline-flex;
   align-items: center;
+  gap: 0.35rem;
+}
+
+.app-chrome__repo svg {
+  color: var(--pf-text-muted);
 }
 
 .app-chrome__separator {

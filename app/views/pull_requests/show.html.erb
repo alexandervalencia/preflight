@@ -1,4 +1,4 @@
-<section class="pf-page">
+<section class="pf-page pf-page--conversation">
   <%= render "repository_header", local_repository: @local_repository %>
 
   <%= render "pull_request_header",
@@ -42,9 +42,9 @@
                   <div class="pf-commit-list__item">
                     <div class="pf-commit-list__meta">
                       <span class="pf-timeline-badge pf-timeline-badge--mini" aria-hidden="true"><%= author_initials(commit.author_name) %></span>
-                      <%= link_to commit.message, pull_request_commit_path(@pull_request, commit.sha), class: "pf-commit-list__message" %>
+                      <%= link_to commit.message, repository_pull_commit_path(@local_repository, @pull_request, commit.sha), class: "pf-commit-list__message" %>
                     </div>
-                    <%= link_to commit.short_sha, pull_request_commit_path(@pull_request, commit.sha), class: "pf-commit-list__sha" %>
+                    <%= link_to commit.short_sha, repository_pull_commit_path(@local_repository, @pull_request, commit.sha), class: "pf-commit-list__sha" %>
                   </div>
                 <% end %>
               </div>
@@ -70,7 +70,7 @@
             </header>
 
             <div class="pf-card-body">
-              <%= form_with model: @pull_request, url: repository_pull_request_path(@local_repository, @pull_request), method: :patch, class: "pf-form pf-comment-editor__form" do |form| %>
+              <%= form_with model: @pull_request, url: repository_pull_path(@local_repository, @pull_request), method: :patch, class: "pf-form pf-comment-editor__form" do |form| %>
                 <div class="field">
                   <%= form.label :base_branch, "Base branch" %>
                   <%= form.select :base_branch, options_for_select(@branches.map(&:name), @pull_request.base_branch) %>

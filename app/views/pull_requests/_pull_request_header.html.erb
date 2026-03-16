@@ -5,12 +5,6 @@
 <% author_name = pull_request_author_name(comparison) %>
 
 <header class="pf-pr-header">
-  <p class="pf-breadcrumb">
-    <%= link_to local_repository.name, repository_pulls_path(local_repository) %>
-    <span>/</span>
-    <span>pull request</span>
-  </p>
-
   <div class="pf-pr-title-row">
     <div class="pf-pr-title-display" data-role="title-display">
       <h1 class="pf-pr-title"><%= pull_request.title %></h1>
