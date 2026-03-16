@@ -14,7 +14,7 @@ Two components in one Homebrew package:
 
 1. **Go CLI binary** (`preflight`) — handles all terminal commands. Reads SQLite directly for simple queries (`list`). Talks to the Rails server via localhost HTTP for operations that need the full app (`push`, `open`). Manages the server process via PID file.
 
-2. **Rails server with bundled Ruby** — the existing app, mostly unchanged. Adds JSON API endpoints for CLI communication. Ships with its own Ruby runtime (via Traveling Ruby or static build) so it never conflicts with the user's Ruby version manager (asdf, rbenv, rvm, devbox, etc.).
+2. **Rails server with bundled Ruby** — the existing app, mostly unchanged. Adds JSON API endpoints for CLI communication. Ships with its own Ruby runtime so it never conflicts with the user's Ruby version manager (asdf, rbenv, rvm, devbox, etc.). The bundling strategy (Traveling Ruby, static Ruby build, or similar) will be evaluated during implementation — the key requirement is a self-contained Ruby that works on macOS arm64/x86_64 and Linux without any system Ruby dependency.
 
 ### System Diagram
 
@@ -67,6 +67,8 @@ The primary entry point. From any git repository:
 **Base branch resolution:**
 - If `--base` flag provided, use that
 - Otherwise, default to the repo's default branch (main/master)
+
+**Repo name collisions:** The existing `LocalRepository` model derives `name` from `File.basename(path)`. If two repos have the same directory name (e.g., `~/Code/my-app` and `~/Work/my-app`), the API should auto-suffix with a disambiguator (e.g., `my-app-2`). The CLI reports the registered name back to the user on first push.
 
 ### `preflight open`
 
@@ -139,6 +141,8 @@ Manual server management:
 3. Returns markdown image reference: `![filename](/_preflight/uploads/<pr_id>/filename.png)`
 4. Inserted into description textarea at cursor position
 
+This requires a **Stimulus controller** for the drag-and-drop, async upload, and cursor-position insertion — an appropriate use of client-side JS per the project's "reach for Stimulus when server rendering can't deliver the interaction" philosophy.
+
 ### Serving
 
 Rails serves images from `~/.preflight/uploads/` via a controller route at `/_preflight/uploads/:pr_id/:filename`.
@@ -162,19 +166,25 @@ Images are local-only in v1. On export, a warning informs the user that images w
 - Move SQLite DB location to `~/.preflight/db.sqlite3` (env var override for dev)
 - Add `status` column to `pull_requests` (`open`/`closed`, default `open`)
 - Add `github_pr_url` column to `pull_requests` (nullable, set on export)
+- Change unique index on `[local_repository_id, source_branch]` to a partial unique index scoped to `status = 'open'` — allows re-creating a PR for a branch after the previous one was closed
+- Audit all existing PR queries and model validations (index action, `existing_pull_request_for`, `validates :source_branch, uniqueness:`) to scope to `status: :open` where appropriate
+- Add `validates :name, uniqueness: true` and a unique DB index on `local_repositories.name` — required since names are used as URL slugs and the new auto-suffix logic depends on uniqueness
 
 ### New Controllers
 
 **`Api::PullRequestsController`**
 - `POST /api/pull_requests` — accepts `repo_path`, `source_branch`, `base_branch`; auto-registers repo; returns PR URL as JSON
 - `GET /api/status` — health check for CLI
+- Shares PR creation logic with the existing `PullRequestsController` via a concern or service to avoid duplication
+- Uses `skip_forgery_protection` since the Go CLI won't have a CSRF token
 
 **`UploadsController`**
 - `POST /:repository_name/pull/:id/uploads` — saves image, returns markdown reference
 - `GET /_preflight/uploads/:pr_id/:filename` — serves image files
 
 **`GithubExportsController`**
-- `POST /:repository_name/pull/:id/github_export` — runs `gh pr create`, marks PR closed, deletes images, returns GitHub URL
+- `POST /:repository_name/pull/:id/github_export` — creates GitHub PR, marks preflight PR closed, deletes images, returns GitHub URL
+- GitHub CLI interactions go through a new `GithubCli` service (parallel to `GitRepository` for `git`) — keeps shell-out logic centralized and testable
 
 ### View Changes
 
@@ -185,7 +195,7 @@ Images are local-only in v1. On export, a warning informs the user that images w
 
 ### Idle Shutdown
 
-Middleware or background thread that tracks last request time. Exits the Puma process after ~30 minutes of no requests.
+A Rack middleware tracks the timestamp of the last request. A background thread (started in a Puma `on_booted` hook) checks this timestamp every 60 seconds and calls `exit(0)` when 30 minutes have elapsed since the last request. The PID file is cleaned up via an `at_exit` hook.
 
 ## Distribution (Homebrew)
 
