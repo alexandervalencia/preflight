@@ -70,6 +70,8 @@
 
 .pf-conversation-page {
   max-width: 960px;
+  margin: 0 auto;
+  padding: 0 16px;
 }
 
 .pf-conversation-shell {
