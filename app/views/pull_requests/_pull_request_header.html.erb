@@ -11,12 +11,12 @@
     <span>pull request</span>
   </p>
 
-  <div class="pf-pr-title-row" data-controller="title-edit">
+  <div class="pf-pr-title-row">
     <div class="pf-pr-title-display" data-role="title-display">
       <h1 class="pf-pr-title"><%= pull_request.title %></h1>
       <span class="pf-pr-number">#<%= pull_request.id %></span>
       <% if active_tab == :conversation %>
-        <button type="button" class="button button-secondary button-small" aria-label="Edit title" data-action="edit-title">Edit</button>
+        <button type="button" class="pf-title-pencil" aria-label="Edit title" data-action="edit-title"><%= octicon(:pencil, size: 16) %></button>
       <% end %>
     </div>
 
@@ -27,7 +27,6 @@
         <%= form.text_field :title, value: pull_request.title, class: "pf-title-edit__input" %>
         <%= form.hidden_field :base_branch, value: pull_request.base_branch %>
         <%= form.hidden_field :description, value: pull_request.description %>
-        <span class="pf-pr-number">#<%= pull_request.id %></span>
         <div class="pf-title-edit__actions">
           <%= form.submit "Save", class: "button button-small" %>
           <button type="button" class="button button-secondary button-small" data-action="cancel-title">Cancel</button>

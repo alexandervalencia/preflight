@@ -26,6 +26,28 @@
   flex-wrap: wrap;
 }
 
+.pf-pr-title-display[hidden] {
+  display: none;
+}
+
+.pf-title-pencil {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 4px;
+  border: none;
+  border-radius: 6px;
+  background: none;
+  color: var(--pf-text-muted);
+  cursor: pointer;
+  position: relative;
+  top: 2px;
+}
+
+.pf-title-pencil:hover {
+  color: var(--pf-link);
+}
+
 .pf-pr-title-edit {
   display: flex;
   align-items: center;
