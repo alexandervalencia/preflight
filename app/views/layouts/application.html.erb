@@ -99,6 +99,27 @@
             row.querySelector("[data-role='title-form']").hidden = true;
             return;
           }
+
+          // Inline description editing
+          var editDescBtn = e.target.closest("[data-action='edit-description']");
+          if (editDescBtn) {
+            var card = editDescBtn.closest(".pf-comment-card");
+            card.querySelector("[data-role='description-display']").hidden = true;
+            var form = card.querySelector("[data-role='description-form']");
+            form.hidden = false;
+            editDescBtn.hidden = true;
+            form.querySelector("textarea").focus();
+            return;
+          }
+
+          var cancelDescBtn = e.target.closest("[data-action='cancel-description']");
+          if (cancelDescBtn) {
+            var card = cancelDescBtn.closest(".pf-comment-card");
+            card.querySelector("[data-role='description-display']").hidden = false;
+            card.querySelector("[data-role='description-form']").hidden = true;
+            card.querySelector("[data-action='edit-description']").hidden = false;
+            return;
+          }
         });
       })();
     </script>

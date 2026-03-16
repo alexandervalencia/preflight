@@ -20,10 +20,22 @@
                 <strong><%= author_name %></strong>
                 <span>commented on <%= pull_request_timestamp(@pull_request.created_at) %></span>
               </div>
+              <button type="button" class="button button-secondary button-small" data-action="edit-description">Edit</button>
             </header>
 
-            <div class="pf-card-body markdown-body pf-markdown-body">
+            <div class="pf-card-body markdown-body pf-markdown-body" data-role="description-display">
               <%= render_pull_request_markdown(@pull_request.description.presence || "No description provided yet.") %>
+            </div>
+
+            <div class="pf-card-body pf-description-edit" data-role="description-form" hidden>
+              <%= form_with model: @pull_request, url: repository_pull_path(@local_repository, @pull_request), method: :patch do |form| %>
+                <%= form.hidden_field :base_branch, value: @pull_request.base_branch %>
+                <%= form.text_area :description, rows: 16, class: "pf-description-edit__textarea" %>
+                <div class="pf-description-edit__actions">
+                  <button type="button" class="button button-secondary button-small" data-action="cancel-description">Cancel</button>
+                  <%= form.submit "Update comment", class: "button button-small" %>
+                </div>
+              <% end %>
             </div>
           </article>
         </li>
@@ -60,33 +72,6 @@
             </header>
             <p class="pf-merge-box__body">These branches can be merged cleanly. Review the files changed and update the description before you push this branch upstream.</p>
           </section>
-        </li>
-
-        <li class="pf-timeline-item pf-timeline-item--editor">
-          <div class="pf-timeline-badge pf-timeline-badge--event" aria-hidden="true">&#9998;</div>
-          <article class="pf-card pf-comment-editor">
-            <header class="pf-card-header pf-comment-editor__header">
-              <strong>Edit pull request description</strong>
-            </header>
-
-            <div class="pf-card-body">
-              <%= form_with model: @pull_request, url: repository_pull_path(@local_repository, @pull_request), method: :patch, class: "pf-form pf-comment-editor__form" do |form| %>
-                <div class="field">
-                  <%= form.label :base_branch, "Base branch" %>
-                  <%= form.select :base_branch, options_for_select(@branches.map(&:name), @pull_request.base_branch) %>
-                </div>
-
-                <div class="field">
-                  <%= form.label :description, "Description" %>
-                  <%= form.text_area :description, rows: 12 %>
-                </div>
-
-                <div class="pf-comment-editor__actions">
-                  <%= form.submit "Save changes", class: "button" %>
-                </div>
-              <% end %>
-            </div>
-          </article>
         </li>
       </ol>
     </div>

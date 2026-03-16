@@ -166,6 +166,31 @@
   color: var(--pf-text-bright);
 }
 
+.pf-description-edit[hidden] {
+  display: none;
+}
+
+.pf-description-edit__textarea {
+  width: 100%;
+  min-height: 300px;
+  padding: 0.75rem;
+  color: var(--pf-text);
+  border: 1px solid var(--pf-border);
+  border-radius: 6px;
+  background: var(--pf-bg);
+  font-family: var(--pf-font-mono);
+  font-size: 13px;
+  line-height: 1.5;
+  resize: vertical;
+}
+
+.pf-description-edit__actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+  margin-top: 8px;
+}
+
 .pf-markdown-body {
   padding: 1rem 1rem 1.1rem;
 }
