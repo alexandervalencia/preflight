@@ -11,7 +11,7 @@ default: &default
 
 development:
   <<: *default
-  database: storage/development.sqlite3
+  database: <%= ENV.fetch("PREFLIGHT_DB_PATH", "storage/development.sqlite3") %>
 
 # Warning: The database defined as "test" will be erased and
 # re-generated from your development database when you run "rake".
@@ -29,12 +29,4 @@ test:
 production:
   primary:
     <<: *default
-    # database: path/to/persistent/storage/production.sqlite3
-  cache:
-    <<: *default
-    # database: path/to/persistent/storage/production_cache.sqlite3
-    migrations_paths: db/cache_migrate
-  queue:
-    <<: *default
-    # database: path/to/persistent/storage/production_queue.sqlite3
-    migrations_paths: db/queue_migrate
+    database: <%= ENV.fetch("PREFLIGHT_DB_PATH", "storage/production.sqlite3") %>
