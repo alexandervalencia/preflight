@@ -4,7 +4,7 @@ class PullRequestsController < ApplicationController
   before_action :set_pull_request, only: [:show, :update]
 
   def index
-    @pull_requests = @local_repository.pull_requests.order(created_at: :desc)
+    @pull_requests = @local_repository.pull_requests.open.order(created_at: :desc)
   end
 
   def compare
@@ -79,7 +79,7 @@ class PullRequestsController < ApplicationController
   def existing_pull_request_for(source_branch)
     return if source_branch.blank?
 
-    @local_repository.pull_requests.find_by(source_branch:)
+    @local_repository.pull_requests.open.find_by(source_branch:)
   end
 
   def load_pull_request_data
