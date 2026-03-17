@@ -19,20 +19,20 @@ Two components in one Homebrew package:
 ### System Diagram
 
 ```
-┌─────────────────────────┐         ┌──────────────────────────────┐
+┌──────────────────────────┐         ┌───────────────────────────────┐
 │  User's Terminal         │         │  Rails Server (bundled Ruby)  │
 │                          │  HTTP   │                               │
 │  $ preflight push       ─┼────────>│  HTML Views (browser UI)      │
 │  $ preflight list       ─┼─ SQLite │  API Endpoints (CLI ↔ server) │
 │  $ preflight open       ─┼────────>│  GitRepository service        │
-│  $ preflight server ... ─┼─ PID   │  SQLite (~/.preflight/db)     │
+│  $ preflight server ... ─┼─ PID    │  SQLite (~/.preflight/db)     │
 │                          │         │  Image uploads                │
-└─────────────────────────┘         └──────────────────────────────┘
+└──────────────────────────┘         └───────────────────────────────┘
          │                                     │           │
          ▼                                     ▼           ▼
-    ┌─────────┐                          ┌──────────┐ ┌────────┐
-    │ Browser  │                          │ Git Repos │ │ gh CLI │
-    └─────────┘                          └──────────┘ └────────┘
+    ┌─────────┐                          ┌───────────┐ ┌────────┐
+    │ Browser │                          │ Git Repos │ │ gh CLI │
+    └─────────┘                          └───────────┘ └────────┘
 ```
 
 ## Data Storage
@@ -65,6 +65,7 @@ The primary entry point. From any git repository:
 6. Opens browser to the PR show page, focused on the description field
 
 **Base branch resolution:**
+
 - If `--base` flag provided, use that
 - Otherwise, default to the repo's default branch (main/master)
 
@@ -87,6 +88,7 @@ other-repo    fix/login-bug       yesterday
 ### `preflight server start|stop|restart`
 
 Manual server management:
+
 - `start` — boots Rails, writes PID file, logs to `~/.preflight/preflight.log`
 - `stop` — sends SIGTERM to PID
 - `restart` — stop + start
@@ -173,16 +175,19 @@ Images are local-only in v1. On export, a warning informs the user that images w
 ### New Controllers
 
 **`Api::PullRequestsController`**
+
 - `POST /api/pull_requests` — accepts `repo_path`, `source_branch`, `base_branch`; auto-registers repo; returns PR URL as JSON
 - `GET /api/status` — health check for CLI
 - Shares PR creation logic with the existing `PullRequestsController` via a concern or service to avoid duplication
 - Uses `skip_forgery_protection` since the Go CLI won't have a CSRF token
 
 **`UploadsController`**
+
 - `POST /:repository_name/pull/:id/uploads` — saves image, returns markdown reference
 - `GET /_preflight/uploads/:pr_id/:filename` — serves image files
 
 **`GithubExportsController`**
+
 - `POST /:repository_name/pull/:id/github_export` — creates GitHub PR, marks preflight PR closed, deletes images, returns GitHub URL
 - GitHub CLI interactions go through a new `GithubCli` service (parallel to `GitRepository` for `git`) — keeps shell-out logic centralized and testable
 
