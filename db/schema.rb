@@ -10,12 +10,13 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_03_17_141703) do
+ActiveRecord::Schema[8.1].define(version: 2026_03_17_143349) do
   create_table "local_repositories", force: :cascade do |t|
     t.datetime "created_at", null: false
     t.string "name", null: false
     t.string "path", null: false
     t.datetime "updated_at", null: false
+    t.index ["name"], name: "index_local_repositories_on_name", unique: true
     t.index ["path"], name: "index_local_repositories_on_path", unique: true
   end
 
