@@ -6,6 +6,17 @@
     <%= link_to "New pull request", repository_compare_path(@local_repository), class: "pf-button" %>
   </div>
 
+  <div class="pf-pulls-filters">
+    <%= link_to repository_pulls_path(@local_repository, status: "open"),
+      class: "pf-pulls-filter #{"pf-pulls-filter--active" if @current_filter == :open}" do %>
+      <%= octicon(:git_pull_request, size: 16) %> Open
+    <% end %>
+    <%= link_to repository_pulls_path(@local_repository, status: "closed"),
+      class: "pf-pulls-filter #{"pf-pulls-filter--active" if @current_filter == :closed}" do %>
+      <%= octicon(:check, size: 16) %> Closed
+    <% end %>
+  </div>
+
   <% if @pull_requests.any? %>
     <ul class="pf-pull-list">
       <% @pull_requests.each do |pull_request| %>

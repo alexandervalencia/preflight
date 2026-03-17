@@ -4,7 +4,8 @@ class PullRequestsController < ApplicationController
   before_action :set_pull_request, only: [:show, :update]
 
   def index
-    @pull_requests = @local_repository.pull_requests.open.order(created_at: :desc)
+    @current_filter = params[:status] == "closed" ? :closed : :open
+    @pull_requests = @local_repository.pull_requests.where(status: @current_filter).order(created_at: :desc)
   end
 
   def compare
