@@ -32,7 +32,13 @@ Rails.application.routes.draw do
       get "commits", to: "pull_request_commits#index", as: :repository_pull_commits
       get "commits/:id", to: "pull_request_commits#show", as: :repository_pull_commit
     end
+
+    post "pull/:id/uploads", to: "uploads#create", as: :repository_pull_uploads
+    post "pull/:id/github_export", to: "github_exports#create", as: :repository_pull_github_export
   end
+
+  get "/_preflight/uploads/:pull_request_id/:filename", to: "uploads#show", as: :preflight_upload,
+    constraints: { filename: /[^\/]+/ }
 
   namespace :api do
     resources :pull_requests, only: [:create, :index]
