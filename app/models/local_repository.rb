@@ -1,7 +1,7 @@
 class LocalRepository < ApplicationRecord
   has_many :pull_requests, dependent: :destroy
 
-  validates :name, presence: true
+  validates :name, presence: true, uniqueness: true
   validates :path, presence: true, uniqueness: true
   validate :path_points_to_git_repository
 
@@ -31,6 +31,22 @@ class LocalRepository < ApplicationRecord
 
   def assign_name
     self.name = File.basename(path) if name.blank? && path.present?
+    resolve_name_collision if name.present?
+  end
+
+  def resolve_name_collision
+    return unless LocalRepository.where(name: name).where.not(id: id).exists?
+
+    base_name = name
+    counter = 2
+    loop do
+      candidate = "#{base_name}-#{counter}"
+      unless LocalRepository.where(name: candidate).where.not(id: id).exists?
+        self.name = candidate
+        break
+      end
+      counter += 1
+    end
   end
 
   def path_points_to_git_repository
