@@ -72,4 +72,27 @@ class PullRequestTest < ActiveSupport::TestCase
       assert_equal "open", pull_request.status
     end
   end
+
+  test "cleans up uploads directory when PR is closed" do
+    with_sample_repository do |fixture|
+      Dir.mktmpdir("preflight-uploads") do |uploads_dir|
+        ENV["PREFLIGHT_UPLOADS_PATH"] = uploads_dir
+
+        local_repository = create_local_repository!(fixture)
+        pr = PullRequest.create!(local_repository:, source_branch: "feature", base_branch: "main")
+
+        pr_uploads = File.join(uploads_dir, pr.id.to_s)
+        FileUtils.mkdir_p(pr_uploads)
+        File.write(File.join(pr_uploads, "test.png"), "fake")
+
+        assert Dir.exist?(pr_uploads)
+
+        pr.update!(status: "closed")
+
+        assert_not Dir.exist?(pr_uploads)
+      ensure
+        ENV.delete("PREFLIGHT_UPLOADS_PATH")
+      end
+    end
+  end
 end
