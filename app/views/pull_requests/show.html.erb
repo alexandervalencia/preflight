@@ -30,7 +30,22 @@
             <div class="pf-card-body pf-description-edit" data-role="description-form" hidden>
               <%= form_with model: @pull_request, url: repository_pull_path(@local_repository, @pull_request), method: :patch do |form| %>
                 <%= form.hidden_field :base_branch, value: @pull_request.base_branch %>
-                <%= form.text_area :description, rows: 16, class: "pf-description-edit__textarea" %>
+                <div data-controller="image-upload"
+                     data-image-upload-url="<%= repository_pull_uploads_path(@local_repository, @pull_request) %>">
+                  <%= form.text_area :description, rows: 16,
+                    class: "pf-description-edit__textarea",
+                    data: { image_upload_target: "textarea" } %>
+                  <div class="pf-dropzone"
+                       data-image-upload-target="dropzone"
+                       data-action="dragover->image-upload#dragover dragleave->image-upload#dragleave drop->image-upload#drop">
+                    <button type="button" class="pf-button pf-button--secondary pf-button--small"
+                            data-action="image-upload#selectFile">Attach an image</button>
+                    <span class="pf-dropzone__hint">or drag and drop, or paste</span>
+                    <input type="file" accept="image/png,image/jpeg,image/gif,image/webp" hidden
+                           data-image-upload-target="fileInput"
+                           data-action="image-upload#fileSelected">
+                  </div>
+                </div>
                 <div class="pf-description-edit__actions">
                   <button type="button" class="pf-button pf-button--secondary pf-button--small" data-action="cancel-description">Cancel</button>
                   <%= form.submit "Update comment", class: "pf-button pf-button--small" %>
