@@ -33,4 +33,9 @@ Rails.application.routes.draw do
       get "commits/:id", to: "pull_request_commits#show", as: :repository_pull_commit
     end
   end
+
+  namespace :api do
+    resources :pull_requests, only: [:create, :index]
+    get "status", to: "pull_requests#status"
+  end
 end
