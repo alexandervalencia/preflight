@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_03_16_130000) do
+ActiveRecord::Schema[8.1].define(version: 2026_03_17_141703) do
   create_table "local_repositories", force: :cascade do |t|
     t.datetime "created_at", null: false
     t.string "name", null: false
@@ -23,11 +23,13 @@ ActiveRecord::Schema[8.1].define(version: 2026_03_16_130000) do
     t.string "base_branch", null: false
     t.datetime "created_at", null: false
     t.text "description", default: "", null: false
+    t.string "github_pr_url"
     t.integer "local_repository_id", null: false
     t.string "source_branch", null: false
+    t.string "status", default: "open", null: false
     t.string "title", null: false
     t.datetime "updated_at", null: false
-    t.index ["local_repository_id", "source_branch"], name: "index_pull_requests_on_repository_and_source_branch", unique: true
+    t.index ["local_repository_id", "source_branch"], name: "index_pull_requests_on_repo_and_branch_when_open", unique: true, where: "status = 'open'"
     t.index ["local_repository_id"], name: "index_pull_requests_on_local_repository_id"
   end
 
