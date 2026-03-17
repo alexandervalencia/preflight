@@ -35,17 +35,16 @@ class LocalRepository < ApplicationRecord
   end
 
   def resolve_name_collision
+    return unless new_record? || name_changed?
     return unless LocalRepository.where(name: name).where.not(id: id).exists?
 
     base_name = name
-    counter = 2
-    loop do
+    (2..100).each do |counter|
       candidate = "#{base_name}-#{counter}"
       unless LocalRepository.where(name: candidate).where.not(id: id).exists?
         self.name = candidate
-        break
+        return
       end
-      counter += 1
     end
   end
 
