@@ -7,9 +7,13 @@ class PullRequest < ApplicationRecord
   validates :base_branch, presence: true
   validates :source_branch, uniqueness: {
     scope: :local_repository_id,
+    conditions: -> { where(status: "open") },
     message: "already has an open local pull request"
   }
   validate :base_branch_differs_from_source_branch
+
+  scope :open, -> { where(status: "open") }
+  scope :closed, -> { where(status: "closed") }
 
   before_validation :assign_default_base_branch
   before_validation :assign_default_title
