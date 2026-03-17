@@ -37,3 +37,23 @@ plugin :tmp_restart
 # Specify the PID file. Defaults to tmp/pids/server.pid in development.
 # In other environments, only set the PID file if requested.
 pidfile ENV["PIDFILE"] if ENV["PIDFILE"]
+
+if ENV["PREFLIGHT_IDLE_SHUTDOWN"] && !ENV["PREFLIGHT_IDLE_SHUTDOWN"].empty?
+  on_booted do
+    require_relative "../app/middleware/idle_shutdown"
+    timeout_minutes = ENV.fetch("PREFLIGHT_IDLE_TIMEOUT", "30").to_i
+
+    Thread.new do
+      loop do
+        sleep 60
+        elapsed = Time.now - IdleShutdown.last_request_at
+        if elapsed >= timeout_minutes * 60
+          Rails.logger.info "Preflight shutting down after #{timeout_minutes} minutes of inactivity"
+          pid_path = ENV["PIDFILE"]
+          FileUtils.rm_f(pid_path) if pid_path
+          exit(0)
+        end
+      end
+    end
+  end
+end
