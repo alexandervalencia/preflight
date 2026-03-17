@@ -1,0 +1,19 @@
+#!/usr/bin/env bash
+set -e
+
+# Resolve the directory where this script lives
+SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
+LIBEXEC_DIR="$(dirname "$SCRIPT_DIR")"
+
+# Use bundled Ruby if available, otherwise system Ruby
+if [ -d "$LIBEXEC_DIR/ruby/bin" ]; then
+  export PATH="$LIBEXEC_DIR/ruby/bin:$PATH"
+  export GEM_HOME="$LIBEXEC_DIR/vendor/bundle"
+  export GEM_PATH="$GEM_HOME"
+fi
+
+export BUNDLE_GEMFILE="$LIBEXEC_DIR/server/Gemfile"
+export BUNDLE_PATH="$LIBEXEC_DIR/vendor/bundle"
+
+cd "$LIBEXEC_DIR/server"
+exec bundle exec rails server "$@"
