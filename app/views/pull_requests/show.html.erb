@@ -20,7 +20,9 @@
                 <strong><%= author_name %></strong>
                 <span>commented on <%= pull_request_timestamp(@pull_request.created_at) %></span>
               </div>
-              <button type="button" class="pf-button pf-button--secondary pf-button--small" data-action="edit-description">Edit</button>
+              <% if @pull_request.status == "open" %>
+                <button type="button" class="pf-button pf-button--secondary pf-button--small" data-action="edit-description">Edit</button>
+              <% end %>
             </header>
 
             <div class="pf-card-body markdown-body pf-markdown-body" data-role="description-display">
@@ -79,15 +81,50 @@
           </li>
         <% end %>
 
-        <li class="pf-timeline-item pf-timeline-item--merge">
-          <div class="pf-timeline-badge pf-timeline-badge--merge" aria-hidden="true">&#10003;</div>
-          <section class="pf-merge-box">
-            <header class="pf-merge-box__header">
-              <strong>No conflicts with base branch</strong>
-            </header>
-            <p class="pf-merge-box__body">These branches can be merged cleanly. Review the files changed and update the description before you push this branch upstream.</p>
-          </section>
-        </li>
+        <% if @pull_request.status == "closed" && @pull_request.github_pr_url.present? %>
+          <li class="pf-timeline-item pf-timeline-item--merge">
+            <div class="pf-timeline-badge pf-timeline-badge--merge" aria-hidden="true">&#10003;</div>
+            <section class="pf-merge-box pf-merge-box--closed">
+              <header class="pf-merge-box__header">
+                <strong>Exported to GitHub</strong>
+              </header>
+              <p class="pf-merge-box__body">
+                This preflight PR has been exported.
+                <%= link_to "View on GitHub \u2192", @pull_request.github_pr_url, target: "_blank", rel: "noopener" %>
+              </p>
+            </section>
+          </li>
+        <% elsif @can_export %>
+          <li class="pf-timeline-item pf-timeline-item--merge">
+            <div class="pf-timeline-badge pf-timeline-badge--merge" aria-hidden="true">&#10003;</div>
+            <section class="pf-merge-box">
+              <header class="pf-merge-box__header">
+                <strong>Ready to export</strong>
+              </header>
+              <p class="pf-merge-box__body">Review the files changed and update the description, then create a draft PR on GitHub.</p>
+              <%= button_to "Create PR on GitHub",
+                repository_pull_github_export_path(@local_repository, @pull_request),
+                method: :post,
+                class: "pf-button" %>
+            </section>
+          </li>
+        <% else %>
+          <li class="pf-timeline-item pf-timeline-item--merge">
+            <div class="pf-timeline-badge pf-timeline-badge--merge" aria-hidden="true">&#10003;</div>
+            <section class="pf-merge-box">
+              <header class="pf-merge-box__header">
+                <strong>No conflicts with base branch</strong>
+              </header>
+              <p class="pf-merge-box__body">
+                <% unless @gh_available %>
+                  Install the <a href="https://cli.github.com" target="_blank" rel="noopener">GitHub CLI</a> to export PRs to GitHub.
+                <% else %>
+                  Review the files changed and update the description before you push this branch upstream.
+                <% end %>
+              </p>
+            </section>
+          </li>
+        <% end %>
       </ol>
     </div>
   </section>
