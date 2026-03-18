@@ -17,9 +17,9 @@ class GithubExportsController < ApplicationController
 
     existing_url = github_cli.pull_request_for_branch(@pull_request.source_branch)
     if existing_url
-      @pull_request.update!(status: "closed", github_pr_url: existing_url)
-      return redirect_to repository_pull_path(@local_repository, @pull_request),
-        notice: "A GitHub PR already exists for this branch."
+      @pull_request.destroy!
+      return redirect_to repository_pulls_path(@local_repository),
+        notice: "A GitHub PR already exists for this branch: #{existing_url}"
     end
 
     base = resolve_base_branch(github_cli)
@@ -34,9 +34,9 @@ class GithubExportsController < ApplicationController
         draft: true
       )
 
-      @pull_request.update!(status: "closed", github_pr_url: pr_url)
+      @pull_request.destroy!
 
-      redirect_to repository_pull_path(@local_repository, @pull_request),
+      redirect_to repository_pulls_path(@local_repository),
         notice: "GitHub PR created: #{pr_url}"
     rescue GithubCli::Error => e
       redirect_to repository_pull_path(@local_repository, @pull_request),

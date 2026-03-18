@@ -73,7 +73,7 @@ class PullRequestTest < ActiveSupport::TestCase
     end
   end
 
-  test "cleans up uploads directory when PR is closed" do
+  test "cleans up uploads directory when PR is destroyed" do
     with_sample_repository do |fixture|
       Dir.mktmpdir("preflight-uploads") do |uploads_dir|
         ENV["PREFLIGHT_UPLOADS_PATH"] = uploads_dir
@@ -87,7 +87,7 @@ class PullRequestTest < ActiveSupport::TestCase
 
         assert Dir.exist?(pr_uploads)
 
-        pr.update!(status: "closed")
+        pr.destroy!
 
         assert_not Dir.exist?(pr_uploads)
       ensure

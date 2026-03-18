@@ -20,9 +20,7 @@
                 <strong><%= author_name %></strong>
                 <span>commented on <%= pull_request_timestamp(@pull_request.created_at) %></span>
               </div>
-              <% if @pull_request.status == "open" %>
-                <button type="button" class="pf-button pf-button--secondary pf-button--small" data-action="edit-description">Edit</button>
-              <% end %>
+              <button type="button" class="pf-button pf-button--secondary pf-button--small" data-action="edit-description">Edit</button>
             </header>
 
             <div class="pf-card-body markdown-body pf-markdown-body" data-role="description-display">
@@ -81,20 +79,7 @@
           </li>
         <% end %>
 
-        <% if @pull_request.status == "closed" && @pull_request.github_pr_url.present? %>
-          <li class="pf-timeline-item pf-timeline-item--merge">
-            <div class="pf-timeline-badge pf-timeline-badge--merge" aria-hidden="true">&#10003;</div>
-            <section class="pf-merge-box pf-merge-box--closed">
-              <header class="pf-merge-box__header">
-                <strong>Exported to GitHub</strong>
-              </header>
-              <p class="pf-merge-box__body">
-                This preflight PR has been exported.
-                <%= link_to "View on GitHub \u2192", @pull_request.github_pr_url, target: "_blank", rel: "noopener" %>
-              </p>
-            </section>
-          </li>
-        <% elsif @can_export %>
+        <% if @can_export %>
           <li class="pf-timeline-item pf-timeline-item--merge">
             <div class="pf-timeline-badge pf-timeline-badge--merge" aria-hidden="true">&#10003;</div>
             <section class="pf-merge-box">

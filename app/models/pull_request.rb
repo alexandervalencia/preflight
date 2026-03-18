@@ -17,7 +17,7 @@ class PullRequest < ApplicationRecord
 
   before_validation :assign_default_base_branch
   before_validation :assign_default_title
-  after_update :cleanup_uploads, if: :saved_change_to_status?
+  before_destroy :cleanup_uploads
 
   def git_repository
     local_repository.git_repository
@@ -61,8 +61,6 @@ class PullRequest < ApplicationRecord
   end
 
   def cleanup_uploads
-    return unless status == "closed"
-
     uploads_dir = File.join(
       ENV.fetch("PREFLIGHT_UPLOADS_PATH") { File.expand_path("~/.preflight/uploads") },
       id.to_s

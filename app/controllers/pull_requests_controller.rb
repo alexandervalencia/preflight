@@ -4,8 +4,7 @@ class PullRequestsController < ApplicationController
   before_action :set_pull_request, only: [:show, :update]
 
   def index
-    @current_filter = params[:status] == "closed" ? :closed : :open
-    @pull_requests = @local_repository.pull_requests.where(status: @current_filter).order(created_at: :desc)
+    @pull_requests = @local_repository.pull_requests.open.order(created_at: :desc)
   end
 
   def compare
@@ -87,7 +86,7 @@ class PullRequestsController < ApplicationController
     @comparison = @pull_request.comparison
     @branches = @local_repository.branches
     @gh_available = GithubCli.available?
-    @can_export = @gh_available && GithubCli.new(repo_path: @local_repository.path).has_remote? && @pull_request.status == "open"
+    @can_export = @gh_available && GithubCli.new(repo_path: @local_repository.path).has_remote?
   end
 
   def load_comparison
