@@ -515,6 +515,28 @@
   display: inline;
 }
 
+.pf-modal__field {
+  margin-bottom: 1rem;
+}
+
+.pf-modal__label {
+  display: block;
+  margin-bottom: 0.35rem;
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: var(--pf-text-bright);
+}
+
+.pf-modal__select {
+  width: 100%;
+  padding: 6px 8px;
+  border: 1px solid var(--pf-border);
+  border-radius: 6px;
+  background: var(--pf-subtle);
+  color: var(--pf-text);
+  font-size: 13px;
+}
+
 /* Draft toggle */
 
 .pf-toggle {

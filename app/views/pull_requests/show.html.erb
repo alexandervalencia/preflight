@@ -114,21 +114,33 @@
               <header class="pf-modal__header">
                 <strong>Export to GitHub</strong>
               </header>
-              <div class="pf-modal__body">
-                <p>This will create a pull request on GitHub using your current title and description. This action cannot be undone from Preflight.</p>
-                <label class="pf-toggle">
-                  <input type="checkbox" data-role="draft-toggle" checked>
-                  <span class="pf-toggle__label">Create as draft</span>
-                  <span class="pf-toggle__hint">Draft PRs don't request review or trigger most notifications.</span>
-                </label>
-              </div>
-              <footer class="pf-modal__footer">
-                <button type="button" class="pf-button pf-button--secondary" data-action="close-export-modal">Cancel</button>
-                <%= form_with url: repository_pull_github_export_path(@local_repository, @pull_request), method: :post do |f| %>
+              <%= form_with url: repository_pull_github_export_path(@local_repository, @pull_request), method: :post do |f| %>
+                <div class="pf-modal__body">
+                  <p>This will push your branch and create a pull request on GitHub using your current title and description.</p>
+
+                  <% if @remotes.length > 1 %>
+                    <div class="pf-modal__field">
+                      <label class="pf-modal__label">Push to remote</label>
+                      <%= f.select :remote, @remotes.map { |r| ["#{r.name} (#{r.url})", r.name] },
+                        { selected: "origin" },
+                        class: "pf-modal__select" %>
+                    </div>
+                  <% else %>
+                    <%= f.hidden_field :remote, value: @remotes.first&.name || "origin" %>
+                  <% end %>
+
+                  <label class="pf-toggle">
+                    <input type="checkbox" data-role="draft-toggle" checked>
+                    <span class="pf-toggle__label">Create as draft</span>
+                    <span class="pf-toggle__hint">Draft PRs don't request review or trigger most notifications.</span>
+                  </label>
                   <%= f.hidden_field :draft, value: "1", data: { role: "draft-field" } %>
+                </div>
+                <footer class="pf-modal__footer">
+                  <button type="button" class="pf-button pf-button--secondary" data-action="close-export-modal">Cancel</button>
                   <%= f.submit "Create pull request", class: "pf-button" %>
-                <% end %>
-              </footer>
+                </footer>
+              <% end %>
             </div>
           </div>
         <% else %>

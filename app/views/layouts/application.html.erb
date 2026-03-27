@@ -46,6 +46,12 @@
     </header>
 
     <main class="app-main">
+      <% if flash[:notice] %>
+        <div class="pf-flash pf-flash--notice"><%= flash[:notice] %></div>
+      <% end %>
+      <% if flash[:alert] %>
+        <div class="pf-flash pf-flash--alert"><%= flash[:alert] %></div>
+      <% end %>
       <%= yield %>
     </main>
 

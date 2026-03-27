@@ -3,7 +3,8 @@ class GithubExportsController < ApplicationController
 
   def create
     @pull_request = @local_repository.pull_requests.find(params[:id])
-    github_cli = GithubCli.new(repo_path: @local_repository.path)
+    remote = params[:remote].presence || "origin"
+    github_cli = GithubCli.new(repo_path: @local_repository.path, remote:)
 
     unless GithubCli.available?
       return redirect_to repository_pull_path(@local_repository, @pull_request),
@@ -12,7 +13,7 @@ class GithubExportsController < ApplicationController
 
     unless github_cli.has_remote?
       return redirect_to repository_pull_path(@local_repository, @pull_request),
-        alert: "This repository has no remote. Push to GitHub first."
+        alert: "Remote \"#{remote}\" not found in this repository."
     end
 
     existing_url = github_cli.pull_request_for_branch(@pull_request.source_branch)
@@ -26,6 +27,11 @@ class GithubExportsController < ApplicationController
     body = strip_local_image_warning(@pull_request.description)
 
     begin
+      # Push the branch to the remote if it's not already there
+      unless github_cli.remote_branch_exists?(@pull_request.source_branch)
+        github_cli.push_branch(@pull_request.source_branch)
+      end
+
       pr_url = github_cli.create_pull_request(
         title: @pull_request.title,
         body:,

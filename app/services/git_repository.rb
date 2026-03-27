@@ -41,6 +41,16 @@ class GitRepository
     current_branch
   end
 
+  Remote = Data.define(:name, :url)
+
+  def remotes
+    git("remote", "-v").each_line.filter_map do |line|
+      next unless line.include?("(push)")
+      name, url = line.split(/\s+/, 3)
+      Remote.new(name:, url:)
+    end.sort_by(&:name)
+  end
+
   def branch_head(branch_name)
     git("rev-parse", branch_name)
   end

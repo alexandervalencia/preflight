@@ -86,7 +86,8 @@ class PullRequestsController < ApplicationController
     @comparison = @pull_request.comparison
     @branches = @local_repository.branches
     @gh_available = GithubCli.available?
-    @can_export = @gh_available && GithubCli.new(repo_path: @local_repository.path).has_remote?
+    @remotes = @gh_available ? @local_repository.git_repository.remotes : []
+    @can_export = @gh_available && @remotes.any?
   end
 
   def load_comparison

@@ -37,7 +37,7 @@ class GithubExportsControllerTest < ActionDispatch::IntegrationTest
       GithubCli.define_singleton_method(:available?, original_method)
 
       assert_redirected_to repository_pull_path(local_repository, pull_request)
-      assert_match "no remote", flash[:alert]
+      assert_match "not found", flash[:alert]
     end
   end
 end

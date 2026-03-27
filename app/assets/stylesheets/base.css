@@ -119,3 +119,24 @@ pre {
   margin-bottom: 1rem;
   color: var(--pf-danger-text);
 }
+
+.pf-flash {
+  max-width: min(1900px, calc(100vw - 3rem));
+  margin: 0.75rem auto;
+  padding: 0.75rem 1rem;
+  border-radius: 6px;
+  font-size: 14px;
+  line-height: 1.5;
+}
+
+.pf-flash--notice {
+  background: var(--pf-success-soft);
+  border: 1px solid var(--pf-success);
+  color: var(--pf-success-text);
+}
+
+.pf-flash--alert {
+  background: var(--pf-danger-soft);
+  border: 1px solid var(--pf-danger);
+  color: var(--pf-danger-text);
+}
