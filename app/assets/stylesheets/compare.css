@@ -60,28 +60,145 @@
   background: var(--pf-subtle);
 }
 
-.pf-compare-summary {
+.pf-compare-diffs {
+  margin-top: 16px;
+}
+
+/* Diff summary bar */
+
+.pf-diff-summary-bar {
   display: flex;
   align-items: center;
-  gap: 24px;
-  padding: 12px 16px;
-  border: 1px solid var(--pf-border);
-  border-radius: 6px;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 8px;
   margin-bottom: 16px;
   font-size: 14px;
   color: var(--pf-text);
 }
 
-.pf-compare-summary span {
-  display: inline-flex;
+.pf-diff-summary-bar__text {
+  display: flex;
   align-items: center;
-  gap: 6px;
+  gap: 0.4rem;
 }
 
-.pf-compare-summary svg {
+.pf-diff-summary-bar__text .octicon {
   color: var(--pf-text-muted);
 }
 
-.pf-compare-diffs {
-  margin-top: 16px;
+.pf-diff-summary-bar__text strong {
+  color: var(--pf-text-bright);
+}
+
+/* Split/Unified toggle */
+
+.pf-diff-view-toggle {
+  display: flex;
+  border: 1px solid var(--pf-border);
+  border-radius: 6px;
+  overflow: hidden;
+}
+
+.pf-diff-view-toggle__btn {
+  padding: 4px 12px;
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--pf-text);
+  text-decoration: none;
+  background: var(--pf-canvas-subtle);
+  border-right: 1px solid var(--pf-border);
+}
+
+.pf-diff-view-toggle__btn:last-child {
+  border-right: 0;
+}
+
+.pf-diff-view-toggle__btn:hover {
+  background: var(--pf-muted);
+}
+
+.pf-diff-view-toggle__btn--active {
+  background: var(--pf-muted);
+  color: var(--pf-text-bright);
+  font-weight: 600;
+}
+
+/* Copy path button */
+
+.pf-copy-path-btn {
+  display: inline-flex;
+  align-items: center;
+  padding: 0;
+  border: 0;
+  background: none;
+  color: var(--pf-text-muted);
+  cursor: pointer;
+  opacity: 0;
+  transition: opacity 0.1s;
+}
+
+.pf-file-header__left:hover .pf-copy-path-btn {
+  opacity: 1;
+}
+
+.pf-copy-path-btn:hover {
+  color: var(--pf-link);
+}
+
+.pf-stats-bar--standalone {
+  margin-bottom: 16px;
+}
+
+/* Compare timeline (GitHub-style grouped commits with vertical line) */
+
+.pf-compare-timeline {
+  position: relative;
+  margin-bottom: 16px;
+  padding-left: 32px;
+}
+
+.pf-compare-timeline::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 14px;
+  width: 2px;
+  background: rgba(48, 54, 61, 0.7);
+}
+
+.pf-compare-timeline__group {
+  position: relative;
+  margin-bottom: 16px;
+}
+
+.pf-compare-timeline__header {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-left: -32px;
+  padding: 8px 0 8px;
+  font-size: 14px;
+  font-weight: 400;
+  color: var(--pf-text-muted);
+}
+
+.pf-compare-timeline__badge {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 16px;
+  border-radius: 999px;
+  background: var(--pf-canvas);
+  color: var(--pf-text-muted);
+  z-index: 1;
+  flex-shrink: 0;
+}
+
+.pf-commit-author-name {
+  color: var(--pf-text-bright);
+  font-weight: 600;
 }

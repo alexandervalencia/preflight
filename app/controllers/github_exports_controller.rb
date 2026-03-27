@@ -31,7 +31,7 @@ class GithubExportsController < ApplicationController
         body:,
         base:,
         head: @pull_request.source_branch,
-        draft: true
+        draft: params[:draft] != "0"
       )
 
       @pull_request.destroy!

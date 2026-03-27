@@ -69,7 +69,6 @@
   }
 
   .changed-file header,
-  .pf-commit-list-item,
   .pf-repo-list__item--row {
     grid-template-columns: 1fr;
     flex-direction: column;

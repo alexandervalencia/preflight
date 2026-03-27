@@ -79,18 +79,20 @@
   <%# Comparison details (only when branches differ) %>
   <% if @comparison %>
     <%# Summary bar %>
-    <div class="pf-compare-summary">
-      <span><%= octicon(:git_commit, size: 16) %> <%= pluralize(@commits.length, "commit") %></span>
-      <span><%= octicon(:file, size: 16) %> <%= pluralize(@files.length, "file") %> changed</span>
+    <% contributors = @commits.map(&:author_name).uniq %>
+    <div class="pf-stats-bar pf-stats-bar--standalone">
+      <span class="pf-stats-bar__item"><%= octicon(:git_commit, size: 16) %> <strong><%= @commits.length %></strong> <%= "commit".pluralize(@commits.length) %></span>
+      <span class="pf-stats-bar__item"><%= octicon(:file, size: 16) %> <strong><%= @files.length %></strong> <%= "file".pluralize(@files.length) %> changed</span>
+      <span class="pf-stats-bar__item"><%= octicon(:people, size: 16) %> <strong><%= contributors.count %></strong> <%= "contributor".pluralize(contributors.count) %></span>
     </div>
 
-    <%# Commit list grouped by date %>
-    <div class="pf-commits-index">
+    <%# Commit list grouped by date with timeline %>
+    <div class="pf-compare-timeline">
       <% @grouped_commits.each do |date, commits| %>
-        <div class="pf-commit-group">
-          <div class="pf-commit-group__header">
-            <%= octicon(:git_commit, size: 16) %>
-            <h3><%= commit_group_title(date) %></h3>
+        <div class="pf-compare-timeline__group">
+          <div class="pf-compare-timeline__header">
+            <span class="pf-compare-timeline__badge"><%= octicon(:git_commit, size: 16) %></span>
+            <span>Commits on <%= date.strftime("%b %-d, %Y") %></span>
           </div>
 
           <div class="pf-commit-group__list">
@@ -98,13 +100,19 @@
               <article class="pf-commit-list-item">
                 <div class="pf-commit-list-item__body">
                   <strong><%= format_commit_message(commit.message) %></strong>
-                  <p><%= commit.author_name %> committed <%= time_ago_in_words(commit.authored_at) %> ago</p>
+                  <p>
+                    <span class="pf-commit-list__avatar"><%= author_initials(commit.author_name) %></span>
+                    <strong class="pf-commit-author-name"><%= commit.author_name %></strong> committed <%= time_ago_in_words(commit.authored_at) %> ago
+                  </p>
                 </div>
 
                 <div class="pf-commit-list-item__meta">
-                  <span class="pf-commit-sha-group">
-                    <code class="pf-commit-sha"><%= commit.short_sha.first(7) %></code>
-                  </span>
+                  <div class="pf-sha-pill">
+                    <button type="button" class="pf-sha-pill__copy" data-action="copy-sha" data-sha="<%= commit.sha %>" title="Copy full SHA">
+                      <%= octicon(:copy, size: 16) %>
+                    </button>
+                    <code class="pf-sha-pill__link"><%= commit.short_sha.first(7) %></code>
+                  </div>
                 </div>
               </article>
             <% end %>
@@ -113,55 +121,24 @@
       <% end %>
     </div>
 
-    <%# File diffs (unified) %>
+    <%# File diffs %>
+    <% total_adds = @files.sum { |f| diff_stats(f)[:additions] } %>
+    <% total_dels = @files.sum { |f| diff_stats(f)[:deletions] } %>
     <section class="pf-compare-diffs">
-      <% @files.each do |file| %>
-        <% stats = diff_stats(file) %>
-        <div class="changed-file" data-role="changed-file">
-          <header>
-            <div class="pf-file-header__left">
-              <div class="pf-file-header">
-                <span class="pf-file-header__path"><%= file.path %></span>
-              </div>
-            </div>
-            <div class="pf-file-stats">
-              <span class="pf-diffstat" aria-hidden="true">
-                <span class="pf-diffstat-count"><%= stats[:additions] + stats[:deletions] %></span>
-                <%= diffstat_blocks(stats[:additions], stats[:deletions]) %>
-              </span>
-            </div>
-          </header>
-          <table class="diff-table pf-unified-diff">
-            <colgroup>
-              <col class="pf-col-number">
-              <col class="pf-col-number">
-              <col>
-            </colgroup>
-            <tbody>
-              <% unified_diff_rows(file).each do |row| %>
-                <% if row.kind == :hunk %>
-                  <tr class="pf-hunk-row">
-                    <td class="line-number line-number--hunk">...</td>
-                    <td class="line-number line-number--hunk">...</td>
-                    <td class="line-code line-code--hunk" colspan="2">
-                      <code><%= row.hunk %></code>
-                    </td>
-                  </tr>
-                <% else %>
-                  <tr>
-                    <td class="line-number <%= "line-number--#{row.cell_kind}" %>"><%= row.left_number %></td>
-                    <td class="line-number <%= "line-number--#{row.cell_kind}" %>"><%= row.right_number %></td>
-                    <td class="line-code line-code--<%= row.cell_kind %>">
-                      <div class="line-code__content">
-                        <code><%= highlighted_diff_line(file.path, row.content) %></code>
-                      </div>
-                    </td>
-                  </tr>
-                <% end %>
-              <% end %>
-            </tbody>
-          </table>
+      <div class="pf-diff-summary-bar">
+        <div class="pf-diff-summary-bar__text">
+          <%= octicon(:file, size: 16) %>
+          Showing <strong><%= pluralize(@files.length, "changed file") %></strong> with <strong><%= pluralize(total_adds, "addition") %></strong> and <strong><%= pluralize(total_dels, "deletion") %></strong>.
         </div>
+        <div class="pf-diff-view-toggle">
+          <a href="?<%= request.query_parameters.merge(layout: "split").to_query %>" class="pf-diff-view-toggle__btn <%= "pf-diff-view-toggle__btn--active" unless diff_preference(:layout) == "unified" %>">Split</a>
+          <a href="?<%= request.query_parameters.merge(layout: "unified").to_query %>" class="pf-diff-view-toggle__btn <%= "pf-diff-view-toggle__btn--active" if diff_preference(:layout) == "unified" %>">Unified</a>
+        </div>
+      </div>
+
+      <% compare_layout = diff_preference(:layout) == "unified" ? :unified : :split %>
+      <% @files.each do |file| %>
+        <%= render "pull_requests/diff_file", file: file, layout: compare_layout, compact_line_height: true %>
       <% end %>
     </section>
   <% end %>
