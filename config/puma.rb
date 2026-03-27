@@ -41,7 +41,7 @@ pidfile ENV["PIDFILE"] if ENV["PIDFILE"]
 if ENV["PREFLIGHT_IDLE_SHUTDOWN"] && !ENV["PREFLIGHT_IDLE_SHUTDOWN"].empty?
   on_booted do
     require_relative "../app/middleware/idle_shutdown"
-    timeout_minutes = ENV.fetch("PREFLIGHT_IDLE_TIMEOUT", "30").to_i
+    timeout_minutes = ENV.fetch("PREFLIGHT_IDLE_TIMEOUT", "240").to_i
 
     Thread.new do
       loop do
