@@ -12,8 +12,8 @@ class PullRequestsFlowTest < ActionDispatch::IntegrationTest
       assert_select "select[name='base_branch'] option[selected='selected']", text: "main"
       assert_select "input[name='pull_request[source_branch]'][value='feature']", count: 1
       assert_select "input[name='pull_request[base_branch]'][value='main']", count: 1
-      assert_select ".pf-compare-summary", text: /2 commits/
-      assert_select ".pf-compare-summary", text: /2 files changed/
+      assert_select ".pf-stats-bar", text: /2 commits/
+      assert_select ".pf-stats-bar", text: /2 files changed/
       assert_select ".pf-commit-list-item", count: 2
       assert_select "[data-role='changed-file']", minimum: 1
 
@@ -36,8 +36,8 @@ class PullRequestsFlowTest < ActionDispatch::IntegrationTest
       assert_select "a[href='#{repository_pull_commits_path(repository, pull_request)}']", text: /Commits/
       assert_select "a[href='#{repository_pull_files_path(repository, pull_request)}']", text: /Files changed/
       assert_select "[data-role='conversation-card']", text: /Review the widget work\./
-      assert_select "[data-role='conversation-commit-list'] a[href='#{repository_pull_commit_path(repository, pull_request, fixture.feature_commits[:add_widget])}']", text: /Add widget/
-      assert_select "[data-role='conversation-commit-list'] a[href='#{repository_pull_commit_path(repository, pull_request, fixture.feature_commits[:refine_widget])}']", text: /Refine widget/
+      assert_select ".pf-commit-list__message[href='#{repository_pull_commit_path(repository, pull_request, fixture.feature_commits[:add_widget])}']", text: /Add widget/
+      assert_select ".pf-commit-list__message[href='#{repository_pull_commit_path(repository, pull_request, fixture.feature_commits[:refine_widget])}']", text: /Refine widget/
       assert_select ".pf-merge-box", text: /No conflicts with base branch/
       assert_select "[data-role='pr-sidebar']", count: 0
       assert_select "[data-role='branch-pill']", text: "main"

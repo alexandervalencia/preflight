@@ -56,27 +56,43 @@
         </li>
 
         <% if @comparison.commits.any? %>
-          <li class="pf-timeline-item pf-timeline-item--event">
-            <div class="pf-timeline-badge pf-timeline-badge--event" aria-hidden="true">&#8593;</div>
-            <section class="pf-timeline-event">
-              <header class="pf-timeline-event__header">
-                <strong><%= author_name %></strong>
-                <span>added <%= pluralize(@comparison.commits.count, "commit") %> on <%= pull_request_timestamp(@comparison.commits.last.authored_at) %></span>
-              </header>
-
-              <div class="pf-commit-list" data-role="conversation-commit-list">
-                <% @comparison.commits.each do |commit| %>
-                  <div class="pf-commit-list__item">
-                    <div class="pf-commit-list__meta">
-                      <span class="pf-timeline-badge pf-timeline-badge--mini" aria-hidden="true"><%= author_initials(commit.author_name) %></span>
-                      <%= link_to commit.message, repository_pull_commit_path(@local_repository, @pull_request, commit.sha), class: "pf-commit-list__message" %>
-                    </div>
-                    <%= link_to commit.short_sha, repository_pull_commit_path(@local_repository, @pull_request, commit.sha), class: "pf-commit-list__sha" %>
-                  </div>
-                <% end %>
-              </div>
-            </section>
+          <% contributors = @comparison.commits.map(&:author_name).uniq %>
+          <li class="pf-timeline-item pf-timeline-item--stats">
+            <div class="pf-stats-bar">
+              <span class="pf-stats-bar__item"><%= octicon(:git_commit, size: 16) %> <strong><%= @comparison.commits.count %></strong> <%= "commit".pluralize(@comparison.commits.count) %></span>
+              <span class="pf-stats-bar__item"><%= octicon(:file, size: 16) %> <strong><%= @comparison.files.count %></strong> <%= "file".pluralize(@comparison.files.count) %> changed</span>
+              <span class="pf-stats-bar__item"><%= octicon(:people, size: 16) %> <strong><%= contributors.count %></strong> <%= "contributor".pluralize(contributors.count) %></span>
+            </div>
           </li>
+
+          <% @comparison.commits.group_by { |c| c.authored_at.to_date }.each do |date, commits| %>
+            <li class="pf-timeline-item pf-timeline-item--commits">
+              <div class="pf-timeline-badge pf-timeline-badge--commit" aria-hidden="true"><%= octicon(:git_commit, size: 16) %></div>
+              <section class="pf-timeline-commits">
+                <header class="pf-timeline-commits__header">Commits on <%= date.strftime("%b %-d, %Y") %></header>
+
+                <div class="pf-commit-list">
+                  <% commits.each do |commit| %>
+                    <div class="pf-commit-list__item">
+                      <div class="pf-commit-list__body">
+                        <strong><%= link_to commit.message, repository_pull_commit_path(@local_repository, @pull_request, commit.sha), class: "pf-commit-list__message" %></strong>
+                        <p class="pf-commit-list__author">
+                          <span class="pf-commit-list__avatar"><%= author_initials(commit.author_name) %></span>
+                          <strong><%= commit.author_name %></strong> committed on <%= commit.authored_at.strftime("%b %-d, %Y") %>
+                        </p>
+                      </div>
+                      <div class="pf-sha-pill">
+                        <button type="button" class="pf-sha-pill__copy" data-action="copy-sha" data-sha="<%= commit.sha %>" title="Copy full SHA">
+                          <%= octicon(:copy, size: 16) %>
+                        </button>
+                        <%= link_to commit.short_sha, repository_pull_commit_path(@local_repository, @pull_request, commit.sha), class: "pf-sha-pill__link" %>
+                      </div>
+                    </div>
+                  <% end %>
+                </div>
+              </section>
+            </li>
+          <% end %>
         <% end %>
 
         <% if @can_export %>
@@ -86,13 +102,35 @@
               <header class="pf-merge-box__header">
                 <strong>Ready to export</strong>
               </header>
-              <p class="pf-merge-box__body">Review the files changed and update the description, then create a draft PR on GitHub.</p>
-              <%= button_to "Create PR on GitHub",
-                repository_pull_github_export_path(@local_repository, @pull_request),
-                method: :post,
-                class: "pf-button" %>
+              <p class="pf-merge-box__body">Review the files changed and update the description, then export to GitHub.</p>
+              <div class="pf-export-actions">
+                <button type="button" class="pf-button" data-action="show-export-modal">Create PR on GitHub</button>
+              </div>
             </section>
           </li>
+
+          <div class="pf-modal-overlay" data-role="export-modal" hidden>
+            <div class="pf-modal">
+              <header class="pf-modal__header">
+                <strong>Export to GitHub</strong>
+              </header>
+              <div class="pf-modal__body">
+                <p>This will create a pull request on GitHub using your current title and description. This action cannot be undone from Preflight.</p>
+                <label class="pf-toggle">
+                  <input type="checkbox" data-role="draft-toggle" checked>
+                  <span class="pf-toggle__label">Create as draft</span>
+                  <span class="pf-toggle__hint">Draft PRs don't request review or trigger most notifications.</span>
+                </label>
+              </div>
+              <footer class="pf-modal__footer">
+                <button type="button" class="pf-button pf-button--secondary" data-action="close-export-modal">Cancel</button>
+                <%= form_with url: repository_pull_github_export_path(@local_repository, @pull_request), method: :post do |f| %>
+                  <%= f.hidden_field :draft, value: "1", data: { role: "draft-field" } %>
+                  <%= f.submit "Create pull request", class: "pf-button" %>
+                <% end %>
+              </footer>
+            </div>
+          </div>
         <% else %>
           <li class="pf-timeline-item pf-timeline-item--merge">
             <div class="pf-timeline-badge pf-timeline-badge--merge" aria-hidden="true">&#10003;</div>

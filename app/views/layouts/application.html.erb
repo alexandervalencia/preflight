@@ -121,6 +121,51 @@
             card.querySelector("[data-action='edit-description']").hidden = false;
             return;
           }
+
+          // Copy SHA to clipboard
+          var copyBtn = e.target.closest("[data-action='copy-sha']");
+          if (copyBtn) {
+            var sha = copyBtn.getAttribute("data-sha");
+            navigator.clipboard.writeText(sha).then(function() {
+              var icon = copyBtn.querySelector(".octicon");
+              if (icon) {
+                var original = icon.innerHTML;
+                icon.innerHTML = '<path d="M13.78 4.22a.75.75 0 0 1 0 1.06l-7.25 7.25a.75.75 0 0 1-1.06 0L2.22 9.28a.751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018L6 10.94l6.72-6.72a.75.75 0 0 1 1.06 0Z"></path>';
+                setTimeout(function() { icon.innerHTML = original; }, 1500);
+              }
+            });
+            return;
+          }
+
+          // Export modal
+          var showModalBtn = e.target.closest("[data-action='show-export-modal']");
+          if (showModalBtn) {
+            var modal = document.querySelector("[data-role='export-modal']");
+            if (modal) modal.hidden = false;
+            return;
+          }
+
+          var closeModalBtn = e.target.closest("[data-action='close-export-modal']");
+          if (closeModalBtn) {
+            var modal = document.querySelector("[data-role='export-modal']");
+            if (modal) modal.hidden = true;
+            return;
+          }
+
+          // Close modal on overlay click
+          if (e.target.matches("[data-role='export-modal']")) {
+            e.target.hidden = true;
+            return;
+          }
+        });
+
+        // Draft toggle syncs checkbox to hidden field
+        document.addEventListener("change", function(e) {
+          var toggle = e.target.closest("[data-role='draft-toggle']");
+          if (toggle) {
+            var field = document.querySelector("[data-role='draft-field']");
+            if (field) field.value = toggle.checked ? "1" : "0";
+          }
         });
       })();
     </script>
