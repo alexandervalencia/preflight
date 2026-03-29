@@ -246,6 +246,10 @@
   margin-top: 16px;
 }
 
+.pf-markdown-body li:has(> input[type="checkbox"]) {
+  list-style: none;
+}
+
 .pf-markdown-body li input[type="checkbox"] {
   margin: 0 0.2em 0.25em -1.4em;
   vertical-align: middle;
