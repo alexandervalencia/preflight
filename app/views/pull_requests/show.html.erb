@@ -23,8 +23,11 @@
               <button type="button" class="pf-button pf-button--secondary pf-button--small" data-action="edit-description">Edit</button>
             </header>
 
-            <div class="pf-card-body markdown-body pf-markdown-body" data-role="description-display">
-              <%= render_pull_request_markdown(@pull_request.description.presence || "No description provided yet.") %>
+            <div class="pf-card-body markdown-body pf-markdown-body" data-role="description-display"
+                 data-task-update-url="<%= repository_pull_path(@local_repository, @pull_request) %>"
+                 data-base-branch="<%= @pull_request.base_branch %>"
+                 data-description="<%= ERB::Util.html_escape(@pull_request.description) %>">
+              <%= render_pull_request_markdown(@pull_request.description.presence || "No description provided yet.", interactive_tasks: true) %>
             </div>
 
             <div class="pf-card-body pf-description-edit" data-role="description-form" hidden>

@@ -213,6 +213,46 @@
             var field = document.querySelector("[data-role='draft-field']");
             if (field) field.value = toggle.checked ? "1" : "0";
           }
+
+          // Task list checkbox toggle
+          var checkbox = e.target.closest(".pf-task-checkbox");
+          if (checkbox) {
+            var container = checkbox.closest("[data-role='description-display']");
+            if (!container) return;
+
+            var url = container.getAttribute("data-task-update-url");
+            var description = container.getAttribute("data-description");
+            var baseBranch = container.getAttribute("data-base-branch");
+            var taskIndex = parseInt(checkbox.getAttribute("data-task-index"), 10);
+
+            // Find the nth task in the markdown and toggle it
+            var count = -1;
+            var updated = description.replace(/- \[(x| )\]/gi, function(match, state) {
+              count++;
+              if (count === taskIndex) {
+                return state.trim() ? "- [ ]" : "- [x]";
+              }
+              return match;
+            });
+
+            // Update the stored description
+            container.setAttribute("data-description", updated);
+
+            // Also update the textarea if the edit form is open
+            var textarea = document.querySelector("[data-role='description-form'] textarea");
+            if (textarea) textarea.value = updated;
+
+            // PATCH the description
+            fetch(url, {
+              method: "PATCH",
+              headers: {
+                "Content-Type": "application/x-www-form-urlencoded",
+                "X-CSRF-Token": document.querySelector("[name='csrf-token']").content
+              },
+              body: "pull_request[description]=" + encodeURIComponent(updated) +
+                    "&pull_request[base_branch]=" + encodeURIComponent(baseBranch)
+            });
+          }
         });
       })();
     </script>
