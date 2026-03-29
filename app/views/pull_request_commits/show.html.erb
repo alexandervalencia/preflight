@@ -1,4 +1,4 @@
-<section class="pf-page pf-page--wide">
+<section class="pf-page pf-page--wide" data-controller="tree-toggle">
   <%= render "pull_requests/repository_header", local_repository: @local_repository %>
 
   <%= render "pull_requests/pull_request_header",
@@ -11,10 +11,11 @@
     <div class="pf-review-toolbar__left">
       <button type="button"
         class="pf-toolbar-button pf-toolbar-button--icon"
-        data-action="toggle-tree"
+        data-tree-toggle-target="button"
+        data-action="tree-toggle#toggle"
         aria-label="<%= @show_file_tree ? "Hide file tree" : "Show file tree" %>">
-        <span data-tree-icon="collapse" <%= 'hidden' unless @show_file_tree %>><%= octicon(:sidebar_collapse, size: 16) %></span>
-        <span data-tree-icon="expand" <%= 'hidden' if @show_file_tree %>><%= octicon(:sidebar_expand, size: 16) %></span>
+        <span data-tree-toggle-target="collapseIcon" <%= 'hidden' unless @show_file_tree %>><%= octicon(:sidebar_collapse, size: 16) %></span>
+        <span data-tree-toggle-target="expandIcon" <%= 'hidden' if @show_file_tree %>><%= octicon(:sidebar_expand, size: 16) %></span>
       </button>
       <span class="pf-toolbar-pill">Commit <strong><%= @commit.short_sha %></strong></span>
       <details class="pf-diff-settings" data-role="diff-settings">
@@ -39,7 +40,7 @@
 
   <% ordered_files = ordered_diff_files(@files) %>
 
-  <div class="pf-review-layout <%= "pf-review-layout--tree-hidden" unless @show_file_tree %>">
+  <div class="pf-review-layout <%= "pf-review-layout--tree-hidden" unless @show_file_tree %>" data-tree-toggle-target="layout">
     <%= render "pull_requests/file_tree",
       files: ordered_files,
       query: @query,
