@@ -15,7 +15,7 @@ import (
 )
 
 const (
-	DefaultPort    = 3000
+	DefaultPort    = 4500
 	HealthEndpoint = "/api/status"
 	StartTimeout   = 15 * time.Second
 )
