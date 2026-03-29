@@ -134,7 +134,7 @@ class PullRequestsFlowTest < ActionDispatch::IntegrationTest
       assert_select "[data-role='conversation-card'] h3", text: "Motivation"
       assert_select "[data-role='conversation-card'] a[href='https://example.com/rails/1']", text: "rails#1"
       assert_select "[data-role='conversation-card'] pre code", text: /puts "retry"/
-      assert_select "[data-role='conversation-card'] input[type='checkbox'][checked='checked'][disabled='disabled']"
+      assert_select "[data-role='conversation-card'] input[type='checkbox'][checked][disabled]"
     end
   end
 

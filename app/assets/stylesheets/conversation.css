@@ -192,36 +192,133 @@
   padding: 1rem 1rem 1.1rem;
 }
 
-.pf-md-heading {
-  margin: 1rem 0 0.75rem;
+/* Markdown body — scoped styles for commonmarker GFM output */
+
+.pf-markdown-body h1,
+.pf-markdown-body h2,
+.pf-markdown-body h3,
+.pf-markdown-body h4,
+.pf-markdown-body h5,
+.pf-markdown-body h6 {
+  margin: 1.25rem 0 0.75rem;
   color: var(--pf-text-bright);
   font-weight: 600;
   line-height: 1.25;
 }
 
-.pf-md-heading:first-child {
+.pf-markdown-body h1:first-child,
+.pf-markdown-body h2:first-child,
+.pf-markdown-body h3:first-child {
   margin-top: 0;
 }
 
-.pf-md-paragraph {
+.pf-markdown-body h1 { font-size: 1.5rem; padding-bottom: 0.3rem; border-bottom: 1px solid var(--pf-border); }
+.pf-markdown-body h2 { font-size: 1.25rem; padding-bottom: 0.3rem; border-bottom: 1px solid var(--pf-border); }
+.pf-markdown-body h3 { font-size: 1.1rem; }
+.pf-markdown-body h4 { font-size: 1rem; }
+
+.pf-markdown-body p {
   margin: 0 0 0.9rem;
 }
 
-.pf-md-list {
+.pf-markdown-body ul,
+.pf-markdown-body ol {
   margin: 0 0 0.9rem;
-  padding-left: 1.35rem;
+  padding-left: 1.5rem;
 }
 
-.pf-md-list-item + .pf-md-list-item,
-.pf-md-list-item--task + .pf-md-list-item--task {
-  margin-top: 0.45rem;
+.pf-markdown-body li + li {
+  margin-top: 0.25rem;
 }
 
-.pf-md-list-item--task {
-  display: flex;
-  gap: 0.55rem;
-  align-items: flex-start;
-  list-style: none;
+.pf-markdown-body li input[type="checkbox"] {
+  margin-right: 0.4rem;
+}
+
+.pf-markdown-body blockquote {
+  margin: 0 0 0.9rem;
+  padding: 0.5rem 1rem;
+  border-left: 3px solid var(--pf-border);
+  color: var(--pf-text-muted);
+}
+
+.pf-markdown-body blockquote > :last-child {
+  margin-bottom: 0;
+}
+
+.pf-markdown-body table {
+  width: 100%;
+  margin: 0 0 0.9rem;
+  border-collapse: collapse;
+  font-size: 0.875rem;
+}
+
+.pf-markdown-body th,
+.pf-markdown-body td {
+  padding: 6px 13px;
+  border: 1px solid var(--pf-border);
+}
+
+.pf-markdown-body th {
+  font-weight: 600;
+  background: var(--pf-subtle);
+}
+
+.pf-markdown-body tr:nth-child(even) {
+  background: var(--pf-canvas-subtle);
+}
+
+.pf-markdown-body hr {
+  height: 2px;
+  margin: 1.5rem 0;
+  border: 0;
+  background: var(--pf-border);
+}
+
+.pf-markdown-body del {
+  color: var(--pf-text-muted);
+}
+
+.pf-markdown-body code {
+  padding: 0.15rem 0.35rem;
+  border-radius: 4px;
+  background: var(--pf-subtle);
+  font-family: var(--pf-font-mono);
+  font-size: 0.85em;
+}
+
+.pf-markdown-body pre code {
+  padding: 0;
+  background: none;
+  border-radius: 0;
+  font-size: 0.8125rem;
+}
+
+.pf-markdown-body a {
+  color: var(--pf-link);
+  text-decoration: none;
+}
+
+.pf-markdown-body a:hover {
+  text-decoration: underline;
+}
+
+.pf-markdown-body img {
+  max-width: 100%;
+  border-radius: 6px;
+}
+
+.pf-markdown-body .footnotes {
+  margin-top: 1.5rem;
+  padding-top: 0.75rem;
+  border-top: 1px solid var(--pf-border);
+  font-size: 0.8125rem;
+  color: var(--pf-text-muted);
+}
+
+.pf-markdown-body sup a {
+  text-decoration: none;
+  font-weight: 600;
 }
 
 .pf-md-checkbox {
