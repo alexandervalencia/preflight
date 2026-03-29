@@ -40,10 +40,10 @@ class GithubExportsController < ApplicationController
         draft: params[:draft] != "0"
       )
 
+      title = @pull_request.title
       @pull_request.destroy!
 
-      redirect_to repository_pulls_path(@local_repository),
-        notice: "GitHub PR created: <a href=\"#{pr_url}\" target=\"_blank\" rel=\"noopener\">#{pr_url}</a>"
+      redirect_to repository_pulls_path(@local_repository, exported: 1, pr_url:, pr_title: title)
     rescue GithubCli::Error => e
       redirect_to repository_pull_path(@local_repository, @pull_request),
         alert: "Failed to create GitHub PR: #{e.message}"

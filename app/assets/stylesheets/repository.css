@@ -231,3 +231,40 @@ a.pf-repo-list__title:hover {
   font-size: 14px;
 }
 
+/* Export success splash */
+
+.pf-export-success {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  padding: 3rem 1.5rem;
+  margin-bottom: 1.5rem;
+  border: 1px solid var(--pf-border);
+  border-radius: 6px;
+  background: var(--pf-canvas);
+}
+
+.pf-export-success__icon {
+  color: var(--pf-text-muted);
+  margin-bottom: 1rem;
+}
+
+.pf-export-success__title {
+  margin: 0 0 0.35rem;
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: var(--pf-text-bright);
+}
+
+.pf-export-success__detail {
+  margin: 0 0 1.25rem;
+  font-size: 1rem;
+  color: var(--pf-text-muted);
+}
+
+.pf-export-success__link {
+  font-size: 1rem;
+  padding: 0.5rem 1.25rem;
+}
+
