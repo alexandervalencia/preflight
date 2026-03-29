@@ -32,19 +32,28 @@
                 <%= form.hidden_field :base_branch, value: @pull_request.base_branch %>
                 <div data-controller="image-upload"
                      data-image-upload-url="<%= repository_pull_uploads_path(@local_repository, @pull_request) %>">
-                  <%= form.text_area :description, rows: 16,
-                    class: "pf-description-edit__textarea",
-                    data: { image_upload_target: "textarea" } %>
-                  <div class="pf-dropzone"
-                       data-image-upload-target="dropzone"
-                       data-action="dragover->image-upload#dragover dragleave->image-upload#dragleave drop->image-upload#drop">
-                    <button type="button" class="pf-button pf-button--secondary pf-button--small"
-                            data-action="image-upload#selectFile">Attach an image</button>
-                    <span class="pf-dropzone__hint">or drag and drop, or paste</span>
-                    <input type="file" accept="image/png,image/jpeg,image/gif,image/webp" hidden
-                           data-image-upload-target="fileInput"
-                           data-action="image-upload#fileSelected">
+                  <div class="pf-editor-tabs">
+                    <button type="button" class="pf-editor-tab pf-editor-tab--active" data-action="show-write-tab">Write</button>
+                    <button type="button" class="pf-editor-tab" data-action="show-preview-tab"
+                            data-preview-url="<%= repository_pull_path(@local_repository, @pull_request, format: :json) %>">Preview</button>
                   </div>
+                  <div data-role="write-panel">
+                    <%= form.text_area :description, rows: 16,
+                      class: "pf-description-edit__textarea",
+                      data: { image_upload_target: "textarea" } %>
+                    <div class="pf-dropzone"
+                         data-image-upload-target="dropzone"
+                         data-action="dragover->image-upload#dragover dragleave->image-upload#dragleave drop->image-upload#drop">
+                      <button type="button" class="pf-button pf-button--secondary pf-button--small"
+                              data-action="image-upload#selectFile">Attach an image</button>
+                      <span class="pf-dropzone__hint">or drag and drop, or paste</span>
+                      <span class="pf-dropzone__note">Images are stored locally. On export to GitHub, they'll become placeholders for you to re-upload.</span>
+                      <input type="file" accept="image/png,image/jpeg,image/gif,image/webp" hidden
+                             data-image-upload-target="fileInput"
+                             data-action="image-upload#fileSelected">
+                    </div>
+                  </div>
+                  <div data-role="preview-panel" class="pf-preview-panel markdown-body pf-markdown-body" hidden></div>
                 </div>
                 <div class="pf-description-edit__actions">
                   <button type="button" class="pf-button pf-button--secondary pf-button--small" data-action="cancel-description">Cancel</button>

@@ -24,7 +24,7 @@ class GithubExportsController < ApplicationController
     end
 
     base = resolve_base_branch(github_cli)
-    body = strip_local_image_warning(@pull_request.description)
+    body = replace_local_images(@pull_request.description)
 
     begin
       # Push the branch to the remote if it's not already there
@@ -60,13 +60,10 @@ class GithubExportsController < ApplicationController
     end
   end
 
-  def strip_local_image_warning(description)
-    has_local_images = description.include?("/_preflight/uploads/")
-    if has_local_images
-      warning = "\n\n---\n_Note: This PR was drafted in Preflight. Some images were local-only and are not included._\n"
-      description + warning
-    else
-      description
+  def replace_local_images(description)
+    description.gsub(%r{!\[([^\]]*)\]\(/_preflight/uploads/[^)]+\)}) do
+      filename = $1.presence || "image"
+      "<!-- TODO: upload image (#{filename}) -->\n![#{filename}]()"
     end
   end
 end

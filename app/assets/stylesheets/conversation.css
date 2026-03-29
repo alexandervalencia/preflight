@@ -515,6 +515,49 @@
   display: inline;
 }
 
+/* Editor Write/Preview tabs */
+
+.pf-editor-tabs {
+  display: flex;
+  gap: 0;
+  border-bottom: 1px solid var(--pf-border);
+  margin-bottom: 0;
+}
+
+.pf-editor-tab {
+  padding: 8px 16px;
+  border: none;
+  background: none;
+  color: var(--pf-text-muted);
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+  border-bottom: 2px solid transparent;
+  margin-bottom: -1px;
+}
+
+.pf-editor-tab:hover {
+  color: var(--pf-text-bright);
+}
+
+.pf-editor-tab--active {
+  color: var(--pf-text-bright);
+  border-bottom-color: var(--pf-accent);
+}
+
+.pf-preview-panel {
+  min-height: 200px;
+  padding: 1rem;
+}
+
+.pf-dropzone__note {
+  display: block;
+  width: 100%;
+  margin-top: 0.25rem;
+  font-size: 0.75rem;
+  color: var(--pf-text-subtle);
+}
+
 .pf-modal__field {
   margin-bottom: 1rem;
 }

@@ -1,7 +1,7 @@
 class PullRequestsController < ApplicationController
   include RepositoryScoped
 
-  before_action :set_pull_request, only: [:show, :update]
+  before_action :set_pull_request, only: [:show, :update, :preview]
 
   def index
     @pull_requests = @local_repository.pull_requests.open.order(created_at: :desc)
@@ -37,6 +37,11 @@ class PullRequestsController < ApplicationController
 
   def show
     load_pull_request_data
+  end
+
+  def preview
+    html = helpers.render_pull_request_markdown(params[:text].to_s)
+    render json: { html: }
   end
 
   def update

@@ -24,6 +24,7 @@ Rails.application.routes.draw do
     scope "/pull/:id", controller: "pull_requests" do
       get "/", action: :show, as: :repository_pull
       patch "/", action: :update
+      post "preview", action: :preview, as: :repository_pull_preview
     end
 
     get "pull/:id/files", to: "pull_request_files#index", as: :repository_pull_files

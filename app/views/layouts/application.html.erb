@@ -143,6 +143,47 @@
             return;
           }
 
+          // Write/Preview tabs
+          var writeTab = e.target.closest("[data-action='show-write-tab']");
+          if (writeTab) {
+            var container = writeTab.closest(".pf-description-edit");
+            container.querySelector("[data-role='write-panel']").hidden = false;
+            container.querySelector("[data-role='preview-panel']").hidden = true;
+            writeTab.classList.add("pf-editor-tab--active");
+            writeTab.nextElementSibling.classList.remove("pf-editor-tab--active");
+            return;
+          }
+
+          var previewTab = e.target.closest("[data-action='show-preview-tab']");
+          if (previewTab) {
+            var container = previewTab.closest(".pf-description-edit");
+            var textarea = container.querySelector("textarea");
+            var previewPanel = container.querySelector("[data-role='preview-panel']");
+            var writePanel = container.querySelector("[data-role='write-panel']");
+            var previewUrl = container.querySelector("[data-action='show-preview-tab']")
+              .closest(".pf-description-edit")
+              .querySelector("form").action.replace(/\?.*/, "") + "/preview";
+
+            previewPanel.innerHTML = "<p style='color: var(--pf-text-muted)'>Loading preview...</p>";
+            writePanel.hidden = true;
+            previewPanel.hidden = false;
+            previewTab.classList.add("pf-editor-tab--active");
+            previewTab.previousElementSibling.classList.remove("pf-editor-tab--active");
+
+            fetch(previewUrl, {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json",
+                "X-CSRF-Token": document.querySelector("[name='csrf-token']").content
+              },
+              body: JSON.stringify({ text: textarea.value })
+            })
+            .then(function(r) { return r.json(); })
+            .then(function(data) { previewPanel.innerHTML = data.html || "<p style='color: var(--pf-text-muted)'>Nothing to preview.</p>"; })
+            .catch(function() { previewPanel.innerHTML = "<p style='color: var(--pf-danger-text)'>Preview failed.</p>"; });
+            return;
+          }
+
           // Export modal
           var showModalBtn = e.target.closest("[data-action='show-export-modal']");
           if (showModalBtn) {
