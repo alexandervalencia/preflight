@@ -135,6 +135,12 @@ pre {
   color: var(--pf-success-text);
 }
 
+.pf-flash--notice a {
+  color: var(--pf-success-text);
+  font-weight: 600;
+  text-decoration: underline;
+}
+
 .pf-flash--alert {
   background: var(--pf-danger-soft);
   border: 1px solid var(--pf-danger);
