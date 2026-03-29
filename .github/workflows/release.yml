@@ -20,10 +20,39 @@ jobs:
         with:
           go-version: '1.22'
 
-      - name: Run GoReleaser
+      - name: Run GoReleaser (CLI binary)
         uses: goreleaser/goreleaser-action@v6
         with:
           version: latest
           args: release --clean
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Package server
+        run: |
+          VERSION="${GITHUB_REF#refs/tags/}"
+          mkdir -p dist/server-package/bin dist/server-package/server
+
+          # Copy the Rails app (excluding dev/test artifacts)
+          rsync -a --exclude='.git' --exclude='tmp/' --exclude='log/' \
+            --exclude='storage/' --exclude='cli/' --exclude='dist/' \
+            --exclude='.superpowers/' --exclude='vendor/bundle/' \
+            --exclude='.devbox/' --exclude='node_modules/' \
+            --exclude='test/' --exclude='.goreleaser.yml' \
+            --exclude='.github/' \
+            . dist/server-package/server/
+
+          # Copy the start-server script
+          cp script/start-server dist/server-package/bin/start-server
+          chmod +x dist/server-package/bin/start-server
+
+          # Create the tarball
+          cd dist
+          tar czf "preflight-server-${VERSION}.tar.gz" -C server-package .
+
+      - name: Upload server package
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          VERSION="${GITHUB_REF#refs/tags/}"
+          gh release upload "$VERSION" "dist/preflight-server-${VERSION}.tar.gz"

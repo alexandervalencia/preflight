@@ -1,0 +1,88 @@
+#!/usr/bin/env bash
+set -e
+
+# Usage: script/update-homebrew-formula v0.1.0
+# Updates the Homebrew formula with SHA256 hashes from a GitHub release.
+
+VERSION="${1:?Usage: $0 <version-tag>}"
+REPO="alexandervalencia/preflight"
+TAP_DIR="${TAP_DIR:-$HOME/Code/homebrew-tap}"
+FORMULA="$TAP_DIR/Formula/preflight.rb"
+
+if [ ! -f "$FORMULA" ]; then
+  echo "Formula not found at $FORMULA"
+  echo "Set TAP_DIR to the path of your homebrew-tap clone"
+  exit 1
+fi
+
+echo "Fetching release artifacts for $VERSION..."
+
+get_sha() {
+  local url="https://github.com/$REPO/releases/download/$VERSION/$1"
+  curl -sL "$url" | shasum -a 256 | cut -d' ' -f1
+}
+
+echo "  Downloading preflight-darwin-arm64.tar.gz..."
+SHA_DARWIN_ARM64=$(get_sha "preflight-darwin-arm64.tar.gz")
+
+echo "  Downloading preflight-darwin-amd64.tar.gz..."
+SHA_DARWIN_AMD64=$(get_sha "preflight-darwin-amd64.tar.gz")
+
+echo "  Downloading preflight-linux-arm64.tar.gz..."
+SHA_LINUX_ARM64=$(get_sha "preflight-linux-arm64.tar.gz")
+
+echo "  Downloading preflight-linux-amd64.tar.gz..."
+SHA_LINUX_AMD64=$(get_sha "preflight-linux-amd64.tar.gz")
+
+echo "  Downloading preflight-server-$VERSION.tar.gz..."
+SHA_SERVER=$(get_sha "preflight-server-$VERSION.tar.gz")
+
+echo ""
+echo "Updating formula..."
+
+# Strip the leading 'v' for the version field
+BARE_VERSION="${VERSION#v}"
+
+# Use sed to update the formula
+sed -i '' \
+  -e "s/version \".*\"/version \"$BARE_VERSION\"/" \
+  "$FORMULA"
+
+# Update SHAs in order of appearance (darwin-arm64, darwin-amd64, linux-arm64, linux-amd64, server)
+python3 -c "
+import re, sys
+
+with open('$FORMULA', 'r') as f:
+    content = f.read()
+
+shas = ['$SHA_DARWIN_ARM64', '$SHA_DARWIN_AMD64', '$SHA_LINUX_ARM64', '$SHA_LINUX_AMD64', '$SHA_SERVER']
+i = 0
+
+def replace_sha(match):
+    global i
+    if i < len(shas):
+        result = f'sha256 \"{shas[i]}\"'
+        i += 1
+        return result
+    return match.group(0)
+
+content = re.sub(r'sha256 \"[A-Fa-f0-9]+\"|sha256 \"PLACEHOLDER\"', replace_sha, content)
+
+with open('$FORMULA', 'w') as f:
+    f.write(content)
+"
+
+echo "Formula updated at $FORMULA"
+echo ""
+echo "SHAs:"
+echo "  darwin-arm64: $SHA_DARWIN_ARM64"
+echo "  darwin-amd64: $SHA_DARWIN_AMD64"
+echo "  linux-arm64:  $SHA_LINUX_ARM64"
+echo "  linux-amd64:  $SHA_LINUX_AMD64"
+echo "  server:       $SHA_SERVER"
+echo ""
+echo "Next steps:"
+echo "  cd $TAP_DIR"
+echo "  git add Formula/preflight.rb"
+echo "  git commit -m 'preflight $VERSION'"
+echo "  git push"

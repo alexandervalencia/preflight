@@ -22,5 +22,5 @@ archives:
 
 release:
   github:
-    owner: zhubert
+    owner: alexandervalencia
     name: preflight
