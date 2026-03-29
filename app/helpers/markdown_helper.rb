@@ -42,7 +42,7 @@ module MarkdownHelper
       index += 1
       attrs = $1
       checked = attrs.include?("checked")
-      %(<input type="checkbox" class="pf-task-checkbox" data-task-index="#{index}"#{" checked" if checked}>)
+      %(<input type="checkbox" class="pf-task-checkbox" data-task-index="#{index}" data-action="task-list#toggle"#{" checked" if checked}>)
     end
   end
 

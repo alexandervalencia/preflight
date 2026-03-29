@@ -14,36 +14,45 @@
       <ol class="pf-timeline" data-role="conversation-timeline">
         <li class="pf-timeline-item pf-timeline-item--comment">
           <div class="pf-timeline-badge" aria-hidden="true"><%= author_initials(author_name) %></div>
-          <article class="pf-card pf-comment-card" data-role="conversation-card">
+          <article class="pf-card pf-comment-card" data-role="conversation-card"
+                   data-controller="inline-edit">
             <header class="pf-card-header pf-comment-card__header">
               <div class="pf-comment-card__meta">
                 <strong><%= author_name %></strong>
                 <span>commented on <%= pull_request_timestamp(@pull_request.created_at) %></span>
               </div>
-              <button type="button" class="pf-button pf-button--secondary pf-button--small" data-action="edit-description">Edit</button>
+              <button type="button" class="pf-button pf-button--secondary pf-button--small"
+                      data-inline-edit-target="editButton"
+                      data-action="inline-edit#edit">Edit</button>
             </header>
 
-            <div class="pf-card-body markdown-body pf-markdown-body" data-role="description-display"
-                 data-task-update-url="<%= repository_pull_path(@local_repository, @pull_request) %>"
-                 data-base-branch="<%= @pull_request.base_branch %>"
-                 data-description="<%= ERB::Util.html_escape(@pull_request.description) %>">
+            <div class="pf-card-body markdown-body pf-markdown-body"
+                 data-inline-edit-target="display"
+                 data-controller="task-list"
+                 data-task-list-url-value="<%= repository_pull_path(@local_repository, @pull_request) %>"
+                 data-task-list-base-branch-value="<%= @pull_request.base_branch %>"
+                 data-task-list-description-value="<%= ERB::Util.html_escape(@pull_request.description) %>">
               <%= render_pull_request_markdown(@pull_request.description.presence || "No description provided yet.", interactive_tasks: true) %>
             </div>
 
-            <div class="pf-card-body pf-description-edit" data-role="description-form" hidden>
+            <div class="pf-card-body pf-description-edit" data-inline-edit-target="form" hidden>
               <%= form_with model: @pull_request, url: repository_pull_path(@local_repository, @pull_request), method: :patch do |form| %>
                 <%= form.hidden_field :base_branch, value: @pull_request.base_branch %>
-                <div data-controller="image-upload"
-                     data-image-upload-url="<%= repository_pull_uploads_path(@local_repository, @pull_request) %>">
+                <div data-controller="image-upload markdown-preview"
+                     data-image-upload-url="<%= repository_pull_uploads_path(@local_repository, @pull_request) %>"
+                     data-markdown-preview-url-value="<%= repository_pull_preview_path(@local_repository, @pull_request) %>">
                   <div class="pf-editor-tabs">
-                    <button type="button" class="pf-editor-tab pf-editor-tab--active" data-action="show-write-tab">Write</button>
-                    <button type="button" class="pf-editor-tab" data-action="show-preview-tab"
-                            data-preview-url="<%= repository_pull_path(@local_repository, @pull_request, format: :json) %>">Preview</button>
+                    <button type="button" class="pf-editor-tab pf-editor-tab--active"
+                            data-markdown-preview-target="writeTab"
+                            data-action="markdown-preview#write">Write</button>
+                    <button type="button" class="pf-editor-tab"
+                            data-markdown-preview-target="previewTab"
+                            data-action="markdown-preview#preview">Preview</button>
                   </div>
-                  <div data-role="write-panel">
+                  <div data-markdown-preview-target="writePanel">
                     <%= form.text_area :description, rows: 16,
                       class: "pf-description-edit__textarea",
-                      data: { image_upload_target: "textarea" } %>
+                      data: { image_upload_target: "textarea", markdown_preview_target: "textarea" } %>
                     <div class="pf-dropzone"
                          data-image-upload-target="dropzone"
                          data-action="dragover->image-upload#dragover dragleave->image-upload#dragleave drop->image-upload#drop">
@@ -56,10 +65,10 @@
                              data-action="image-upload#fileSelected">
                     </div>
                   </div>
-                  <div data-role="preview-panel" class="pf-preview-panel markdown-body pf-markdown-body" hidden></div>
+                  <div data-markdown-preview-target="previewPanel" class="pf-preview-panel markdown-body pf-markdown-body" hidden></div>
                 </div>
                 <div class="pf-description-edit__actions">
-                  <button type="button" class="pf-button pf-button--secondary pf-button--small" data-action="cancel-description">Cancel</button>
+                  <button type="button" class="pf-button pf-button--secondary pf-button--small" data-action="inline-edit#cancel">Cancel</button>
                   <%= form.submit "Update comment", class: "pf-button pf-button--small" %>
                 </div>
               <% end %>
@@ -93,8 +102,8 @@
                           <strong><%= commit.author_name %></strong> committed on <%= commit.authored_at.strftime("%b %-d, %Y") %>
                         </p>
                       </div>
-                      <div class="pf-sha-pill">
-                        <button type="button" class="pf-sha-pill__copy" data-action="copy-sha" data-sha="<%= commit.sha %>" title="Copy full SHA">
+                      <div class="pf-sha-pill" data-controller="clipboard" data-clipboard-text-value="<%= commit.sha %>">
+                        <button type="button" class="pf-sha-pill__copy" data-action="clipboard#copy" title="Copy full SHA">
                           <%= octicon(:copy, size: 16) %>
                         </button>
                         <%= link_to commit.short_sha, repository_pull_commit_path(@local_repository, @pull_request, commit.sha), class: "pf-sha-pill__link" %>
@@ -108,7 +117,7 @@
         <% end %>
 
         <% if @can_export %>
-          <li class="pf-timeline-item pf-timeline-item--merge">
+          <li class="pf-timeline-item pf-timeline-item--merge" data-controller="modal">
             <div class="pf-timeline-badge pf-timeline-badge--merge" aria-hidden="true">&#10003;</div>
             <section class="pf-merge-box">
               <header class="pf-merge-box__header">
@@ -116,45 +125,46 @@
               </header>
               <p class="pf-merge-box__body">Review the files changed and update the description, then export to GitHub.</p>
               <div class="pf-export-actions">
-                <button type="button" class="pf-button" data-action="show-export-modal">Create PR on GitHub</button>
+                <button type="button" class="pf-button" data-action="modal#open">Create PR on GitHub</button>
               </div>
             </section>
-          </li>
 
-          <div class="pf-modal-overlay" data-role="export-modal" hidden>
-            <div class="pf-modal">
-              <header class="pf-modal__header">
-                <strong>Export to GitHub</strong>
-              </header>
-              <%= form_with url: repository_pull_github_export_path(@local_repository, @pull_request), method: :post do |f| %>
-                <div class="pf-modal__body">
-                  <p>This will push your branch and create a pull request on GitHub using your current title and description.</p>
+            <div class="pf-modal-overlay" data-modal-target="overlay" data-action="click->modal#closeOnBackdrop" hidden>
+              <div class="pf-modal">
+                <header class="pf-modal__header">
+                  <strong>Export to GitHub</strong>
+                </header>
+                <%= form_with url: repository_pull_github_export_path(@local_repository, @pull_request), method: :post,
+                              data: { controller: "export-form" } do |f| %>
+                  <div class="pf-modal__body">
+                    <p>This will push your branch and create a pull request on GitHub using your current title and description.</p>
 
-                  <% if @remotes.length > 1 %>
-                    <div class="pf-modal__field">
-                      <label class="pf-modal__label">Push to remote</label>
-                      <%= f.select :remote, @remotes.map { |r| ["#{r.name} (#{r.url})", r.name] },
-                        { selected: "origin" },
-                        class: "pf-modal__select" %>
-                    </div>
-                  <% else %>
-                    <%= f.hidden_field :remote, value: @remotes.first&.name || "origin" %>
-                  <% end %>
+                    <% if @remotes.length > 1 %>
+                      <div class="pf-modal__field">
+                        <label class="pf-modal__label">Push to remote</label>
+                        <%= f.select :remote, @remotes.map { |r| ["#{r.name} (#{r.url})", r.name] },
+                          { selected: "origin" },
+                          class: "pf-modal__select" %>
+                      </div>
+                    <% else %>
+                      <%= f.hidden_field :remote, value: @remotes.first&.name || "origin" %>
+                    <% end %>
 
-                  <label class="pf-toggle">
-                    <input type="checkbox" data-role="draft-toggle" checked>
-                    <span class="pf-toggle__label">Create as draft</span>
-                    <span class="pf-toggle__hint">Draft PRs don't request review or trigger most notifications.</span>
-                  </label>
-                  <%= f.hidden_field :draft, value: "1", data: { role: "draft-field" } %>
-                </div>
-                <footer class="pf-modal__footer">
-                  <button type="button" class="pf-button pf-button--secondary" data-action="close-export-modal">Cancel</button>
-                  <%= f.submit "Create pull request", class: "pf-button" %>
-                </footer>
-              <% end %>
+                    <label class="pf-toggle">
+                      <input type="checkbox" checked data-action="export-form#toggleDraft">
+                      <span class="pf-toggle__label">Create as draft</span>
+                      <span class="pf-toggle__hint">Draft PRs don't request review or trigger most notifications.</span>
+                    </label>
+                    <%= f.hidden_field :draft, value: "1", data: { export_form_target: "draftField" } %>
+                  </div>
+                  <footer class="pf-modal__footer">
+                    <button type="button" class="pf-button pf-button--secondary" data-action="modal#close">Cancel</button>
+                    <%= f.submit "Create pull request", class: "pf-button" %>
+                  </footer>
+                <% end %>
+              </div>
             </div>
-          </div>
+          </li>
         <% else %>
           <li class="pf-timeline-item pf-timeline-item--merge">
             <div class="pf-timeline-badge pf-timeline-badge--merge" aria-hidden="true">&#10003;</div>

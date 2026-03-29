@@ -107,8 +107,8 @@
                 </div>
 
                 <div class="pf-commit-list-item__meta">
-                  <div class="pf-sha-pill">
-                    <button type="button" class="pf-sha-pill__copy" data-action="copy-sha" data-sha="<%= commit.sha %>" title="Copy full SHA">
+                  <div class="pf-sha-pill" data-controller="clipboard" data-clipboard-text-value="<%= commit.sha %>">
+                    <button type="button" class="pf-sha-pill__copy" data-action="clipboard#copy" title="Copy full SHA">
                       <%= octicon(:copy, size: 16) %>
                     </button>
                     <code class="pf-sha-pill__link"><%= commit.short_sha.first(7) %></code>

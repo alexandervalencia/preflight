@@ -4,25 +4,25 @@
 <% author_name = pull_request_author_name(comparison) %>
 
 <header class="pf-pr-header">
-  <div class="pf-pr-title-row">
-    <div class="pf-pr-title-display" data-role="title-display">
+  <div class="pf-pr-title-row" data-controller="inline-edit">
+    <div class="pf-pr-title-display" data-inline-edit-target="display">
       <h1 class="pf-pr-title"><%= pull_request.title %></h1>
       <span class="pf-pr-number">#<%= pull_request.id %></span>
       <% if active_tab == :conversation %>
-        <button type="button" class="pf-title-pencil" aria-label="Edit title" data-action="edit-title"><%= octicon(:pencil, size: 16) %></button>
+        <button type="button" class="pf-title-pencil" aria-label="Edit title" data-action="inline-edit#edit"><%= octicon(:pencil, size: 16) %></button>
       <% end %>
     </div>
 
     <% if active_tab == :conversation %>
       <%= form_with model: pull_request,
         url: repository_pull_path(local_repository, pull_request),
-        class: "pf-pr-title-edit", data: { role: "title-form" }, html: { hidden: true } do |form| %>
-        <%= form.text_field :title, value: pull_request.title, class: "pf-title-edit__input" %>
+        class: "pf-pr-title-edit", data: { inline_edit_target: "form" }, html: { hidden: true } do |form| %>
+        <%= form.text_field :title, value: pull_request.title, class: "pf-title-edit__input", data: { inline_edit_target: "input" } %>
         <%= form.hidden_field :base_branch, value: pull_request.base_branch %>
         <%= form.hidden_field :description, value: pull_request.description %>
         <div class="pf-title-edit__actions">
           <%= form.submit "Save", class: "pf-button pf-button--small" %>
-          <button type="button" class="pf-button pf-button--secondary pf-button--small" data-action="cancel-title">Cancel</button>
+          <button type="button" class="pf-button pf-button--secondary pf-button--small" data-action="inline-edit#cancel">Cancel</button>
         </div>
       <% end %>
     <% end %>
