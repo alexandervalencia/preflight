@@ -121,17 +121,20 @@ module MarkdownHelper
     replacements = {}
     placeholder = 0
 
-    processed = text.to_s.gsub(/\[([^\]]+)\]\(([^)]+)\)|`([^`]+)`|\*\*([^*]+)\*\*/) do
+    processed = text.to_s.gsub(/!\[([^\]]*)\]\(([^)]+)\)|\[([^\]]+)\]\(([^)]+)\)|`([^`]+)`|\*\*([^*]+)\*\*/) do
       key = "__MDTOKEN#{placeholder}__"
       placeholder += 1
 
+      m = Regexp.last_match
       replacements[key] =
-        if Regexp.last_match(1)
-          link_to(CGI.escapeHTML(Regexp.last_match(1)), Regexp.last_match(2), target: "_blank", rel: "noreferrer")
-        elsif Regexp.last_match(3)
-          content_tag(:code, CGI.escapeHTML(Regexp.last_match(3)))
-        else
-          content_tag(:strong, CGI.escapeHTML(Regexp.last_match(4)))
+        if m[2] # Image: ![alt](url) — group 2 is the image src
+          tag.img(src: m[2], alt: CGI.escapeHTML(m[1].to_s), style: "max-width: 100%")
+        elsif m[4] # Link: [text](url)
+          link_to(CGI.escapeHTML(m[3]), m[4], target: "_blank", rel: "noreferrer")
+        elsif m[5] # Inline code: `code`
+          content_tag(:code, CGI.escapeHTML(m[5]))
+        else # Bold: **text**
+          content_tag(:strong, CGI.escapeHTML(m[6]))
         end
 
       key
