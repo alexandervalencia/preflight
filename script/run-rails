@@ -1,7 +1,10 @@
 #!/usr/bin/env bash
 set -e
 
-# Resolve the directory where this script lives
+# Run an arbitrary bin/rails command with the correct Ruby and bundle env.
+# Usage: run-rails db:prepare
+#        run-rails runner "puts 1"
+
 SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
 LIBEXEC_DIR="$(dirname "$SCRIPT_DIR")"
 
@@ -24,4 +27,4 @@ export RAILS_ENV="${RAILS_ENV:-production}"
 export SECRET_KEY_BASE="${SECRET_KEY_BASE:-preflight-local-development-only}"
 
 cd "$LIBEXEC_DIR/server"
-exec bundle exec rails server "$@"
+exec bundle exec rails "$@"

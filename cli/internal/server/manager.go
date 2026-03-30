@@ -218,7 +218,14 @@ func findServerCommand() serverCommand {
 	dir := filepath.Dir(filepath.Dir(exe))
 	candidate := filepath.Join(dir, "libexec", "bin", "start-server")
 	if _, err := os.Stat(candidate); err == nil {
-		return serverCommand{bin: candidate, env: os.Environ()}
+		serverDir := filepath.Join(dir, "libexec", "server")
+		railsPath := filepath.Join(serverDir, "bin", "rails")
+		return serverCommand{
+			bin:       candidate,
+			dir:       serverDir,
+			env:       os.Environ(),
+			railsPath: railsPath,
+		}
 	}
 
 	// Dev layout: project/tmp/preflight → project/bin/rails
@@ -294,15 +301,22 @@ func runRailsCommand(serverCmd serverCommand, railsArgs ...string) error {
 		}
 	}
 
-	// Fallback: run ruby directly (production)
-	args := append([]string{serverCmd.railsPath}, railsArgs...)
-	cmd := exec.Command(serverCmd.bin, args...)
-	cmd.Dir = serverCmd.dir
-	cmd.Env = serverCmd.env
-	if out, err := cmd.CombinedOutput(); err != nil {
-		return fmt.Errorf("failed to run rails %s: %s", strings.Join(railsArgs, " "), string(out))
+	// Production: find the run-rails script next to start-server
+	if serverCmd.dir != "" {
+		runRails := filepath.Join(serverCmd.dir, "..", "bin", "run-rails")
+		if _, err := os.Stat(runRails); err == nil {
+			args := append([]string{runRails}, railsArgs...)
+			cmd := exec.Command("bash", args...)
+			cmd.Dir = serverCmd.dir
+			cmd.Env = serverCmd.env
+			if out, err := cmd.CombinedOutput(); err != nil {
+				return fmt.Errorf("failed to run rails %s: %s", strings.Join(railsArgs, " "), string(out))
+			}
+			return nil
+		}
 	}
-	return nil
+
+	return fmt.Errorf("cannot run rails command: no run-rails script found")
 }
 
 func captureDevboxEnv(devboxJSON string) ([]string, error) {

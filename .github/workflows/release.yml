@@ -42,9 +42,10 @@ jobs:
             --exclude='.github/' \
             . dist/server-package/server/
 
-          # Copy the start-server script
+          # Copy the server scripts
           cp script/start-server dist/server-package/bin/start-server
-          chmod +x dist/server-package/bin/start-server
+          cp script/run-rails dist/server-package/bin/run-rails
+          chmod +x dist/server-package/bin/start-server dist/server-package/bin/run-rails
 
           # Create the tarball
           cd dist
