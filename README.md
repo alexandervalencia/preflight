@@ -1,6 +1,12 @@
-# Preflight
+<p align="center">
+  <img src="docs/Preflight_splash.png" alt="Preflight" width="400">
+</p>
 
-Review your branches like GitHub pull requests — before pushing upstream.
+<p align="center">
+  Review your branches like GitHub pull requests — before pushing upstream.
+</p>
+
+---
 
 Preflight is a local-first tool for self-reviewing your work. Run `preflight push` from any repo to open a local PR with diffs, commits, and a description editor. When you're ready, export it as a real GitHub PR with one click.
 
