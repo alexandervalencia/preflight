@@ -308,7 +308,7 @@ func runRailsCommand(serverCmd serverCommand, railsArgs ...string) error {
 			args := append([]string{runRails}, railsArgs...)
 			cmd := exec.Command("bash", args...)
 			cmd.Dir = serverCmd.dir
-			cmd.Env = serverCmd.env
+			// Don't set cmd.Env — inherit from process which has PREFLIGHT_DB_PATH etc via os.Setenv
 			if out, err := cmd.CombinedOutput(); err != nil {
 				return fmt.Errorf("failed to run rails %s: %s", strings.Join(railsArgs, " "), string(out))
 			}

@@ -27,6 +27,5 @@ test:
 # Similarly, if you deploy your application as a Docker container, you must
 # ensure the database is located in a persisted volume.
 production:
-  primary:
-    <<: *default
-    database: <%= ENV.fetch("PREFLIGHT_DB_PATH", "storage/production.sqlite3") %>
+  <<: *default
+  database: <%= ENV.fetch("PREFLIGHT_DB_PATH", "storage/production.sqlite3") %>
