@@ -51,14 +51,12 @@
   text-decoration: underline;
 }
 
-.pf-brand-mark {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  width: 1.75rem;
-  height: 1.75rem;
-  border-radius: 999px;
-  background: var(--pf-text-bright);
-  color: var(--pf-bg-inset);
-  font-size: 0.9rem;
+.pf-brand-logo {
+  height: 1.5rem;
+  width: auto;
+}
+
+.pf-brand-name {
+  font-family: var(--pf-font-brand);
+  font-weight: 600;
 }

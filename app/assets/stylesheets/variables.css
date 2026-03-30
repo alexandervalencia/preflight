@@ -1,3 +1,31 @@
+@font-face {
+  font-family: "Prompt";
+  src: url("/Prompt-Regular.ttf") format("truetype");
+  font-weight: 400;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Prompt";
+  src: url("/Prompt-Medium.ttf") format("truetype");
+  font-weight: 500;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Prompt";
+  src: url("/Prompt-SemiBold.ttf") format("truetype");
+  font-weight: 600;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Prompt";
+  src: url("/Prompt-Bold.ttf") format("truetype");
+  font-weight: 700;
+  font-display: swap;
+}
+
 :root {
   --pf-bg: #0d1117;
   --pf-canvas: #0d1117;
@@ -25,6 +53,7 @@
   --pf-code-hunk: rgba(56, 139, 253, 0.15);
   --pf-shadow: 0 0 0 1px rgba(48, 54, 61, 0.3);
   --pf-shadow-lg: 0 8px 24px rgba(1, 4, 9, 0.45);
+  --pf-font-brand: "Prompt", -apple-system, "Segoe UI", Helvetica, Arial, sans-serif;
   --pf-font-mono: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, "Liberation Mono", monospace;
   --pf-bg-inset: #010409;
   --pf-text-on-emphasis: #fff;

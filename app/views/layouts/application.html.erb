@@ -38,8 +38,8 @@
     <header class="app-header">
       <div class="app-header__inner">
         <%= link_to root_path, class: "pf-brand" do %>
-          <span class="pf-brand-mark">P</span>
-          <span>Preflight</span>
+          <%= image_tag "preflight_logo.png", alt: "Preflight", class: "pf-brand-logo" %>
+          <span class="pf-brand-name">Preflight</span>
         <% end %>
         <%= yield :nav_context %>
       </div>
