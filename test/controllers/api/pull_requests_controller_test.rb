@@ -60,6 +60,40 @@ class Api::PullRequestsControllerTest < ActionDispatch::IntegrationTest
     end
   end
 
+  test "POST /api/pull_requests accepts title and description" do
+    with_sample_repository do |fixture|
+      post api_pull_requests_path, params: {
+        repo_path: fixture.path,
+        source_branch: "feature",
+        base_branch: "main",
+        title: "Add login page",
+        description: "Implements the new login flow with OAuth support."
+      }, as: :json
+
+      assert_response :created
+
+      pr = PullRequest.last
+      assert_equal "Add login page", pr.title
+      assert_equal "Implements the new login flow with OAuth support.", pr.description
+    end
+  end
+
+  test "POST /api/pull_requests uses defaults when title and description omitted" do
+    with_sample_repository do |fixture|
+      post api_pull_requests_path, params: {
+        repo_path: fixture.path,
+        source_branch: "feature",
+        base_branch: "main"
+      }, as: :json
+
+      assert_response :created
+
+      pr = PullRequest.last
+      assert_equal "feature", pr.title
+      assert_equal "", pr.description
+    end
+  end
+
   test "POST /api/pull_requests errors when on base branch" do
     with_sample_repository do |fixture|
       post api_pull_requests_path, params: {

@@ -39,7 +39,9 @@ class Api::PullRequestsController < ApplicationController
 
     pull_request = local_repository.pull_requests.new(
       source_branch:,
-      base_branch: base_branch.presence || local_repository.default_branch
+      base_branch: base_branch.presence || local_repository.default_branch,
+      title: params[:title].presence,
+      description: params[:description].presence || ""
     )
 
     if pull_request.save

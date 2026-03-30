@@ -7,13 +7,19 @@ import (
 	"strings"
 )
 
-func CreatePullRequest(repoPath, sourceBranch, baseBranch string) (map[string]interface{}, error) {
+func CreatePullRequest(repoPath, sourceBranch, baseBranch, title, description string) (map[string]interface{}, error) {
 	url := fmt.Sprintf("%s/api/pull_requests", ServerURL())
 
 	payload := map[string]string{
 		"repo_path":     repoPath,
 		"source_branch": sourceBranch,
 		"base_branch":   baseBranch,
+	}
+	if title != "" {
+		payload["title"] = title
+	}
+	if description != "" {
+		payload["description"] = description
 	}
 	body, _ := json.Marshal(payload)
 

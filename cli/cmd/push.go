@@ -12,6 +12,9 @@ import (
 )
 
 var baseBranch string
+var prTitle string
+var prBody string
+var prBodyFile string
 
 var pushCmd = &cobra.Command{
 	Use:   "push",
@@ -44,8 +47,17 @@ var pushCmd = &cobra.Command{
 			return fmt.Errorf("failed to start server: %w", err)
 		}
 
+		description := prBody
+		if prBodyFile != "" {
+			content, err := os.ReadFile(prBodyFile)
+			if err != nil {
+				return fmt.Errorf("failed to read body file: %w", err)
+			}
+			description = string(content)
+		}
+
 		fmt.Printf("Creating PR for %s → %s...\n", branch, base)
-		result, err := server.CreatePullRequest(repoPath, branch, base)
+		result, err := server.CreatePullRequest(repoPath, branch, base, prTitle, description)
 		if err != nil {
 			return err
 		}
@@ -68,6 +80,9 @@ var pushCmd = &cobra.Command{
 
 func init() {
 	pushCmd.Flags().StringVar(&baseBranch, "base", "", "Base branch (defaults to main/master)")
+	pushCmd.Flags().StringVarP(&prTitle, "title", "t", "", "PR title (defaults to branch name)")
+	pushCmd.Flags().StringVarP(&prBody, "body", "b", "", "PR description")
+	pushCmd.Flags().StringVar(&prBodyFile, "body-file", "", "Read PR description from file")
 	rootCmd.AddCommand(pushCmd)
 }
 
