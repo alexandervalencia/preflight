@@ -1,0 +1,6 @@
+{
+  "packages": ["ruby@3.4"],
+  "shell": {
+    "init_hook": []
+  }
+}
