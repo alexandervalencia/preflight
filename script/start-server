@@ -5,17 +5,6 @@ set -e
 SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
 LIBEXEC_DIR="$(dirname "$SCRIPT_DIR")"
 
-# Find Ruby: prefer Homebrew's ruby, fall back to PATH
-if command -v brew &>/dev/null; then
-  HOMEBREW_PREFIX="$(brew --prefix)"
-  for ruby_dir in "$HOMEBREW_PREFIX/opt/ruby@3.4/bin" "$HOMEBREW_PREFIX/opt/ruby/bin"; do
-    if [ -x "$ruby_dir/ruby" ]; then
-      export PATH="$ruby_dir:$PATH"
-      break
-    fi
-  done
-fi
-
 export BUNDLE_GEMFILE="$LIBEXEC_DIR/server/Gemfile"
 export BUNDLE_PATH="$LIBEXEC_DIR/vendor/bundle"
 export GEM_HOME="$LIBEXEC_DIR/vendor/bundle"
@@ -24,4 +13,4 @@ export RAILS_ENV="${RAILS_ENV:-production}"
 export SECRET_KEY_BASE="${SECRET_KEY_BASE:-preflight-local-development-only}"
 
 cd "$LIBEXEC_DIR/server"
-exec bundle exec rails server "$@"
+exec devbox run --config "$LIBEXEC_DIR/server/devbox.json" -- bundle exec rails server "$@"
