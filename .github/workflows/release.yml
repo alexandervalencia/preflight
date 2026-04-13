@@ -47,6 +47,9 @@ jobs:
           cp script/run-rails dist/server-package/bin/run-rails
           chmod +x dist/server-package/bin/start-server dist/server-package/bin/run-rails
 
+          # Copy the minimal runtime devbox config
+          cp script/runtime-devbox.json dist/server-package/server/devbox.json
+
           # Create the tarball
           cd dist
           tar czf "preflight-server-${VERSION}.tar.gz" -C server-package .
