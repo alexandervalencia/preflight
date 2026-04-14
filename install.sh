@@ -94,6 +94,16 @@ GEM_HOME="$INSTALL_DIR/libexec/vendor/bundle" \
 devbox run --config "$INSTALL_DIR/libexec/server/devbox.json" \
   -- bundle install --quiet
 
+echo "Precompiling assets..."
+(
+  cd "$INSTALL_DIR/libexec/server"
+  BUNDLE_PATH="$INSTALL_DIR/libexec/vendor/bundle" \
+  GEM_HOME="$INSTALL_DIR/libexec/vendor/bundle" \
+  RAILS_ENV=production \
+  SECRET_KEY_BASE=preflight-local-development-only \
+  devbox run --config devbox.json -- bundle exec rails assets:precompile
+)
+
 # Success — remove the backup
 rm -rf "$INSTALL_DIR/libexec.bak"
 INSTALL_OK=true
