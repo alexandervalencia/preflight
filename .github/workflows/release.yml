@@ -39,7 +39,7 @@ jobs:
             --exclude='.superpowers/' --exclude='vendor/bundle/' \
             --exclude='.devbox/' --exclude='node_modules/' \
             --exclude='test/' --exclude='.goreleaser.yml' \
-            --exclude='.github/' \
+            --exclude='.github/' --exclude='devbox.json' \
             . dist/server-package/server/
 
           # Copy the server scripts
