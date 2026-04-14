@@ -43,19 +43,22 @@ echo "Updating formula..."
 # Strip the leading 'v' for the version field
 BARE_VERSION="${VERSION#v}"
 
-# Use sed to update the formula
+# Use sed to update version and all download URLs
+OLD_VERSION=$(grep -m1 'version "' "$FORMULA" | sed 's/.*version "//;s/".*//')
 sed -i '' \
   -e "s/version \".*\"/version \"$BARE_VERSION\"/" \
+  -e "s|/v${OLD_VERSION}/|/${VERSION}/|g" \
+  -e "s/preflight-server-v${OLD_VERSION}/preflight-server-${VERSION}/g" \
   "$FORMULA"
 
-# Update SHAs in order of appearance (darwin-arm64, darwin-amd64, linux-arm64, linux-amd64, server)
+# Update SHAs in order of appearance (server, darwin-arm64, darwin-amd64, linux-arm64, linux-amd64)
 python3 -c "
 import re, sys
 
 with open('$FORMULA', 'r') as f:
     content = f.read()
 
-shas = ['$SHA_DARWIN_ARM64', '$SHA_DARWIN_AMD64', '$SHA_LINUX_ARM64', '$SHA_LINUX_AMD64', '$SHA_SERVER']
+shas = ['$SHA_SERVER', '$SHA_DARWIN_ARM64', '$SHA_DARWIN_AMD64', '$SHA_LINUX_ARM64', '$SHA_LINUX_AMD64']
 i = 0
 
 def replace_sha(match):
